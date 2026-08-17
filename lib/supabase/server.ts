@@ -20,7 +20,7 @@ export async function createClient() {
             );
           } catch {
             // Called from a Server Component — cookies cannot be mutated here.
-            // If you have a middleware refreshing sessions, this can be ignored.
+            // If you have a proxy refreshing sessions, this can be ignored.
           }
         },
       },
