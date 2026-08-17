@@ -23,6 +23,7 @@ function requireEnv(name: string): string {
 export const env = {
   supabase: {
     url: requireEnv("SUPABASE_URL"),
-    anonKey: requireEnv("SUPABASE_SECRET_KEY"),
+    anonKey: requireEnv("SUPABASE_ANON_KEY"),
   },
+  siteUrl: requireEnv("SITE_URL"),
 } as const;
