@@ -10,20 +10,20 @@
  */
 
 function requireEnv(name: string): string {
-  const value = process.env[name];
+  const value = process.env[name]
   if (!value) {
     throw new Error(
       `Missing required environment variable: "${name}". ` +
-        `Make sure it is defined in .env.local (development) or in your deployment environment.`,
-    );
+        `Make sure it is defined in .env.local (development) or in your deployment environment.`
+    )
   }
-  return value;
+  return value
 }
 
 export const env = {
   supabase: {
-    url: requireEnv("SUPABASE_URL"),
-    anonKey: requireEnv("SUPABASE_ANON_KEY"),
+    url: requireEnv('SUPABASE_URL'),
+    anonKey: requireEnv('SUPABASE_ANON_KEY')
   },
-  siteUrl: requireEnv("SITE_URL"),
-} as const;
+  siteUrl: requireEnv('SITE_URL')
+} as const

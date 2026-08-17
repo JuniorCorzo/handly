@@ -9,6 +9,7 @@ Plataforma de Coordinación de Donaciones en Emergencias con Ingesta y Priorizac
 En situaciones de emergencia humanitaria o desastres naturales, el principal cuello de botella es la **descoordinación logística**: sobre-donación de insumos no prioritarios y desabastecimiento crítico de recursos vitales.
 
 **Triage SOS** resuelve este problema mediante dos pilares:
+
 1. **Asistente de Ingesta y Triage con IA:** Permite a los operadores en terreno cargar pedidos en lenguaje natural (texto o voz transcrita). El modelo clasifica automáticamente categoría, cantidades estandarizadas y nivel de urgencia en segundos.
 2. **Motor Transaccional de Cupos Justos:** Bloqueo atómico de reservas para evitar sobre-donaciones, con expiración dinámica por urgencia y validación rápida en centros de acopio sin fricción de contraseñas.
 
@@ -17,6 +18,7 @@ En situaciones de emergencia humanitaria o desastres naturales, el principal cue
 ## 2. Alcance del MVP (5 Días Hábiles)
 
 ### Módulos Incluidos (In-Scope)
+
 1. **AI Triage & Ingesta Rápida (Organizaciones):**
    - Entrada de texto libre: el operador describe la necesidad y la IA genera el requerimiento estructurado (`category`, `item_name`, `target_quantity`, `unit`, `urgency`).
    - Resumen contextual generado por IA para donantes sobre las prioridades activas en cada zona.
@@ -28,18 +30,19 @@ En situaciones de emergencia humanitaria o desastres naturales, el principal cue
    - Generación de código corto legible (ej: `SOS-7X9K`, sin caracteres ambiguos).
 4. **Control de Concurrencia y TTL Dinámico:**
    - Reserva atómica (`SELECT ... FOR UPDATE`) desde Server Actions en PostgreSQL.
-   - Expiración pasiva (*lazy expiration*) adaptada al nivel de urgencia: **4h** (Crítico), **12h** (Urgente), **24h** (Estándar).
+   - Expiración pasiva (_lazy expiration_) adaptada al nivel de urgencia: **4h** (Crítico), **12h** (Urgente), **24h** (Estándar).
 5. **Mesa de Recepción en Acopio:**
    - Búsqueda por código corto para confirmar ingreso físico con un clic o registrar recepciones presenciales tolerantes.
 6. **Autenticación Básica de Organizaciones:**
    - Login por email y contraseña (Supabase Auth) para administración de pedidos y acopio.
 
 ### Funcionalidades Postergadas (Fase 2)
-* Perfiles y registro obligatorio para donantes particulares.
-* Infraestructura de Redis / colas de mensajería asíncronas pesadas.
-* Notificaciones por WhatsApp / SMS externas.
-* Mapas interactivos con PostGIS / geolocalización por radio.
-* Escaneo por cámara web/PWA offline.
+
+- Perfiles y registro obligatorio para donantes particulares.
+- Infraestructura de Redis / colas de mensajería asíncronas pesadas.
+- Notificaciones por WhatsApp / SMS externas.
+- Mapas interactivos con PostGIS / geolocalización por radio.
+- Escaneo por cámara web/PWA offline.
 
 ---
 
@@ -74,12 +77,12 @@ flowchart TD
     SA_Acopio -->|Actualizar a Received| Persistencia
 ```
 
-| Capa | Tecnología | Propósito en el MVP |
-| :--- | :--- | :--- |
-| **Framework Fullstack** | Next.js (App Router, Server Actions) | Frontend reactivo y backend en una sola base de código con SSR. |
-| **Inteligencia Artificial** | Vercel AI SDK + OpenAI / Gemini | Extracción estructurada (*Structured Outputs / Tool Calling*) del triage de necesidades. |
-| **Estilos y UI** | Tailwind CSS + Lucide Icons | Interfaz móvil limpia, rápida y de alto impacto visual para la demo. |
-| **Base de Datos** | PostgreSQL (Supabase / Neon) | Transacciones ACID, integridad referencial y autenticación integrada. |
+| Capa                        | Tecnología                           | Propósito en el MVP                                                                      |
+| :-------------------------- | :----------------------------------- | :--------------------------------------------------------------------------------------- |
+| **Framework Fullstack**     | Next.js (App Router, Server Actions) | Frontend reactivo y backend en una sola base de código con SSR.                          |
+| **Inteligencia Artificial** | Vercel AI SDK + OpenAI / Gemini      | Extracción estructurada (_Structured Outputs / Tool Calling_) del triage de necesidades. |
+| **Estilos y UI**            | Tailwind CSS + Lucide Icons          | Interfaz móvil limpia, rápida y de alto impacto visual para la demo.                     |
+| **Base de Datos**           | PostgreSQL (Supabase / Neon)         | Transacciones ACID, integridad referencial y autenticación integrada.                    |
 
 ---
 
@@ -252,9 +255,11 @@ CREATE INDEX idx_pledges_short_code ON pledges(short_code);
 ## 5. Lógica de Negocio y Reglas Clave
 
 ### A. Triage de Requerimientos con IA
+
 Prompt del sistema estructurado con schema Zod para garantizar tipado estricto:
-* **Entrada del operador:** *"Nos urgen 40 bidones de agua de 5L y 20 cajas de gasas en el Albergue Central antes del anochecer"*.
-* **Salida del LLM:**
+
+- **Entrada del operador:** _"Nos urgen 40 bidones de agua de 5L y 20 cajas de gasas en el Albergue Central antes del anochecer"_.
+- **Salida del LLM:**
   ```json
   [
     {
@@ -275,12 +280,15 @@ Prompt del sistema estructurado con schema Zod para garantizar tipado estricto:
   ```
 
 ### B. TTL Dinámico según Urgencia
+
 El cálculo de expiración se fija al momento de la reserva según la urgencia del ítem:
-* `critical_4h` $\rightarrow$ `expires_at = NOW() + INTERVAL '4 hours'`
-* `urgent_12h` $\rightarrow$ `expires_at = NOW() + INTERVAL '12 hours'`
-* `standard_24h` $\rightarrow$ `expires_at = NOW() + INTERVAL '24 hours'`
+
+- `critical_4h` $\rightarrow$ `expires_at = NOW() + INTERVAL '4 hours'`
+- `urgent_12h` $\rightarrow$ `expires_at = NOW() + INTERVAL '12 hours'`
+- `standard_24h` $\rightarrow$ `expires_at = NOW() + INTERVAL '24 hours'`
 
 ### C. Reserva Atómica en Server Action (Transacción Segura)
+
 1. Inicia transacción con aislamiento de lectura.
 2. Bloquea la fila del ítem (`SELECT target_quantity FROM need_items WHERE id = $1 FOR UPDATE`).
 3. Suma los cupos vigentes: `status = 'received' OR (status = 'pending' AND expires_at > NOW())`.
@@ -290,10 +298,10 @@ El cálculo de expiración se fija al momento de la reserva según la urgencia d
 
 ## 6. Cronograma de Desarrollo y Entregables (5 Días)
 
-| Día | Foco Principal | Tareas Clave |
-| :--- | :--- | :--- |
-| **Día 1** | **Setup, Schema & IA Triage** | Inicialización del proyecto Next.js, conexión a Supabase, migración DDL y endpoint/Server Action de ingesta con LLM (Vercel AI SDK + Zod). |
-| **Día 2** | **Portal Público & Flujo de Reserva** | Catálogo público con filtros de zona/urgencia, visualización de progreso y modal de compromiso con transacción `FOR UPDATE` + generación de `SOS-XXXX`. |
-| **Día 3** | **Panel de Organización & Recepción** | Login con Supabase Auth, formulario con asistente IA integrado y mesa de recepción para validación de códigos de donación. |
-| **Día 4** | **Pulido de UX, Mobile & Deploy** | Revisión mobile-first, seed de datos realistas para la demo, testing de flujos punta a punta y deploy a producción (Vercel + Supabase). |
+| Día       | Foco Principal                        | Tareas Clave                                                                                                                                             |
+| :-------- | :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Día 1** | **Setup, Schema & IA Triage**         | Inicialización del proyecto Next.js, conexión a Supabase, migración DDL y endpoint/Server Action de ingesta con LLM (Vercel AI SDK + Zod).               |
+| **Día 2** | **Portal Público & Flujo de Reserva** | Catálogo público con filtros de zona/urgencia, visualización de progreso y modal de compromiso con transacción `FOR UPDATE` + generación de `SOS-XXXX`.  |
+| **Día 3** | **Panel de Organización & Recepción** | Login con Supabase Auth, formulario con asistente IA integrado y mesa de recepción para validación de códigos de donación.                               |
+| **Día 4** | **Pulido de UX, Mobile & Deploy**     | Revisión mobile-first, seed de datos realistas para la demo, testing de flujos punta a punta y deploy a producción (Vercel + Supabase).                  |
 | **Día 5** | **Video Pitch (2 min) & Postulación** | **Slot prioritario:** Redacción de guión de 2 minutos, grabación de pantalla y pitch, edición ágil, publicación en redes y envío del formulario oficial. |

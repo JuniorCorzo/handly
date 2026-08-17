@@ -1,12 +1,12 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET() {
-  const supabase = await createClient();
+  const supabase = await createClient()
 
   const { data, error } = await supabase
-    .from("organizations")
-    .select("id")
-    .limit(1);
+    .from('organizations')
+    .select('id')
+    .limit(1)
 
   if (error) {
     // "relation does not exist" means the connection works but the table isn't created yet.
@@ -14,8 +14,8 @@ export async function GET() {
     return Response.json(
       { connected: false, error: error.message, code: error.code },
       { status: 500 }
-    );
+    )
   }
 
-  return Response.json({ connected: true, data });
+  return Response.json({ connected: true, data })
 }
