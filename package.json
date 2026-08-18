@@ -6,15 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "eslint",
-    "format": "prettier --write \"{app,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs",
-    "format:check": "prettier --check \"{app,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs"
+    "format": "prettier --write \"{app,components,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs",
+    "format:check": "prettier --check \"{app,components,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.3",
+    "@tanstack/react-table": "^8.21.3",
     "next": "16.3.1",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
