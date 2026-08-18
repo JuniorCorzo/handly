@@ -1,0 +1,62 @@
+schema: spec-driven
+
+context: |
+  Tech stack: Next.js 16.3.1 (App Router + Server Actions), React 19.2.8, Tailwind CSS 4 (@tailwindcss/postcss), TypeScript 5 (strict), pnpm 11.15.0
+  Architecture: Single Next.js fullstack — App Router frontend + Server Actions backend, PostgreSQL (Supabase/Neon) with row-level transactions, Vercel AI SDK triage, product domain Handly SOS (donation coordination)
+  Testing: No test runner installed (verified: package.json lacks jest/vitest/playwright/cypress/coverage). strict_tdd=false — unavailable until runner is added.
+  Style: Tailwind CSS (globals.css @import tailwindcss + @theme inline vars), Geist fonts via next/font, ESLint (eslint-config-next/core-web-vitals + typescript), target ES2017, moduleResolution bundler, path alias @/*
+  Conventions: .atl/skill-registry.md present (2026-08-18), docs/PROPUESTA_ARQUITECTURA.md is hypothesis-only input (not canonical), source of truth is proposal/design/DESIGN.md + openspec/specs, artifact_store=openspec, delivery auto-chain, review_budget_lines=800, language ES rioplatense (conversation) / EN (artifacts)
+
+artifact_store: openspec
+delivery_strategy: auto-chain
+review_budget_lines: 800
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Treat docs/PROPUESTA_ARQUITECTURA.md as hypothesis-only input; proposal/design/DESIGN.md are source of truth
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+    - Keep technical artifacts in English (neutral/professional)
+  design:
+    - Include sequence diagrams for complex flows (Server Actions, pledge TTL, triage)
+    - Document architecture decisions with rationale (ADRs inline)
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+    - Chain strategy: ask only if tasks forecast exceeds review budget
+  apply:
+    guidelines:
+      - Follow existing code patterns (App Router, Server Actions, @/* alias)
+      - Read node_modules/next/dist/docs before Next.js code (AGENTS.md rule)
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "pnpm build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
+
+testing:
+  strict_tdd: false
+  strict_tdd_reason: "No test runner installed — no jest/vitest/playwright/cypress detected in package.json or lockfile. Install a runner (e.g. vitest + @testing-library/react + playwright) to enable strict TDD."
+  test_runner: null
+  test_command: ""
+  layers:
+    unit: { available: false, tool: null }
+    integration: { available: false, tool: null }
+    e2e: { available: false, tool: null }
+  coverage:
+    available: false
+    command: ""
+  quality:
+    linter: { available: true, command: "pnpm lint (eslint + eslint-config-next/core-web-vitals + typescript)" }
+    type_checker: { available: true, command: "pnpm exec tsc --noEmit (typescript 5, strict)" }
+    formatter: { available: false, command: null, note: "No prettier/biome/dprint — formatting via ESLint rules only" }
+
+project: handly
+execution_mode: interactive
+chain_strategy: por definir (preguntar solo si tasks pronostica riesgo)
+initialized_at: 2026-08-18
