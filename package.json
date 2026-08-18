@@ -5,10 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write \"{app,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs",
+    "format:check": "prettier --check \"{app,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.112.3",
     "next": "16.3.1",
     "react": "19.2.8",
     "react-dom": "19.2.8"
@@ -20,6 +23,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.1",
+    "prettier": "^3.9.6",
+    "prettier-config-standard": "^7.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
