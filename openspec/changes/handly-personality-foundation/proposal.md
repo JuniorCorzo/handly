@@ -54,7 +54,7 @@ Personality-first; light-first tokens (Arial→Geist via `next/font`); shadcn/ui
 Revert `openspec/config.yaml` + proposal; no runtime code. Make v1 additive — disabling webhook restores prior.
 
 ## Dependencies
-- Resend via Make conn 10485281 (verify sender domain); Make owner for secret rotation
+- Resend via Make conn 10488338 (verify sender domain); Make owner for secret rotation
 
 ## Success Criteria
 - [ ] Mock donor pledges <2 min unauth; explains Handly in one sentence

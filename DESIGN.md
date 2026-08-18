@@ -280,4 +280,3 @@ Canonical source: `openspec/changes/handly-personality-foundation/design.md` Col
 WCAG AA notes: ink 15.95:1 on background, muted 6.04:1 on background, action 7.79:1 on white / 6.70:1 focus on white, critical 6.57:1 / urgent 5.96:1 / standard 7.14:1 / success 6.51:1 on white (body ≥4.5:1, large ≥3:1 satisfied). Dark mode holds same hierarchy at shifted lightness. Placeholder contrast = body contrast (never muted-grey-on-white).
 
 **Foundation scope — explicitly excluded:** final logo artwork, `app/page.tsx` UI, DB migrations/RLS/Auth, pledge/TTL/SOS runtime, AI prompts/models, Resend templates, Make blueprint edits/deploys, offline/maps/SMS, analytics, IA prompts. This file is foundation only.
-

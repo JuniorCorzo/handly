@@ -83,7 +83,7 @@ MVP: **expire-only**; pledge TTL 4/12/24h; reads/writes exclude expired pending 
 
 ## Make Integration Boundary
 
-Updated blueprint replaces placeholders with hook `donation_webhook` (2703382), `event_type`/`recipient_email`/`data{org_name,campaign_name,item_goal,item_name,goal_reached,goal}`, sender `noreply@handly.angelcorzo.dev`, HTML, subject, and Resend connection 10488338. Defects preserved: `org_name` is prefixed six times (`{{1.data.org_name}}` ×6); filter reads `{{2.email_type}}` but interface declares `event_type`; HMAC, schema validation, idempotency/deduplication, text-version, DLQ, and delivery guarantees are absent. Unknown routing is unsafe. Do not silently repair JSON.
+Updated blueprint replaces placeholders with hook `donation_webhook` (2703382), `event_type`/`recipient_email`/`data{org_name,campaign_name,item_goal,item_name,goal_reached,goal}`, sender `noreply@handly.angelcorzo.dev`, HTML, subject, and Resend connection 10488338. Defects preserved: `org_name` is prefixed six times (`{{2.data.org_name}}` ×6); filter reads `{{2.email_type}}` but interface declares `event_type`; HMAC, schema validation, idempotency/deduplication, text-version, DLQ, and delivery guarantees are absent. Unknown routing is unsafe. Do not silently repair JSON.
 
 Contract, emitted after the pledge commit reaches its goal:
 
