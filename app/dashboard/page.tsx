@@ -64,16 +64,42 @@ export default async function DashboardPage() {
       )
       .order('created_at', { ascending: false })
 
+    interface NeedItemQueryItem {
+      id: string
+      campaign_id: string
+      category: string
+      item_name: string
+      target_quantity: number
+      unit: string
+      urgency: string
+      status: string
+      created_at: string
+      campaign: {
+        id: string
+        name: string
+        organization_id: string
+      } | null
+      need_items_collection_points:
+        | {
+            collection_points: {
+              id: string
+              location_adress: string
+            } | null
+          }[]
+        | null
+    }
+
     if (error) {
       console.error('[Dashboard] Error fetching need items:', error)
     } else if (needItems) {
+      const items = needItems as unknown as NeedItemQueryItem[]
       // Filtrar únicamente los ítems que correspondan a las organizaciones del usuario
-      needItemRows = needItems
+      needItemRows = items
         .filter(
-          (item: any) =>
+          (item) =>
             !item.campaign || orgIds.includes(item.campaign.organization_id)
         )
-        .map((item: any) => ({
+        .map((item) => ({
           id: item.id,
           campaign_id: item.campaign_id,
           campaign_name: item.campaign?.name ?? '',
@@ -86,11 +112,11 @@ export default async function DashboardPage() {
           created_at: item.created_at,
           collection_points:
             item.need_items_collection_points
-              ?.map((p: any) => ({
-                id: p.collection_points?.id,
-                location_adress: p.collection_points?.location_adress
+              ?.map((p) => ({
+                id: p.collection_points?.id ?? '',
+                location_adress: p.collection_points?.location_adress ?? ''
               }))
-              .filter((p: any) => p.id) ?? []
+              .filter((p) => Boolean(p.id)) ?? []
         }))
     }
   }
