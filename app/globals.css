@@ -48,8 +48,8 @@
   --color-standard: oklch(0.454 0.073 223);
   --color-success: oklch(0.469 0.099 158);
   --color-foreground: oklch(0.23 0.02 173);
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-sans: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-pill: 999px;
@@ -75,7 +75,6 @@ body {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
-
 
 /* Motion: transform/opacity only, ease-out-quart; reduced motion crossfade/instant */
 @media (prefers-reduced-motion: reduce) {

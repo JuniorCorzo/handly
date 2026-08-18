@@ -8,11 +8,11 @@ Este documento detalla la estructura y el formato de los payloads JSON que el We
 
 Todos los eventos enviados al Webhook comparten el siguiente esquema raíz:
 
-| Campo | Tipo | Requerido | Descripción |
-| :--- | :--- | :--- | :--- |
-| `event_type` | `string` | **Sí** | Identificador único del evento (ej. `GOAL_ACHIEVED`). |
-| `recipient_email` | `string` | **Sí** | Dirección de correo electrónico del destinatario de la notificación. |
-| `data` | `object` | **Sí** | Objeto dinámico que contiene el contexto y métricas según el tipo de meta. |
+| Campo             | Tipo     | Requerido | Descripción                                                                |
+| :---------------- | :------- | :-------- | :------------------------------------------------------------------------- |
+| `event_type`      | `string` | **Sí**    | Identificador único del evento (ej. `GOAL_ACHIEVED`).                      |
+| `recipient_email` | `string` | **Sí**    | Dirección de correo electrónico del destinatario de la notificación.       |
+| `data`            | `object` | **Sí**    | Objeto dinámico que contiene el contexto y métricas según el tipo de meta. |
 
 ---
 
@@ -40,6 +40,7 @@ Se utiliza cuando el progreso o meta está asociado al cumplimiento de un ítem/
 ```
 
 **Esquema de data para item:**
+
 - org_name (string): Nombre de la organización promotora.
 
 - campaign_name (string): Nombre o título de la campaña.
@@ -53,7 +54,7 @@ Se utiliza cuando el progreso o meta está asociado al cumplimiento de un ítem/
 - goal (string/number): Meta total a alcanzar.
 
 2. Meta Global de Campaña (goal_type: "campaign")
-Se utiliza cuando la meta evalúa el desempeño global o general de la campaña (ej. recaudación monetaria o alcance general), sin especificar un ítem individual.
+   Se utiliza cuando la meta evalúa el desempeño global o general de la campaña (ej. recaudación monetaria o alcance general), sin especificar un ítem individual.
 
 ```json
 {
@@ -68,7 +69,9 @@ Se utiliza cuando la meta evalúa el desempeño global o general de la campaña 
   }
 }
 ```
+
 **Esquema de data para campaign:**
+
 - org_name (string): Nombre de la organización promotora.
 
 - campaign_name (string): Nombre o título de la campaña.
@@ -80,4 +83,5 @@ Se utiliza cuando la meta evalúa el desempeño global o general de la campaña 
 - goal (string/number): Meta total a alcanzar.
 
 ## ⚠️ Manejo de Excepciones y Errores
+
 Eventos no soportados: Si el campo event_type recibido no coincide con ninguno de los tipos declarados en el flujo de automatización (actualmente solo se procesa GOAL_ACHIEVED), el sistema desviará la ejecución hacia la rama de captura de fallos, disparando una notificación de error de enrutamiento.
