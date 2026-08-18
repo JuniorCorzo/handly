@@ -10,99 +10,64 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { error } = await searchParams
 
   return (
-    <main style={styles.main}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Triage SOS</h1>
-        <p style={styles.subtitle}>Panel de organizaciones</p>
+    <main className='flex min-h-screen items-center justify-center bg-[var(--background)] px-4 py-12 font-sans text-[var(--ink)] antialiased'>
+      <div className='w-full max-w-md rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] sm:p-10'>
+        <div className='mb-8 text-center sm:text-left'>
+          <span className='inline-block text-xs font-semibold tracking-wider text-[var(--primary)] uppercase'>
+            Handly
+          </span>
+          <h1 className='mt-1 text-2xl font-bold tracking-tight text-[var(--ink)] sm:text-3xl'>
+            Acceso a Organizaciones
+          </h1>
+          <p className='mt-2 text-sm text-[var(--muted)]'>
+            Handly · Ingresá tu email corporativo para recibir el enlace de
+            acceso.
+          </p>
+        </div>
 
-        <form action={signInWithMagicLink} style={styles.form}>
-          <label htmlFor='email' style={styles.label}>
-            Email
-          </label>
-          <input
-            id='email'
-            name='email'
-            type='email'
-            required
-            placeholder='org@ejemplo.com'
-            style={styles.input}
-          />
+        <form action={signInWithMagicLink} className='flex flex-col gap-5'>
+          <div className='flex flex-col gap-2'>
+            <label
+              htmlFor='email'
+              className='text-sm font-medium text-[var(--ink)]'
+            >
+              Correo electrónico
+            </label>
+            <input
+              id='email'
+              name='email'
+              type='email'
+              required
+              placeholder='organizacion@ejemplo.org'
+              className='w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-base text-[var(--ink)] placeholder:[color:var(--muted)] transition-colors focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]'
+            />
+          </div>
 
-          {error && <p style={styles.error}>{error}</p>}
+          {error && (
+            <div className='flex items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--critical)]/20 bg-[var(--critical)]/10 px-3.5 py-2.5 text-sm text-[var(--critical)]'>
+              <svg
+                className='h-4 w-4 shrink-0 fill-current'
+                viewBox='0 0 20 20'
+                aria-hidden='true'
+              >
+                <path
+                  fillRule='evenodd'
+                  d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z'
+                  clipRule='evenodd'
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
 
-          <button type='submit' style={styles.button}>
+          <button
+            type='submit'
+            className='mt-2 inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-[var(--surface)] shadow-xs transition-all hover:bg-[var(--primary)]/90 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-[var(--focus)] focus:ring-offset-2 disabled:opacity-50'
+          >
             Enviar enlace de acceso
           </button>
         </form>
       </div>
     </main>
   )
-}
-
-const styles: Record<string, React.CSSProperties> = {
-  main: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-    fontFamily: 'system-ui, sans-serif'
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: '12px',
-    padding: '40px',
-    width: '100%',
-    maxWidth: '400px',
-    boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
-  },
-  title: {
-    margin: '0 0 4px',
-    fontSize: '24px',
-    fontWeight: '700',
-    color: '#111'
-  },
-  subtitle: {
-    margin: '0 0 32px',
-    fontSize: '14px',
-    color: '#666'
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px'
-  },
-  label: {
-    fontSize: '14px',
-    fontWeight: '500',
-    color: '#333'
-  },
-  input: {
-    padding: '10px 14px',
-    fontSize: '15px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    outline: 'none',
-    width: '100%',
-    boxSizing: 'border-box'
-  },
-  error: {
-    margin: '0',
-    fontSize: '13px',
-    color: '#c0392b',
-    backgroundColor: '#fdf0ef',
-    padding: '8px 12px',
-    borderRadius: '6px'
-  },
-  button: {
-    marginTop: '8px',
-    padding: '12px',
-    fontSize: '15px',
-    fontWeight: '600',
-    color: '#fff',
-    backgroundColor: '#111',
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer'
-  }
 }
