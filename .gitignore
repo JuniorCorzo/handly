@@ -40,3 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .codegraph/
+
+# opencode - local config (no commitear, tiene toggles locales y secrets via env)
+opencode.json
+opencode.jsonc
+# Local AI runtime state (track .atl/skill-registry.md, ignore the rest)
+.atl/*
+!.atl/skill-registry.md
+
+# SDD runtime ledger (tracked state)
+.gentle-ai/
