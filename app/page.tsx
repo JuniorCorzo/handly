@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className='flex min-h-screen flex-col bg-[var(--background)] font-sans text-[var(--ink)] antialiased'>
       {/* Header */}
-      <header className='sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)]/90 backdrop-blur-xs'>
+      <header className='sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)]'>
         <div className='mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6'>
           <Link href='/' className='flex items-center gap-2'>
             <span className='text-xl font-bold tracking-tight text-[var(--ink)]'>
