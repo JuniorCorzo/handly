@@ -1,3 +1,7 @@
+---
+lastSync: Wed Aug 19 2026 12:46:58 GMT-0500 (hora estándar de Colombia)
+---
+
 # Propuesta de Arquitectura y Producto MVP: Handly (1 Semana)
 
 Plataforma de Coordinación de Donaciones en Emergencias con Ingesta y Priorización Asistida por Inteligencia Artificial.
