@@ -7,7 +7,5 @@ pre-commit:
       stage_fixed: true
 pre-push:
   commands:
-    ultracite:
-      run: npx ultracite check
     typecheck:
       run: pnpm tsc --noEmit
