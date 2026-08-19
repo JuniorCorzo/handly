@@ -8,6 +8,6 @@ pre-commit:
 pre-push:
   commands:
     ultracite:
-      run: npx ultracite check || npx ultracite check --type-aware
+      run: npx ultracite check
     typecheck:
       run: pnpm tsc --noEmit
