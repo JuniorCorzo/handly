@@ -1,11 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-// ⚠️ server-only — uses cookies(). Never import from a Client Component.
-import { createClient } from "@/lib/supabase/server";
-import { NeedItemSchema, NeedItemErrorCode } from "@/lib/validations/need-item";
-import type { NeedItemInput } from "@/lib/validations/need-item";
+import { createClient } from "@/src/lib/supabase/server";
+import {
+  NeedItemSchema,
+  NeedItemErrorCode,
+} from "@/src/lib/validations/need-item";
+import type { NeedItemInput } from "@/src/lib/validations/need-item";
 
 // ── Return type ─────────────────────────────────────────────────────
 export type NeedItemActionState =
@@ -41,7 +44,7 @@ export async function createNeedItem(
 
   const parsed = NeedItemSchema.safeParse(rawData);
   if (!parsed.success) {
-    return { success: false, errors: parsed.error.flatten().fieldErrors };
+    return { success: false, errors: z.flattenError(parsed.error).fieldErrors };
   }
 
   const {
@@ -115,7 +118,7 @@ export async function updateNeedItem(
 
   const parsed = NeedItemSchema.safeParse(rawData);
   if (!parsed.success) {
-    return { success: false, errors: parsed.error.flatten().fieldErrors };
+    return { success: false, errors: z.flattenError(parsed.error).fieldErrors };
   }
 
   const {
