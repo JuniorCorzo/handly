@@ -13,13 +13,23 @@ Typography: Geist via `next/font` — literal names in `@theme inline`, no Arial
 ## Getting Started
 
 ```bash
-pnpm install
+pnpm install # auto-instala hooks lefthook
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
 Edit `app/page.tsx` — auto-reload on save.
+
+## Calidad (Ultracite + Oxlint/Oxfmt) — para todos, técnico o no
+
+Hooks corren solos tras `pnpm install` (`prepare` → `lefthook install`).
+
+- Commit: `npx ultracite fix` sobre staged (auto-fix + `stage_fixed`).
+- Push: `npx ultracite check` + `pnpm tsc --noEmit` (bloquea si hay errores).
+- Si te bloqueó: corre `pnpm lint` (muestra), `pnpm format` (arregla), commit de nuevo.
+- Formato: `npx oxfmt --check .` debe dar 0 (ya 0 en `main`).
+- Todo el check manual: `pnpm ultracite:check && pnpm tsc --noEmit && pnpm build`.
 
 ## Design
 

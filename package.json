@@ -2,6 +2,7 @@
   "name": "handly",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,7 +11,8 @@
     "format:check": "ultracite check",
     "ultracite:check": "ultracite check",
     "ultracite:fix": "ultracite fix",
-    "ultracite:check:type-aware": "ultracite check --type-aware"
+    "ultracite:check:type-aware": "ultracite check --type-aware",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
