@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Handly — Restrained OKLCH tokens. Teal accent ≤10% of any viewport. */
 /* Light is canonical. Dark preserves hue and contrast hierarchy (WCAG AA). */
@@ -48,8 +48,8 @@
   --color-standard: oklch(0.454 0.073 223);
   --color-success: oklch(0.469 0.099 158);
   --color-foreground: oklch(0.23 0.02 173);
-  --font-sans: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-pill: 999px;

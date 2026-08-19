@@ -110,6 +110,7 @@ Aesthetic philosophy: **Linear / Notion minimal, airy, type-perfect.** Restraine
 What this system explicitly rejects: warm cream/sand AI-default backgrounds, gradient text, glassmorphism, side-stripe borders, hero-metric clichés, identical tiny-card grids, uppercase eyebrows on every section, sketchy SVG illustrations, and any urgency styling that is color-only.
 
 **Key Characteristics:**
+
 - Operativa serena: calm under pressure, direct, hospitable, never panicked
 - Restrained OKLCH palette — teal accent disciplines the page
 - Airy catalog — few large need cards, generous whitespace, mobile-first
@@ -151,9 +152,7 @@ Same hues, lightness-shifted to preserve hierarchy and AA:
 
 ### Named Rules
 
-**The Restrained Rule.** Teal appears on ≤10% of any screen — actions and selection only. If the page looks teal, it is wrong.
-**The Non-Color Urgency Rule.** No urgency state may be conveyed by color alone. Badge + icon + order are mandatory.
-**The No-Cream Rule.** The body background is a teal-tinted neutral. The saturated warm cream/sand band is forbidden.
+**The Restrained Rule.** Teal appears on ≤10% of any screen — actions and selection only. If the page looks teal, it is wrong. **The Non-Color Urgency Rule.** No urgency state may be conveyed by color alone. Badge + icon + order are mandatory. **The No-Cream Rule.** The body background is a teal-tinted neutral. The saturated warm cream/sand band is forbidden.
 
 ## 3. Typography
 
@@ -174,8 +173,7 @@ Scale steps: 12 / 14 / 16 / 18 / 24 / 32 / 40. Ratio 1.125–1.2. Fluid `clamp()
 
 ### Named Rules
 
-**The One-Family Rule.** Geist carries headings, body, labels, and UI. No second display face.
-**The Balance Rule.** `text-wrap: balance` on h1–h3; `text-wrap: pretty` on prose; body never exceeds 75ch.
+**The One-Family Rule.** Geist carries headings, body, labels, and UI. No second display face. **The Balance Rule.** `text-wrap: balance` on h1–h3; `text-wrap: pretty` on prose; body never exceeds 75ch.
 
 ## 4. Elevation
 
@@ -262,7 +260,7 @@ Nested cards, side-stripe `border-left >1px` urgency accents, gradient text, gla
 ## Appendix — Tokens for Stitch Variables (exportable)
 
 | Token | OKLCH | sRGB | Role |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `background` | `oklch(0.9815 0.005 165)` | `#F6FAF8` | Page — light canonical (matches `design.md`). Dark: `oklch(0.18 0.015 191)` |
 | `surface` | `oklch(1 0 0)` | `#FFFFFF` | Card/dialog/input — Dark: `oklch(0.22 0.015 191)` |
 | `ink` | `oklch(0.23 0.02 173)` | `#13201C` | Text — Dark: `oklch(0.95 0.005 165)` |
