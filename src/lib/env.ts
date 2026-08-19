@@ -26,4 +26,8 @@ export const env = {
     anonKey: requireEnv("SUPABASE_ANON_KEY"),
   },
   siteUrl: requireEnv("SITE_URL"),
+  make: {
+    webhookUrl: process.env.MAKE_WEBHOOK_URL || "",
+    apiKey: process.env.MAKE_WEBHOOK_API_KEY || "",
+  },
 } as const;
