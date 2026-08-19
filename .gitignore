@@ -54,3 +54,6 @@ audios/
 
 # SDD runtime ledger (tracked state)
 .gentle-ai/
+
+# stitch raw — externo, no commit (ver docs/design/stitch/)
+stitch_coderhub_design_system/

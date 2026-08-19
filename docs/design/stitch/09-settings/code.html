@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Handly - Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#b9eaff",
+                        "tertiary-fixed": "#a4f4c3",
+                        "surface-container-low": "#e8f7f0",
+                        "surface-container-highest": "#d7e6df",
+                        "on-tertiary": "#ffffff",
+                        "muted": "#52635D",
+                        "surface-container-high": "#dcece5",
+                        "background": "#eefdf6",
+                        "on-background": "#111e1a",
+                        "on-primary-container": "#8fd2ce",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#e5f4ed",
+                        "on-tertiary-container": "#88d7a8",
+                        "inverse-primary": "#90d2ce",
+                        "surface-bright": "#eefdf6",
+                        "primary-container": "#0f5c59",
+                        "urgent": "#A14B00",
+                        "primary": "#004341",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#88d7a8",
+                        "on-surface": "#111e1a",
+                        "paper-bg": "#F6FAF8",
+                        "tertiary-container": "#005f3a",
+                        "focus": "#1D4ED8",
+                        "surface-variant": "#d7e6df",
+                        "critical": "#B42318",
+                        "inverse-surface": "#26332f",
+                        "outline-variant": "#bec9c7",
+                        "error": "#ba1a1a",
+                        "surface": "#FFFFFF",
+                        "on-surface-variant": "#3f4948",
+                        "surface-tint": "#226865",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005232",
+                        "tertiary": "#004529",
+                        "on-tertiary-fixed": "#002111",
+                        "primary-fixed": "#abefea",
+                        "on-primary-fixed-variant": "#00504d",
+                        "surface-container": "#e2f1ea",
+                        "outline": "#6f7978",
+                        "on-secondary-container": "#29687d",
+                        "surface-dim": "#ceddd7",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "secondary-container": "#aae6fe",
+                        "border": "#CBD8D2",
+                        "secondary-fixed-dim": "#94cfe7",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#00201f",
+                        "primary-fixed-dim": "#90d2ce",
+                        "secondary": "#26667b",
+                        "on-secondary-fixed": "#001f29",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "max-width": "1200px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "32px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "body": ["Geist"],
+                        "mono": ["Geist Mono"],
+                        "display": ["Geist"],
+                        "headline": ["Geist"],
+                        "label": ["Geist"],
+                        "title": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "mono": ["14px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "display": ["40px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+                        "label": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "title": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .geist-mono { font-family: 'Geist Mono', monospace; }
+        
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #004341;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #004341;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #CBD8D2;
+        }
+        .toggle-label {
+            background-color: #dcece5;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-paper-bg text-on-surface min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-on-background w-full top-0 sticky border-b border-border dark:border-outline-variant flat no shadows flex items-center justify-between px-margin-mobile md:px-margin-desktop h-16 w-full z-40">
+<div class="flex items-center gap-4">
+<button aria-label="Go back" class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-colors active:opacity-80 transition-opacity">
+<span aria-hidden="true" class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline text-headline text-primary dark:text-primary-fixed-dim">Donor Profile</h1>
+</div>
+<button aria-label="Settings" class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-colors active:opacity-80 transition-opacity">
+<span aria-hidden="true" class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-lg pb-32">
+<div class="max-w-2xl mx-auto space-y-xl">
+<!-- Account Section -->
+<section aria-labelledby="account-heading">
+<h2 class="font-title text-title text-muted mb-md uppercase tracking-wider text-xs" id="account-heading">Account</h2>
+<div class="bg-surface border border-border rounded flex flex-col">
+<div class="p-md flex items-center gap-md border-b border-border">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-bold text-lg">
+                            JD
+                        </div>
+<div class="flex-1">
+<p class="font-title text-title text-on-surface">Jane Doe</p>
+<p class="font-body text-body text-muted text-sm">jane.doe@example.com</p>
+</div>
+</div>
+<div class="p-md">
+<button class="w-full text-left font-label text-label text-critical py-2 hover:opacity-80 transition-opacity flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+                            Sign Out
+                        </button>
+</div>
+</div>
+</section>
+<!-- Notifications Section -->
+<section aria-labelledby="notifications-heading">
+<h2 class="font-title text-title text-muted mb-md uppercase tracking-wider text-xs" id="notifications-heading">Notifications</h2>
+<div class="bg-surface border border-border rounded flex flex-col divide-y divide-border">
+<div class="p-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors">
+<div>
+<p class="font-body text-body text-on-surface">Critical Needs Alerts</p>
+<p class="font-body text-body text-muted text-sm">Urgent local requests requiring immediate action.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-critical" name="toggle-critical" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer" for="toggle-critical"></label>
+</div>
+</div>
+<div class="p-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors">
+<div>
+<p class="font-body text-body text-on-surface">Pledge Reminders</p>
+<p class="font-body text-body text-muted text-sm">Notifications for pending drop-offs.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-pledge" name="toggle-pledge" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer" for="toggle-pledge"></label>
+</div>
+</div>
+<div class="p-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors">
+<div>
+<p class="font-body text-body text-on-surface">Impact Updates</p>
+<p class="font-body text-body text-muted text-sm">Weekly summaries of your contributions.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle-impact" name="toggle-impact" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer" for="toggle-impact"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Appearance Section -->
+<section aria-labelledby="appearance-heading">
+<h2 class="font-title text-title text-muted mb-md uppercase tracking-wider text-xs" id="appearance-heading">Appearance</h2>
+<div class="bg-surface border border-border rounded p-md">
+<fieldset>
+<legend class="sr-only">Choose a theme</legend>
+<div class="grid grid-cols-3 gap-sm">
+<label class="cursor-pointer">
+<input checked="" class="sr-only peer" name="theme" type="radio" value="light"/>
+<div class="text-center p-sm border border-border rounded font-label text-label text-on-surface-variant peer-checked:bg-surface-container-high peer-checked:border-primary peer-checked:text-primary transition-all">
+<span aria-hidden="true" class="material-symbols-outlined block mb-1 text-xl" data-icon="light_mode">light_mode</span>
+                                    Light
+                                </div>
+</label>
+<label class="cursor-pointer">
+<input class="sr-only peer" name="theme" type="radio" value="dark"/>
+<div class="text-center p-sm border border-border rounded font-label text-label text-on-surface-variant peer-checked:bg-surface-container-high peer-checked:border-primary peer-checked:text-primary transition-all">
+<span aria-hidden="true" class="material-symbols-outlined block mb-1 text-xl" data-icon="dark_mode">dark_mode</span>
+                                    Dark
+                                </div>
+</label>
+<label class="cursor-pointer">
+<input class="sr-only peer" name="theme" type="radio" value="system"/>
+<div class="text-center p-sm border border-border rounded font-label text-label text-on-surface-variant peer-checked:bg-surface-container-high peer-checked:border-primary peer-checked:text-primary transition-all">
+<span aria-hidden="true" class="material-symbols-outlined block mb-1 text-xl" data-icon="settings_suggest">settings_suggest</span>
+                                    System
+                                </div>
+</label>
+</div>
+</fieldset>
+</div>
+</section>
+<!-- Support Section -->
+<section aria-labelledby="support-heading">
+<h2 class="font-title text-title text-muted mb-md uppercase tracking-wider text-xs" id="support-heading">Support</h2>
+<div class="bg-surface border border-border rounded flex flex-col divide-y divide-border">
+<a class="p-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors group" href="#">
+<span class="font-body text-body text-on-surface">Help Center</span>
+<span aria-hidden="true" class="material-symbols-outlined text-muted group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="p-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors group" href="#">
+<span class="font-body text-body text-on-surface">Privacy Policy</span>
+<span aria-hidden="true" class="material-symbols-outlined text-muted group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</a>
+<a class="p-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors group" href="#">
+<span class="font-body text-body text-on-surface">Terms of Service</span>
+<span aria-hidden="true" class="material-symbols-outlined text-muted group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<div class="text-center pt-md pb-xl">
+<p class="font-mono text-mono text-muted text-xs">Handly v2.4.1 (Build 482)</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface dark:bg-inverse-surface fixed bottom-0 w-full z-50 border-t border-border dark:border-outline-variant flat no shadows flex justify-around items-center h-16 px-4 w-full md:hidden">
+<a class="flex flex-col items-center justify-center text-muted dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150 w-16" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span class="font-label text-label text-[10px]">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-muted dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150 w-16" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mb-1" data-icon="map">map</span>
+<span class="font-label text-label text-[10px]">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-muted dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150 w-16" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mb-1" data-icon="volunteer_activism">volunteer_activism</span>
+<span class="font-label text-label text-[10px]">Impact</span>
+</a>
+<a aria-current="page" class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim font-bold hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150 w-16" href="#">
+<span aria-hidden="true" class="material-symbols-outlined mb-1" data-icon="person" data-weight="fill" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label text-label text-[10px]">Profile</span>
+</a>
+</nav>
+</body></html>

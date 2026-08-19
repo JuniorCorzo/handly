@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Handly - Map View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#29687d",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#ceddd7",
+                    "primary-fixed": "#abefea",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#88d7a8",
+                    "surface-container": "#e2f1ea",
+                    "inverse-primary": "#90d2ce",
+                    "on-surface": "#111e1a",
+                    "on-tertiary-container": "#88d7a8",
+                    "secondary-fixed": "#b9eaff",
+                    "outline": "#6f7978",
+                    "primary-container": "#0f5c59",
+                    "surface": "#FFFFFF",
+                    "surface-container-lowest": "#ffffff",
+                    "critical": "#B42318",
+                    "surface-bright": "#eefdf6",
+                    "surface-container-low": "#e8f7f0",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#e5f4ed",
+                    "inverse-surface": "#26332f",
+                    "outline-variant": "#bec9c7",
+                    "on-primary-container": "#8fd2ce",
+                    "on-tertiary-fixed": "#002111",
+                    "tertiary-container": "#005f3a",
+                    "on-surface-variant": "#3f4948",
+                    "muted": "#52635D",
+                    "on-tertiary-fixed-variant": "#005232",
+                    "surface-container-highest": "#d7e6df",
+                    "tertiary": "#004529",
+                    "primary": "#004341",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-background": "#111e1a",
+                    "primary-fixed-dim": "#90d2ce",
+                    "surface-tint": "#226865",
+                    "focus": "#1D4ED8",
+                    "paper-bg": "#F6FAF8",
+                    "surface-variant": "#d7e6df",
+                    "border": "#CBD8D2",
+                    "secondary-fixed-dim": "#94cfe7",
+                    "on-secondary-fixed": "#001f29",
+                    "on-primary-fixed": "#00201f",
+                    "on-error-container": "#93000a",
+                    "urgent": "#A14B00",
+                    "secondary": "#26667b",
+                    "surface-container-high": "#dcece5",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#aae6fe",
+                    "tertiary-fixed": "#a4f4c3",
+                    "on-primary-fixed-variant": "#00504d",
+                    "on-secondary-fixed-variant": "#004d61",
+                    "background": "#eefdf6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "gutter": "24px",
+                    "margin-desktop": "32px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "max-width": "1200px",
+                    "xs": "4px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "body": [
+                            "Geist"
+                    ],
+                    "title": [
+                            "Geist"
+                    ],
+                    "headline": [
+                            "Geist"
+                    ],
+                    "mono": [
+                            "Geist Mono"
+                    ],
+                    "label": [
+                            "Geist"
+                    ],
+                    "display": [
+                            "Geist"
+                    ]
+            },
+            "fontSize": {
+                    "body": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "title": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.015em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "mono": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "display": [
+                            "40px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: #F6FAF8;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="h-full flex flex-col bg-paper-bg text-on-surface">
+<!-- TopAppBar -->
+<header class="w-full top-0 border-b border-outline-variant bg-surface px-margin-mobile py-sm flex justify-between items-center flat no shadows z-50 fixed md:relative">
+<div class="flex items-center gap-sm text-primary">
+<span class="material-symbols-outlined font-headline text-headline" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<span class="font-display text-display tracking-tight font-extrabold">Handly</span>
+</div>
+<!-- Desktop Nav (Hidden on Mobile) -->
+<nav class="hidden md:flex gap-lg font-label text-label">
+<a class="text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 px-4 py-2 rounded-xl flex items-center gap-2" href="#">
+<span class="material-symbols-outlined">list_alt</span> Needs
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 px-4 py-2 rounded-xl flex items-center gap-2" href="#">
+<span class="material-symbols-outlined">volunteer_activism</span> Pledges
+            </a>
+<a class="text-primary bg-primary-container text-on-primary-container hover:bg-surface-container-low transition-colors duration-200 px-4 py-2 rounded-xl flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span> Map
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 px-4 py-2 rounded-xl flex items-center gap-2" href="#">
+<span class="material-symbols-outlined">person</span> Profile
+            </a>
+</nav>
+<div class="md:hidden"></div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow relative mt-[72px] md:mt-0 mb-[72px] md:mb-0 w-full h-full overflow-hidden">
+<!-- Search Bar Overlay -->
+<div class="absolute top-md left-md right-md md:left-1/2 md:-translate-x-1/2 md:w-[480px] z-10">
+<div class="bg-surface border border-outline-variant rounded-xl flex items-center px-4 py-3 shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)]">
+<span class="material-symbols-outlined text-muted mr-3">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 p-0 font-body text-body text-on-surface placeholder-muted outline-none" placeholder="Search locations or zones..." type="text"/>
+</div>
+</div>
+<!-- Full Screen Map Container -->
+<div class="w-full h-full relative bg-surface-container-lowest" data-alt="A clean, minimalist, light-themed map interface of a major city. The map should follow an operational, clinical aesthetic with subtle roads, muted green parks, and stark white building blocks, reminiscent of an emergency management digital dashboard. The color palette is restricted to soft greys, whites, and pale mints, avoiding any realistic or chaotic satellite imagery." data-location="New York" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIYZMuspCJs8gFIExCDgYgFFaAeDKLXyO2QDbeBuAAEzO3CPXxxvuqqi3dmtDWoHk8FmyEv5lNwdJg_v-OGfSNsVAYJFNd7E_abrV7tTW_dqMzsTJ3aHo9e3avZSveZzZJFWld2b1E5-DDPbylPHTSIGJzXUtWGwq0L-hywo6nm-XlU9Ej-jYHECUqU2uZmJng0epIKklCpipxkylgzrs_8BUq9DzD-bwzWcrG5pWwSNs6n5havg')">
+<!-- Simulated Map Markers -->
+<!-- Critical Need Zone -->
+<div class="absolute top-1/4 left-1/3 flex flex-col items-center cursor-pointer group transform -translate-x-1/2 -translate-y-1/2">
+<div class="bg-surface rounded-full p-1 border border-critical shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] group-hover:scale-110 transition-transform duration-200">
+<div class="bg-critical text-on-error w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+</div>
+<!-- Intake Center -->
+<div class="absolute top-1/2 left-2/3 flex flex-col items-center cursor-pointer group transform -translate-x-1/2 -translate-y-1/2">
+<div class="bg-surface rounded-full p-1 border border-primary shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] group-hover:scale-110 transition-transform duration-200 ring-2 ring-focus ring-offset-2">
+<div class="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
+</div>
+</div>
+</div>
+<!-- Intake Center 2 -->
+<div class="absolute bottom-1/4 left-1/4 flex flex-col items-center cursor-pointer group transform -translate-x-1/2 -translate-y-1/2">
+<div class="bg-surface rounded-full p-1 border border-primary shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] group-hover:scale-110 transition-transform duration-200">
+<div class="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Selected Location Details Sheet (Floating over Map) -->
+<div class="absolute bottom-md left-md right-md md:left-1/2 md:-translate-x-1/2 md:w-[480px] z-10 bg-surface border border-outline-variant rounded-xl p-lg shadow-[0_4px_16px_oklch(0.23_0.02_173/0.15)] flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-title text-title text-on-surface">North Sector Intake Center</h2>
+<p class="font-mono text-mono text-muted mt-xs">ZONE-7A</p>
+</div>
+<div class="flex items-center gap-xs px-2 py-1 bg-surface-container-low text-primary rounded-full border border-primary-container">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label text-label">Open</span>
+</div>
+</div>
+<div class="border-t border-outline-variant pt-md">
+<p class="font-label text-label text-muted mb-xs">Current Critical Needs</p>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-critical" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-body text-body text-on-surface">Infant Formula</span>
+<span class="font-mono text-mono text-muted ml-auto">QTY: 150</span>
+</div>
+</div>
+<button class="w-full mt-sm bg-primary text-on-primary font-label text-label py-3 rounded-lg hover:bg-tertiary transition-colors duration-200 flex items-center justify-center gap-sm focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
+<span class="material-symbols-outlined">directions</span>
+                Navigate to Center
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center bg-surface border-t border-outline-variant px-2 py-3 z-50 pb-safe">
+<a class="flex flex-col items-center justify-center text-muted px-4 py-1 hover:bg-surface-container-highest active:scale-95 transition-all duration-150 rounded-xl" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-label text-label mt-1 text-[12px]">Needs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-muted px-4 py-1 hover:bg-surface-container-highest active:scale-95 transition-all duration-150 rounded-xl" href="#">
+<span class="material-symbols-outlined">volunteer_activism</span>
+<span class="font-label text-label mt-1 text-[12px]">Pledges</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 hover:bg-surface-container-highest active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label text-label mt-1 text-[12px]">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-muted px-4 py-1 hover:bg-surface-container-highest active:scale-95 transition-all duration-150 rounded-xl" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-label mt-1 text-[12px]">Profile</span>
+</a>
+</nav>
+</body></html>
