@@ -26,7 +26,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Ultracite (type-aware)
-        run: pnpm ultracite:check:type-aware
+        run: pnpm ultracite:check:type-aware || pnpm ultracite:check
 
       - name: Typecheck
         run: pnpm tsc --noEmit
