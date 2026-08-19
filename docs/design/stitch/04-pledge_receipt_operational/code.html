@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pledge Receipt - Handly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#ceddd7",
+                        "tertiary-fixed": "#a4f4c3",
+                        "outline-variant": "#bec9c7",
+                        "on-error": "#ffffff",
+                        "critical": "#B42318",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#90d2ce",
+                        "outline": "#6f7978",
+                        "urgent": "#A14B00",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#e2f1ea",
+                        "on-tertiary-fixed": "#002111",
+                        "surface-container-low": "#e8f7f0",
+                        "background": "#eefdf6",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "surface-container-highest": "#d7e6df",
+                        "inverse-on-surface": "#e5f4ed",
+                        "primary-fixed": "#abefea",
+                        "tertiary-fixed-dim": "#88d7a8",
+                        "secondary-fixed": "#b9eaff",
+                        "on-tertiary-container": "#88d7a8",
+                        "surface-tint": "#226865",
+                        "on-tertiary": "#ffffff",
+                        "focus": "#1D4ED8",
+                        "on-surface": "#111e1a",
+                        "on-secondary-fixed": "#001f29",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#005f3a",
+                        "on-primary-fixed-variant": "#00504d",
+                        "on-tertiary-fixed-variant": "#005232",
+                        "border": "#CBD8D2",
+                        "primary": "#004341",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#0f5c59",
+                        "on-background": "#111e1a",
+                        "paper-bg": "#F6FAF8",
+                        "secondary-container": "#aae6fe",
+                        "surface-bright": "#eefdf6",
+                        "surface-variant": "#d7e6df",
+                        "tertiary": "#004529",
+                        "on-primary-container": "#8fd2ce",
+                        "secondary-fixed-dim": "#94cfe7",
+                        "inverse-surface": "#26332f",
+                        "on-primary-fixed": "#00201f",
+                        "on-surface-variant": "#3f4948",
+                        "muted": "#52635D",
+                        "surface-container-high": "#dcece5",
+                        "on-secondary-container": "#29687d",
+                        "error": "#ba1a1a",
+                        "secondary": "#26667b",
+                        "surface": "#FFFFFF",
+                        "primary-fixed-dim": "#90d2ce"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "md": "16px",
+                        "max-width": "1200px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body": ["Geist", "sans-serif"],
+                        "title": ["Geist", "sans-serif"],
+                        "label": ["Geist", "sans-serif"],
+                        "display": ["Geist", "sans-serif"],
+                        "headline": ["Geist", "sans-serif"],
+                        "mono": ["Geist Mono", "monospace"]
+                    },
+                    "fontSize": {
+                        "body": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "title": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "label": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display": ["40px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+                        "mono": ["14px", { "lineHeight": "1.4", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Fallback fonts if Geist is not loaded locally */
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;600&display=swap');
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-paper-bg text-on-background font-body h-full flex flex-col antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="bg-paper-bg border-b border-outline-variant w-full top-0 sticky z-40 flat no shadows flex items-center justify-between px-margin-mobile h-16 w-full max-w-max-width mx-auto">
+<button class="text-on-surface-variant hover:bg-surface-container active:opacity-80 transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="close" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+<h1 class="font-headline text-title font-semibold text-primary">Delivery Details</h1>
+<div class="w-10"></div> <!-- Spacer for center alignment -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-2xl mx-auto px-margin-mobile py-xl md:py-16 space-y-xl">
+<!-- Operational Context -->
+<section class="space-y-sm">
+<p class="font-label text-label text-muted uppercase tracking-wider">Status: Awaiting Delivery</p>
+<h2 class="font-headline text-headline text-on-background">Pledge Confirmed</h2>
+<p class="font-body text-body text-on-surface-variant max-w-prose">Please proceed to the intake center. Present your SOS code upon arrival to streamline processing.</p>
+</section>
+<!-- SOS Code Badge (The Anchor) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg flex flex-col items-center justify-center space-y-md relative overflow-hidden group hover:shadow-[0_1px_3px_oklch(0.23_0.02_173_/_0.08)] transition-shadow">
+<div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzExMWUxYSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')]"></div>
+<p class="font-label text-label text-muted">Intake Verification Code</p>
+<div class="flex items-center justify-center space-x-md">
+<span class="font-mono text-display text-primary tracking-widest font-bold">SOS-8429</span>
+</div>
+<button class="mt-md flex items-center space-x-sm px-4 py-2 border border-outline-variant rounded bg-surface hover:bg-surface-container transition-colors focus:ring-2 focus:ring-focus focus:ring-offset-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="content_copy">content_copy</span>
+<span class="font-label text-label text-on-surface">Copy Code</span>
+</button>
+</section>
+<!-- Checklist -->
+<section class="space-y-md">
+<h3 class="font-title text-title text-on-background border-b border-outline-variant pb-xs">Manifest</h3>
+<ul class="space-y-sm">
+<li class="flex items-start space-x-md py-sm">
+<span class="material-symbols-outlined text-primary mt-1" data-icon="check_circle">check_circle</span>
+<div class="flex-1">
+<div class="flex items-baseline justify-between">
+<span class="font-body text-body text-on-background">Infant Formula (Stage 1)</span>
+<span class="font-mono text-mono text-on-surface-variant bg-surface-container px-2 py-1 rounded">5x</span>
+</div>
+</div>
+</li>
+<li class="flex items-start space-x-md py-sm opacity-50">
+<span class="material-symbols-outlined text-outline mt-1" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<div class="flex-1">
+<div class="flex items-baseline justify-between">
+<span class="font-body text-body text-on-background">Awaiting transit scan</span>
+</div>
+</div>
+</li>
+</ul>
+</section>
+<!-- Drop-off Location -->
+<section class="space-y-md">
+<h3 class="font-title text-title text-on-background border-b border-outline-variant pb-xs">Logistics</h3>
+<div class="border border-outline-variant rounded-lg overflow-hidden bg-surface-container-lowest">
+<!-- Static Map Snippet (Placeholder via CSS background) -->
+<div class="h-32 w-full bg-surface-container relative" data-alt="A clinical, minimalist top-down map snippet showing a specific street corner. The map uses a very light color palette (whites, pale teals, light grays) with strict linear roads. A singular dark teal operational marker indicates the intake center. The overall aesthetic is clean, daylight-readable, and free of unnecessary geographical clutter." data-location="New York City" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOY3AzHo85mOCl0H3SVtRA1i8ryO4cXtDcGuwW2ODCDgj0nEgonxbSPhbm__1-1qw4zL1h-ObGnhVGsMzKjGT420arpqnAsrHfu7VPc4-r7slqArUI5Sq6CP9H91h9Wy3Cw-EsrYoXpUuTJxtBdHb2Xn-W6-AOH2Ay3oKXSglNpGqvXfAv54C4RZ140FN_x-YyezTG8BXKikwt-hjaJJn8KH3WYGElFxjBszoK9CQ54WrH3p93LA'); background-size: cover; background-position: center;">
+<div class="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.05)]"></div>
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+<span class="material-symbols-outlined text-primary text-3xl drop-shadow-md" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+</div>
+<div class="p-md flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+<div class="flex items-start space-x-sm">
+<span class="material-symbols-outlined text-muted mt-0.5" data-icon="storefront">storefront</span>
+<div>
+<p class="font-body text-body font-medium text-on-background">Zone C Intake Center</p>
+<p class="font-body text-body text-muted">42nd St &amp; 8th Ave</p>
+</div>
+</div>
+<button class="w-full sm:w-auto bg-primary text-on-primary font-label text-label py-2 px-md rounded flex items-center justify-center space-x-sm hover:bg-primary-container focus:ring-2 focus:ring-focus focus:ring-offset-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="directions">directions</span>
+<span>Open Map</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Footer Actions -->
+<section class="pt-xl pb-lg flex flex-col space-y-md">
+<button class="w-full py-3 border border-outline-variant text-on-surface font-label text-label rounded hover:bg-surface-container transition-colors focus:ring-2 focus:ring-focus focus:ring-offset-2">
+                Need Assistance?
+            </button>
+</section>
+</main>
+<!-- Note: BottomNavBar is suppressed due to 'Linear/Transactional' screen intent (Receipt/Back action). -->
+</body></html>

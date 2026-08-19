@@ -1,0 +1,330 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Handly - Notifications</title>
+<!-- Tailwind CSS Config (Injected) -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#94cfe7",
+                    "on-surface-variant": "#3f4948",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#26332f",
+                    "on-secondary-fixed-variant": "#004d61",
+                    "secondary-fixed": "#b9eaff",
+                    "on-tertiary-fixed": "#002111",
+                    "surface-container-highest": "#d7e6df",
+                    "surface-container": "#e2f1ea",
+                    "primary-fixed-dim": "#90d2ce",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#005f3a",
+                    "surface-container-high": "#dcece5",
+                    "border": "#CBD8D2",
+                    "background": "#eefdf6",
+                    "primary-fixed": "#abefea",
+                    "surface-tint": "#226865",
+                    "on-primary-fixed": "#00201f",
+                    "on-primary-container": "#8fd2ce",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#111e1a",
+                    "surface-variant": "#d7e6df",
+                    "outline-variant": "#bec9c7",
+                    "tertiary": "#004529",
+                    "surface-dim": "#ceddd7",
+                    "on-secondary-container": "#29687d",
+                    "outline": "#6f7978",
+                    "tertiary-fixed": "#a4f4c3",
+                    "secondary": "#26667b",
+                    "focus": "#1D4ED8",
+                    "critical": "#B42318",
+                    "surface": "#FFFFFF",
+                    "paper-bg": "#F6FAF8",
+                    "surface-bright": "#eefdf6",
+                    "urgent": "#A14B00",
+                    "on-primary-fixed-variant": "#00504d",
+                    "primary-container": "#0f5c59",
+                    "tertiary-fixed-dim": "#88d7a8",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#004341",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#aae6fe",
+                    "inverse-primary": "#90d2ce",
+                    "error": "#ba1a1a",
+                    "muted": "#52635D",
+                    "inverse-on-surface": "#e5f4ed",
+                    "on-tertiary-fixed-variant": "#005232",
+                    "on-secondary-fixed": "#001f29",
+                    "on-background": "#111e1a",
+                    "on-tertiary-container": "#88d7a8",
+                    "surface-container-low": "#e8f7f0",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "margin-mobile": "16px",
+                    "max-width": "1200px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "xs": "4px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "label": [
+                            "Geist"
+                    ],
+                    "headline": [
+                            "Geist"
+                    ],
+                    "body": [
+                            "Geist"
+                    ],
+                    "display": [
+                            "Geist"
+                    ],
+                    "mono": [
+                            "Geist Mono"
+                    ],
+                    "title": [
+                            "Geist"
+                    ]
+            },
+            "fontSize": {
+                    "label": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.015em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display": [
+                            "40px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "mono": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "title": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+        }
+        
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Geist Mono';
+            src: url('https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/GeistMono-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body class="bg-paper-bg text-on-surface font-body antialiased min-h-screen flex flex-col pb-24">
+<!-- Top App Bar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-on-background border-b border-outline-variant dark:border-on-surface-variant flex items-center px-margin-mobile md:px-margin-desktop h-16 w-full max-w-max-width mx-auto z-40">
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-container-low dark:hover:bg-on-surface-variant transition-colors active:scale-95 duration-100 p-2 rounded-full -ml-2 mr-2 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline text-title text-primary dark:text-primary-fixed font-bold tracking-tight">Notifications</h1>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-2xl mx-auto px-margin-mobile md:px-0 py-8"><div class="flex items-center gap-2 overflow-x-auto pb-4 mb-4 px-4 md:px-0 scrollbar-hide">
+  <!-- All (Active) -->
+  <button class="flex-shrink-0 px-4 py-1.5 rounded-lg bg-primary text-white font-label text-label transition-all active:scale-95">
+    All
+  </button>
+  <!-- Critical -->
+  <button class="flex-shrink-0 px-4 py-1.5 rounded-lg border border-outline-variant text-muted font-label text-label hover:bg-surface-container-low transition-all active:scale-95">
+    Critical
+  </button>
+  <!-- Deliveries -->
+  <button class="flex-shrink-0 px-4 py-1.5 rounded-lg border border-outline-variant text-muted font-label text-label hover:bg-surface-container-low transition-all active:scale-95">
+    Deliveries
+  </button>
+  <!-- Reminders -->
+  <button class="flex-shrink-0 px-4 py-1.5 rounded-lg border border-outline-variant text-muted font-label text-label hover:bg-surface-container-low transition-all active:scale-95">
+    Reminders
+  </button>
+</div>
+<!-- Group: Today -->
+<section class="mb-12">
+<h2 class="font-label text-label text-muted mb-4 uppercase tracking-wider pl-4">Today</h2>
+<div class="flex flex-col border border-border rounded-lg bg-surface overflow-hidden shadow-sm">
+<!-- Notification 1: CRITICAL -->
+<div class="flex items-start p-4 border-b border-border bg-error-container/20 hover:bg-surface-container-lowest transition-colors group cursor-pointer relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-critical"></div>
+<div class="flex-shrink-0 mt-1 mr-4">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-critical">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-title text-body font-semibold text-on-surface">Urgent Need in Zone 7A</h3>
+<span class="font-mono text-mono text-muted text-xs">2m ago</span>
+</div>
+<p class="font-body text-body text-on-surface-variant">Infant Formula is now at 10% fulfillment. Can you help?</p>
+<div class="mt-3 flex gap-2">
+<button class="bg-critical text-white font-label text-label px-4 py-2 rounded font-medium hover:bg-critical/90 active:scale-95 transition-all">Pledge Now</button>
+</div>
+</div>
+</div>
+<!-- Notification 2: SUCCESS -->
+<div class="flex items-start p-4 border-b border-border hover:bg-surface-container-lowest transition-colors group cursor-pointer">
+<div class="flex-shrink-0 mt-1 mr-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-title text-body font-semibold text-on-surface">Delivery Received</h3>
+<span class="font-mono text-mono text-muted text-xs">1h ago</span>
+</div>
+<p class="font-body text-body text-on-surface-variant">Your pledge for Clean Water (<span class="font-mono text-xs bg-surface-container px-1 py-0.5 rounded">PLD-002</span>) has been processed at West Sector.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Group: Earlier -->
+<section>
+<h2 class="font-label text-label text-muted mb-4 uppercase tracking-wider pl-4">Earlier</h2>
+<div class="flex flex-col border border-border rounded-lg bg-surface overflow-hidden shadow-sm">
+<!-- Notification 3: STANDARD -->
+<div class="flex items-start p-4 border-b border-border hover:bg-surface-container-lowest transition-colors group cursor-pointer">
+<div class="flex-shrink-0 mt-1 mr-4">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">event</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-title text-body font-semibold text-on-surface">Pledge Reminder</h3>
+<span class="font-mono text-mono text-muted text-xs">Yesterday</span>
+</div>
+<p class="font-body text-body text-on-surface-variant">Don't forget your scheduled drop-off for First Aid Kits tomorrow at 10:00 AM.</p>
+</div>
+</div>
+<!-- Notification 4: URGENT -->
+<div class="flex items-start p-4 hover:bg-surface-container-lowest transition-colors group cursor-pointer relative">
+<div class="flex-shrink-0 mt-1 mr-4">
+<div class="w-10 h-10 rounded-full bg-urgent/10 flex items-center justify-center text-urgent">
+<span class="material-symbols-outlined">info</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-title text-body font-semibold text-on-surface">New Drop-off Instruction</h3>
+<span class="font-mono text-mono text-muted text-xs">2 days ago</span>
+</div>
+<p class="font-body text-body text-on-surface-variant">The North Sector Intake Center has updated its entry procedure.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 w-full z-50 border-t border-outline-variant dark:border-on-surface-variant bg-surface dark:bg-on-background shadow-none md:hidden">
+<div class="w-full flex justify-around items-center px-4 py-2">
+<!-- Home -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:text-primary dark:hover:text-primary-fixed transition-colors active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label text-[10px] font-medium">Home</span>
+</button>
+<!-- Map -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:text-primary dark:hover:text-primary-fixed transition-colors active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" data-icon="explore">explore</span>
+<span class="font-label text-[10px] font-medium">Map</span>
+</button>
+<!-- Activity (Active) -->
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-5 py-1 active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" data-icon="notifications" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="font-label text-[10px] font-medium">Activity</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:text-primary dark:hover:text-primary-fixed transition-colors active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</nav>
+
+
+</body></html>
