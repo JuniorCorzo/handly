@@ -1,11 +1,13 @@
-import { cache } from 'react'
-import { createClient } from '@/lib/supabase/server'
+import { cache } from "react";
+
+import { createClient } from "@/lib/supabase/server";
+
 import type {
   PublicCampaign,
   PublicCollectionPoint,
-  PublicNeedItem
-} from './types'
-import { sortByUrgency } from './urgency'
+  PublicNeedItem,
+} from "./types";
+import { sortByUrgency } from "./urgency";
 
 /**
  * Shape de las filas devueltas por Supabase (join anidado con el pivote
@@ -13,49 +15,49 @@ import { sortByUrgency } from './urgency'
  * — mismo patrón que app/dashboard/page.tsx.
  */
 interface PublicNeedItemQueryRow {
-  id: string
-  category: string
-  item_name: string
-  target_quantity: number
-  unit: string
-  urgency: string
-  status: string
+  id: string;
+  category: string;
+  item_name: string;
+  target_quantity: number;
+  unit: string;
+  urgency: string;
+  status: string;
   need_items_collection_points:
     | {
         collection_points: {
-          id: string
-          location_adress: string | null
-          open_time: string | null
-          close_time: string | null
-        } | null
+          id: string;
+          location_adress: string | null;
+          open_time: string | null;
+          close_time: string | null;
+        } | null;
       }[]
-    | null
+    | null;
 }
 
 interface PublicCampaignQueryRow {
-  id: string
-  name: string
-  organization_id: string
+  id: string;
+  name: string;
+  organization_id: string;
   organizations:
     | {
-        id: string
-        name: string
-        zone_code: string | null
-        email: string | null
-        phone: string | null
+        id: string;
+        name: string;
+        zone_code: string | null;
+        email: string | null;
+        phone: string | null;
       }
     | {
-        id: string
-        name: string
-        zone_code: string | null
-        email: string | null
-        phone: string | null
+        id: string;
+        name: string;
+        zone_code: string | null;
+        email: string | null;
+        phone: string | null;
       }[]
-    | null
+    | null;
 }
 
 const UUID_RE =
-  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
 /**
  * Carga la campaña pública con sus necesidades activas y puntos de acopio.
@@ -69,13 +71,15 @@ const UUID_RE =
  */
 export const getPublicCampaign = cache(
   async (campaignId: string): Promise<PublicCampaign | null> => {
-    if (!UUID_RE.test(campaignId)) return null
+    if (!UUID_RE.test(campaignId)) {
+      return null;
+    }
 
-    const supabase = await createClient()
+    const supabase = await createClient();
 
     // ── 1. Campaña + organización (incluye medios de contacto) ──────────────
     const { data: campaignRow } = await supabase
-      .from('campaign')
+      .from("campaign")
       .select(
         `
         id,
@@ -90,30 +94,32 @@ export const getPublicCampaign = cache(
         )
         `
       )
-      .eq('id', campaignId)
-      .maybeSingle()
+      .eq("id", campaignId)
+      .maybeSingle();
 
-    if (!campaignRow) return null
+    if (!campaignRow) {
+      return null;
+    }
 
-    const campaign = campaignRow as unknown as PublicCampaignQueryRow
+    const campaign = campaignRow as unknown as PublicCampaignQueryRow;
 
     // Normalización de la relación organizaciones: Supabase puede devolver
     // objeto o array según la unicidad de la FK. Mismo patrón que
     // app/dashboard/page.tsx.
-    const org = campaign.organizations as unknown
+    const org = campaign.organizations as unknown;
     const orgRow = Array.isArray(org)
       ? org[0]
       : (org as {
-          id: string
-          name: string
-          zone_code: string | null
-          email: string | null
-          phone: string | null
-        } | null)
+          id: string;
+          name: string;
+          zone_code: string | null;
+          email: string | null;
+          phone: string | null;
+        } | null);
 
     // ── 2. Necesidades activas + puntos de acopio ──────────────────────
     const { data: needRows, error } = await supabase
-      .from('need_items')
+      .from("need_items")
       .select(
         `
         id,
@@ -133,35 +139,37 @@ export const getPublicCampaign = cache(
         )
         `
       )
-      .eq('campaign_id', campaignId)
-      .eq('status', 'active')
+      .eq("campaign_id", campaignId)
+      .eq("status", "active");
 
-    let needs: PublicNeedItem[] = []
+    let needs: PublicNeedItem[] = [];
     if (error) {
       // No fatal: se muestra la campaña sin necesidades y se loguea.
-      console.error('[Campaign] Error fetching need items:', error)
+      console.error("[Campaign] Error fetching need items:", error);
     } else if (needRows) {
-      const rows = needRows as unknown as PublicNeedItemQueryRow[]
+      const rows = needRows as unknown as PublicNeedItemQueryRow[];
 
       needs = rows
         .map((row) => {
           // Flatten: need_items_collection_points → collection_points.
-          const pointsById = new Map<string, PublicCollectionPoint>()
+          const pointsById = new Map<string, PublicCollectionPoint>();
           for (const link of row.need_items_collection_points ?? []) {
-            const cp = link.collection_points
-            if (!cp) continue
+            const cp = link.collection_points;
+            if (!cp) {
+              continue;
+            }
             const address =
-              cp.location_adress?.trim() || 'Dirección a confirmar'
+              cp.location_adress?.trim() || "Dirección a confirmar";
             pointsById.set(cp.id, {
               id: cp.id,
               address,
-              opensAt: cp.open_time ?? '',
-              closesAt: cp.close_time ?? ''
-            })
+              opensAt: cp.open_time ?? "",
+              closesAt: cp.close_time ?? "",
+            });
           }
-          const points = [...pointsById.values()]
+          const points = [...pointsById.values()];
 
-          const urgency = row.urgency as PublicNeedItem['urgency']
+          const urgency = row.urgency as PublicNeedItem["urgency"];
 
           return {
             id: row.id,
@@ -170,16 +178,16 @@ export const getPublicCampaign = cache(
             targetQuantity: row.target_quantity,
             unit: row.unit,
             urgency,
-            status: row.status as PublicNeedItem['status'],
-            collectionPoints: points
-          }
+            status: row.status as PublicNeedItem["status"],
+            collectionPoints: points,
+          };
         })
         .filter(
           (need): need is PublicNeedItem =>
-            need.urgency === 'critical_4h' ||
-            need.urgency === 'urgent_12h' ||
-            need.urgency === 'standard_24h'
-        )
+            need.urgency === "critical_4h" ||
+            need.urgency === "urgent_12h" ||
+            need.urgency === "standard_24h"
+        );
     }
 
     // ── 3. Normalización final ─────────────────────────────────────────
@@ -190,14 +198,14 @@ export const getPublicCampaign = cache(
         ? {
             id: orgRow.id,
             name: orgRow.name,
-            zoneCode: orgRow.zone_code ?? '',
+            zoneCode: orgRow.zone_code ?? "",
             email: orgRow.email ?? null,
-            phone: orgRow.phone ?? null
+            phone: orgRow.phone ?? null,
           }
         : null,
-      needs: sortByUrgency(needs)
-    }
+      needs: sortByUrgency(needs),
+    };
 
-    return result
+    return result;
   }
-)
+);

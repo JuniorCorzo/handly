@@ -1,563 +1,549 @@
 {
-    "name": "Donation Email Dispatch",
-    "flow": [
+  "name": "Donation Email Dispatch",
+  "flow": [
+    {
+      "id": 2,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 2703382,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 150,
+          "name": "Donation Webhook"
+        },
+        "restore": {
+          "parameters": {
+            "hook": {
+              "data": {
+                "editable": "true"
+              },
+              "label": "donation_webhook"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook:gateway-webhook",
+            "label": "Webhook",
+            "required": true
+          },
+          {
+            "name": "maxResults",
+            "type": "number",
+            "label": "Maximum number of results"
+          }
+        ],
+        "interface": [
+          {
+            "name": "event_type",
+            "type": "text"
+          },
+          {
+            "name": "recipient_email",
+            "type": "text"
+          },
+          {
+            "name": "data",
+            "spec": [
+              {
+                "name": "org_name",
+                "type": "text"
+              },
+              {
+                "name": "campaign_name",
+                "type": "text"
+              },
+              {
+                "name": "item_goal",
+                "type": "text"
+              },
+              {
+                "name": "item_name",
+                "type": "text"
+              },
+              {
+                "name": "goal_reached",
+                "type": "text"
+              },
+              {
+                "name": "goal",
+                "type": "text"
+              }
+            ],
+            "type": "collection"
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {
+        "else": 1
+      },
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 150,
+          "name": "Classify Email"
+        }
+      },
+      "routes": [
         {
-            "id": 2,
-            "module": "gateway:CustomWebHook",
-            "version": 1,
-            "parameters": {
-                "hook": 2703382,
-                "maxResults": 1
-            },
-            "mapper": {},
-            "metadata": {
+          "flow": [
+            {
+              "id": 6,
+              "module": "resend:sendAnEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 10488338
+              },
+              "filter": {
+                "name": "Meta alcanzada",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{2.event_type}}",
+                      "b": "GOAL_ACHIEVED",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "from": "noreply@handly.angelcorzo.dev",
+                "to": ["{{2.recipient_email}}"],
+                "subject": "{{if(2.data.goal_type = \"campaign\"; \"🎉 ¡Campaña Completada!\"; \"🎯 Meta Alcanzada en Ítem\")}} — {{2.data.campaign_name}}",
+                "sendEmailAs": "html",
+                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Progreso de Meta - Handly</title>\r\n  <style>\r\n    body {\r\n      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\r\n      background-color: #f4f6f8;\r\n      margin: 0;\r\n      padding: 0;\r\n      color: #333333;\r\n    }\r\n    .container {\r\n      max-width: 600px;\r\n      margin: 30px auto;\r\n      background-color: #ffffff;\r\n      border-radius: 12px;\r\n      overflow: hidden;\r\n      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);\r\n    }\r\n    .header {\r\n      background: linear-gradient(135deg, #FF6B4A 0%, #FF8E53 100%);\r\n      padding: 30px 20px;\r\n      text-align: center;\r\n      color: #ffffff;\r\n    }\r\n    .header h1 {\r\n      margin: 0;\r\n      font-size: 26px;\r\n      font-weight: 700;\r\n      letter-spacing: -0.5px;\r\n    }\r\n    .badge {\r\n      display: inline-block;\r\n      background-color: rgba(255, 255, 255, 0.25);\r\n      padding: 6px 14px;\r\n      border-radius: 20px;\r\n      font-size: 13px;\r\n      font-weight: 600;\r\n      margin-top: 10px;\r\n      text-transform: uppercase;\r\n      letter-spacing: 0.5px;\r\n    }\r\n    .content {\r\n      padding: 30px 25px;\r\n    }\r\n    .greeting {\r\n      font-size: 18px;\r\n      font-weight: 600;\r\n      color: #111827;\r\n      margin-bottom: 12px;\r\n    }\r\n    .message {\r\n      font-size: 15px;\r\n      line-height: 1.6;\r\n      color: #4b5563;\r\n      margin-bottom: 25px;\r\n    }\r\n    .card {\r\n      background-color: #f9fafb;\r\n      border: 1px solid #e5e7eb;\r\n      border-radius: 10px;\r\n      padding: 20px;\r\n      margin-bottom: 25px;\r\n    }\r\n    .card-title {\r\n      font-size: 14px;\r\n      text-transform: uppercase;\r\n      color: #6b7280;\r\n      font-weight: 700;\r\n      margin-bottom: 12px;\r\n      letter-spacing: 0.5px;\r\n    }\r\n    .data-row {\r\n      display: flex;\r\n      justify-content: space-between;\r\n      padding: 8px 0;\r\n      border-bottom: 1px solid #f3f4f6;\r\n      font-size: 15px;\r\n    }\r\n    .data-label {\r\n      color: #6b7280;\r\n    }\r\n    .data-value {\r\n      font-weight: 600;\r\n      color: #111827;\r\n    }\r\n    .progress-box {\r\n      margin-top: 15px;\r\n      background-color: #ecfdf5;\r\n      border: 1px solid #a7f3d0;\r\n      border-radius: 8px;\r\n      padding: 12px;\r\n      text-align: center;\r\n      color: #065f46;\r\n      font-weight: 600;\r\n      font-size: 15px;\r\n    }\r\n    .cta-button {\r\n      display: block;\r\n      width: 100%;\r\n      text-align: center;\r\n      background-color: #111827;\r\n      color: #ffffff !important;\r\n      text-decoration: none;\r\n      padding: 14px 0;\r\n      border-radius: 8px;\r\n      font-weight: 600;\r\n      font-size: 16px;\r\n      margin-top: 20px;\r\n    }\r\n    .footer {\r\n      background-color: #f9fafb;\r\n      padding: 20px;\r\n      text-align: center;\r\n      font-size: 12px;\r\n      color: #9ca3af;\r\n      border-top: 1px solid #f3f4f6;\r\n    }\r\n  </style>\r\n</head>\r\n<body>\r\n\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <h1>{{if(2.data.goal_type = \"campaign\"; \"¡Campaña Acelerando! 🏆\"; \"¡Hito Alcanzado! 🎯\")}}</h1>\r\n      <div class=\"badge\">{{if(2.data.goal_type = \"campaign\"; \"Progreso de Campaña\"; \"Progreso de Insumo\")}}</div>\r\n    </div>\r\n\r\n    <div class=\"content\">\r\n      <div class=\"greeting\">¡Hola, equipo de {{2.data.org_name}}!</div>\r\n      <div class=\"message\">\r\n        {{if(2.data.goal_type = \"campaign\"; \"¡Grandes noticias! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> de la meta global para la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\"; \"¡Excelente progreso! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> del objetivo para el insumo <strong>\" + 2.data.item_name + \"</strong> en la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\")}}\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">{{if(2.data.goal_type = \"campaign\"; \"Resumen de la Campaña\"; \"Detalle del Insumo\")}}</div>\r\n\r\n        <div class=\"data-row\">\r\n          <span class=\"data-label\">Campaña:</span>\r\n          <span class=\"data-value\">{{2.data.campaign_name}}</span>\r\n        </div>\r\n\r\n        {{if(2.data.goal_type != \"campaign\"; \"<div class='data-row'><span class='data-label'>Ítem:</span><span class='data-value'>\" + 2.data.item_name + \"</span></div>\"; )}}\r\n\r\n        <div class=\"data-row\">\r\n          <span class=\"data-label\">Meta objetivo:</span>\r\n          <span class=\"data-value\">{{2.data.goal}} unidades</span>\r\n        </div>\r\n\r\n        <div class=\"progress-box\">\r\n          📈 Recolectado/comprometido: <strong>{{2.data.goal_reached}} unidades ({{round((2.data.goal_reached / 2.data.goal) * 100)}}%)</strong>\r\n        </div>\r\n      </div>\r\n\r\n      <p class=\"message\">\r\n        {{if(2.data.goal_type = \"campaign\"; \"Gracias a la respuesta de los donantes, la campaña avanza a firme paso. Podés gestionar y revisar los acopios desde tu panel.\"; \"Gracias al compromiso de la comunidad, los cupos para este insumo se siguen completando. Podés revisar el estado del acopio desde tu panel.\")}}\r\n      </p>\r\n\r\n      <a href=\"https://handly.app/dashboard\" class=\"cta-button\">Ir al Panel de Gestión</a>\r\n    </div>\r\n\r\n    <div class=\"footer\">\r\n      Este es un mensaje automático generado por <strong>Handly</strong> en respuesta a eventos de la campaña.<br>\r\n      © 2026 Handly. Todos los derechos reservados.\r\n    </div>\r\n  </div>\r\n\r\n</body>\r\n</html>"
+              },
+              "metadata": {
                 "designer": {
-                    "x": 0,
-                    "y": 150,
-                    "name": "Donation Webhook"
+                  "x": 528,
+                  "y": -202
                 },
                 "restore": {
-                    "parameters": {
-                        "hook": {
-                            "data": {
-                                "editable": "true"
-                            },
-                            "label": "donation_webhook"
-                        }
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "Angel's Resend connection",
+                      "data": {
+                        "scoped": "true",
+                        "connection": "resend"
+                      }
                     }
+                  },
+                  "expect": {
+                    "to": {
+                      "mode": "chose",
+                      "items": [null]
+                    },
+                    "bcc": {
+                      "mode": "chose"
+                    },
+                    "cc": {
+                      "mode": "chose"
+                    },
+                    "replyTo": {
+                      "mode": "chose"
+                    },
+                    "sendEmailAs": {
+                      "mode": "chose",
+                      "label": "HTML"
+                    },
+                    "tags": {
+                      "mode": "chose"
+                    },
+                    "attachments": {
+                      "mode": "chose"
+                    },
+                    "headers": {
+                      "mode": "chose"
+                    }
+                  }
                 },
                 "parameters": [
-                    {
-                        "name": "hook",
-                        "type": "hook:gateway-webhook",
-                        "label": "Webhook",
-                        "required": true
-                    },
-                    {
-                        "name": "maxResults",
-                        "type": "number",
-                        "label": "Maximum number of results"
-                    }
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account:resend",
+                    "label": "Connection",
+                    "required": true
+                  }
                 ],
-                "interface": [
-                    {
-                        "name": "event_type",
-                        "type": "text"
-                    },
-                    {
-                        "name": "recipient_email",
-                        "type": "text"
-                    },
-                    {
-                        "name": "data",
-                        "spec": [
-                            {
-                                "name": "org_name",
-                                "type": "text"
-                            },
-                            {
-                                "name": "campaign_name",
-                                "type": "text"
-                            },
-                            {
-                                "name": "item_goal",
-                                "type": "text"
-                            },
-                            {
-                                "name": "item_name",
-                                "type": "text"
-                            },
-                            {
-                                "name": "goal_reached",
-                                "type": "text"
-                            },
-                            {
-                                "name": "goal",
-                                "type": "text"
-                            }
-                        ],
-                        "type": "collection"
+                "expect": [
+                  {
+                    "name": "from",
+                    "type": "text",
+                    "label": "From",
+                    "required": true
+                  },
+                  {
+                    "name": "to",
+                    "type": "array",
+                    "label": "To",
+                    "required": true,
+                    "spec": {
+                      "type": "email",
+                      "name": "value"
                     }
+                  },
+                  {
+                    "name": "bcc",
+                    "type": "array",
+                    "label": "BCC",
+                    "spec": {
+                      "type": "email",
+                      "name": "value"
+                    }
+                  },
+                  {
+                    "name": "cc",
+                    "type": "array",
+                    "label": "CC",
+                    "spec": {
+                      "type": "email",
+                      "name": "value"
+                    }
+                  },
+                  {
+                    "name": "replyTo",
+                    "type": "array",
+                    "label": "Reply-To",
+                    "spec": {
+                      "type": "email",
+                      "name": "value"
+                    }
+                  },
+                  {
+                    "name": "subject",
+                    "type": "text",
+                    "label": "Subject",
+                    "required": true
+                  },
+                  {
+                    "name": "scheduled_at",
+                    "type": "date",
+                    "label": "Schedule For",
+                    "time": true
+                  },
+                  {
+                    "name": "sendEmailAs",
+                    "type": "select",
+                    "label": "Send Email As",
+                    "required": true,
+                    "validate": {
+                      "enum": ["html", "text"]
+                    }
+                  },
+                  {
+                    "name": "tags",
+                    "type": "array",
+                    "label": "Tags",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name"
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "attachments",
+                    "type": "array",
+                    "label": "Attachments",
+                    "spec": [
+                      {
+                        "name": "filename",
+                        "type": "filename",
+                        "label": "File name"
+                      },
+                      {
+                        "name": "path",
+                        "type": "text",
+                        "label": "Path"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "headers",
+                    "type": "array",
+                    "label": "Custom Headers",
+                    "spec": {
+                      "spec": [
+                        {
+                          "name": "key",
+                          "type": "text",
+                          "label": "Key"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "Header",
+                      "name": "value"
+                    }
+                  },
+                  {
+                    "name": "html",
+                    "type": "text",
+                    "label": "HTML Content"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Plain Text Version"
+                  }
                 ]
+              }
             }
+          ]
         },
         {
-            "id": 3,
-            "module": "builtin:BasicRouter",
-            "version": 1,
-            "parameters": {
-                "else": 1
-            },
-            "mapper": null,
-            "metadata": {
+          "flow": [
+            {
+              "id": 7,
+              "module": "resend:sendAnEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 10488338
+              },
+              "filter": {
+                "name": "Tipo desconocido",
+                "conditions": null
+              },
+              "mapper": {
+                "to": ["ramirorodcas.dev@gmail.com"],
+                "from": "noreply@handly.angelcorzo.dev",
+                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Alerta de Sistema - Handly</title>\r\n  <style>\r\n    body {\r\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\r\n      background-color: #0f172a;\r\n      margin: 0;\r\n      padding: 0;\r\n      color: #e2e8f0;\r\n    }\r\n    .container {\r\n      max-width: 620px;\r\n      margin: 30px auto;\r\n      background-color: #1e293b;\r\n      border-radius: 12px;\r\n      overflow: hidden;\r\n      border: 1px solid #334155;\r\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);\r\n    }\r\n    .header {\r\n      background-color: #ef4444;\r\n      padding: 20px 25px;\r\n      color: #ffffff;\r\n      display: flex;\r\n      align-items: center;\r\n    }\r\n    .header h1 {\r\n      margin: 0;\r\n      font-size: 20px;\r\n      font-weight: 700;\r\n      letter-spacing: -0.3px;\r\n    }\r\n    .badge {\r\n      display: inline-block;\r\n      background-color: #b91c1c;\r\n      color: #fef2f2;\r\n      padding: 4px 10px;\r\n      border-radius: 6px;\r\n      font-size: 12px;\r\n      font-weight: 700;\r\n      margin-top: 6px;\r\n      text-transform: uppercase;\r\n    }\r\n    .content {\r\n      padding: 25px;\r\n    }\r\n    .alert-title {\r\n      font-size: 16px;\r\n      font-weight: 600;\r\n      color: #f87171;\r\n      margin-bottom: 12px;\r\n    }\r\n    .message {\r\n      font-size: 14px;\r\n      line-height: 1.6;\r\n      color: #94a3b8;\r\n      margin-bottom: 20px;\r\n    }\r\n    .card {\r\n      background-color: #0f172a;\r\n      border: 1px solid #334155;\r\n      border-radius: 8px;\r\n      padding: 16px;\r\n      margin-bottom: 20px;\r\n    }\r\n    .card-title {\r\n      font-size: 12px;\r\n      text-transform: uppercase;\r\n      color: #64748b;\r\n      font-weight: 700;\r\n      margin-bottom: 10px;\r\n      letter-spacing: 0.5px;\r\n    }\r\n    .data-row {\r\n      padding: 6px 0;\r\n      font-size: 14px;\r\n    }\r\n    .data-label {\r\n      color: #94a3b8;\r\n    }\r\n    .data-value {\r\n      font-weight: 600;\r\n      color: #f8fafc;\r\n      font-family: monospace;\r\n      background-color: #1e293b;\r\n      padding: 2px 6px;\r\n      border-radius: 4px;\r\n    }\r\n    .code-block {\r\n      background-color: #020617;\r\n      border: 1px solid #1e293b;\r\n      border-radius: 8px;\r\n      padding: 14px;\r\n      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;\r\n      font-size: 12px;\r\n      color: #38bdf8;\r\n      overflow-x: auto;\r\n      white-space: pre-wrap;\r\n      word-break: break-all;\r\n    }\r\n    .footer {\r\n      background-color: #0f172a;\r\n      padding: 16px 25px;\r\n      text-align: center;\r\n      font-size: 12px;\r\n      color: #64748b;\r\n      border-top: 1px solid #1e293b;\r\n    }\r\n  </style>\r\n</head>\r\n<body>\r\n\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <div>\r\n        <h1>⚠️ Unhandled Webhook Event</h1>\r\n        <div class=\"badge\">Error de Ruteo / Fallback</div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"content\">\r\n      <div class=\"alert-title\">Evento no procesado en la automatización</div>\r\n      <div class=\"message\">\r\n        El escenario de Make/n8n recibió una petición webhook con un tipo de evento que no coincide con ninguno de los filtros configurados en el Router.\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">Detalles de la Petición</div>\r\n        \r\n        <div class=\"data-row\">\r\n          <span class=\"data-label\">Event Type recibido:</span>\r\n          <span class=\"data-value\">{{2.event_type}}</span>\r\n        </div>\r\n        \r\n        <div class=\"data-row\" style=\"margin-top: 6px;\">\r\n          <span class=\"data-label\">Destinatario original:</span>\r\n          <span class=\"data-value\">{{2.recipient_email}}</span>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"card-title\">Payload Recibido (Raw JSON)</div>\r\n      <div class=\"code-block\">\r\n{\r\n  \"event_type\": \"{{2.event_type}}\",\r\n  \"recipient_email\": \"{{2.recipient_email}}\",\r\n  \"data\": {{2.data}}\r\n}\r\n      </div>\r\n\r\n    </div>\r\n\r\n    <div class=\"footer\">\r\n      Alerta automática para Dev/Staff • <strong>Handly Core System</strong>\r\n    </div>\r\n  </div>\r\n\r\n</body>\r\n</html>",
+                "subject": "⚠️ [Handly System Alert] Evento de webhook no reconocido: {{2.event_type}}",
+                "sendEmailAs": "html"
+              },
+              "metadata": {
                 "designer": {
-                    "x": 300,
-                    "y": 150,
-                    "name": "Classify Email"
-                }
-            },
-            "routes": [
-                {
-                    "flow": [
-                        {
-                            "id": 6,
-                            "module": "resend:sendAnEmail",
-                            "version": 1,
-                            "parameters": {
-                                "__IMTCONN__": 10488338
-                            },
-                            "filter": {
-                                "name": "Meta alcanzada",
-                                "conditions": [
-                                    [
-                                        {
-                                            "a": "{{2.event_type}}",
-                                            "b": "GOAL_ACHIEVED",
-                                            "o": "text:equal"
-                                        }
-                                    ]
-                                ]
-                            },
-                            "mapper": {
-                                "from": "noreply@handly.angelcorzo.dev",
-                                "to": [
-                                    "{{2.recipient_email}}"
-                                ],
-                                "subject": "{{if(2.data.goal_type = \"campaign\"; \"🎉 ¡Campaña Completada!\"; \"🎯 Meta Alcanzada en Ítem\")}} — {{2.data.campaign_name}}",
-                                "sendEmailAs": "html",
-                                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Progreso de Meta - Handly</title>\r\n  <style>\r\n    body {\r\n      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;\r\n      background-color: #f4f6f8;\r\n      margin: 0;\r\n      padding: 0;\r\n      color: #333333;\r\n    }\r\n    .container {\r\n      max-width: 600px;\r\n      margin: 30px auto;\r\n      background-color: #ffffff;\r\n      border-radius: 12px;\r\n      overflow: hidden;\r\n      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);\r\n    }\r\n    .header {\r\n      background: linear-gradient(135deg, #FF6B4A 0%, #FF8E53 100%);\r\n      padding: 30px 20px;\r\n      text-align: center;\r\n      color: #ffffff;\r\n    }\r\n    .header h1 {\r\n      margin: 0;\r\n      font-size: 26px;\r\n      font-weight: 700;\r\n      letter-spacing: -0.5px;\r\n    }\r\n    .badge {\r\n      display: inline-block;\r\n      background-color: rgba(255, 255, 255, 0.25);\r\n      padding: 6px 14px;\r\n      border-radius: 20px;\r\n      font-size: 13px;\r\n      font-weight: 600;\r\n      margin-top: 10px;\r\n      text-transform: uppercase;\r\n      letter-spacing: 0.5px;\r\n    }\r\n    .content {\r\n      padding: 30px 25px;\r\n    }\r\n    .greeting {\r\n      font-size: 18px;\r\n      font-weight: 600;\r\n      color: #111827;\r\n      margin-bottom: 12px;\r\n    }\r\n    .message {\r\n      font-size: 15px;\r\n      line-height: 1.6;\r\n      color: #4b5563;\r\n      margin-bottom: 25px;\r\n    }\r\n    .card {\r\n      background-color: #f9fafb;\r\n      border: 1px solid #e5e7eb;\r\n      border-radius: 10px;\r\n      padding: 20px;\r\n      margin-bottom: 25px;\r\n    }\r\n    .card-title {\r\n      font-size: 14px;\r\n      text-transform: uppercase;\r\n      color: #6b7280;\r\n      font-weight: 700;\r\n      margin-bottom: 12px;\r\n      letter-spacing: 0.5px;\r\n    }\r\n    .data-row {\r\n      display: flex;\r\n      justify-content: space-between;\r\n      padding: 8px 0;\r\n      border-bottom: 1px solid #f3f4f6;\r\n      font-size: 15px;\r\n    }\r\n    .data-label {\r\n      color: #6b7280;\r\n    }\r\n    .data-value {\r\n      font-weight: 600;\r\n      color: #111827;\r\n    }\r\n    .progress-box {\r\n      margin-top: 15px;\r\n      background-color: #ecfdf5;\r\n      border: 1px solid #a7f3d0;\r\n      border-radius: 8px;\r\n      padding: 12px;\r\n      text-align: center;\r\n      color: #065f46;\r\n      font-weight: 600;\r\n      font-size: 15px;\r\n    }\r\n    .cta-button {\r\n      display: block;\r\n      width: 100%;\r\n      text-align: center;\r\n      background-color: #111827;\r\n      color: #ffffff !important;\r\n      text-decoration: none;\r\n      padding: 14px 0;\r\n      border-radius: 8px;\r\n      font-weight: 600;\r\n      font-size: 16px;\r\n      margin-top: 20px;\r\n    }\r\n    .footer {\r\n      background-color: #f9fafb;\r\n      padding: 20px;\r\n      text-align: center;\r\n      font-size: 12px;\r\n      color: #9ca3af;\r\n      border-top: 1px solid #f3f4f6;\r\n    }\r\n  </style>\r\n</head>\r\n<body>\r\n\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <h1>{{if(2.data.goal_type = \"campaign\"; \"¡Campaña Acelerando! 🏆\"; \"¡Hito Alcanzado! 🎯\")}}</h1>\r\n      <div class=\"badge\">{{if(2.data.goal_type = \"campaign\"; \"Progreso de Campaña\"; \"Progreso de Insumo\")}}</div>\r\n    </div>\r\n\r\n    <div class=\"content\">\r\n      <div class=\"greeting\">¡Hola, equipo de {{2.data.org_name}}!</div>\r\n      <div class=\"message\">\r\n        {{if(2.data.goal_type = \"campaign\"; \"¡Grandes noticias! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> de la meta global para la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\"; \"¡Excelente progreso! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> del objetivo para el insumo <strong>\" + 2.data.item_name + \"</strong> en la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\")}}\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">{{if(2.data.goal_type = \"campaign\"; \"Resumen de la Campaña\"; \"Detalle del Insumo\")}}</div>\r\n\r\n        <div class=\"data-row\">\r\n          <span class=\"data-label\">Campaña:</span>\r\n          <span class=\"data-value\">{{2.data.campaign_name}}</span>\r\n        </div>\r\n\r\n        {{if(2.data.goal_type != \"campaign\"; \"<div class='data-row'><span class='data-label'>Ítem:</span><span class='data-value'>\" + 2.data.item_name + \"</span></div>\"; )}}\r\n\r\n        <div class=\"data-row\">\r\n          <span class=\"data-label\">Meta objetivo:</span>\r\n          <span class=\"data-value\">{{2.data.goal}} unidades</span>\r\n        </div>\r\n\r\n        <div class=\"progress-box\">\r\n          📈 Recolectado/comprometido: <strong>{{2.data.goal_reached}} unidades ({{round((2.data.goal_reached / 2.data.goal) * 100)}}%)</strong>\r\n        </div>\r\n      </div>\r\n\r\n      <p class=\"message\">\r\n        {{if(2.data.goal_type = \"campaign\"; \"Gracias a la respuesta de los donantes, la campaña avanza a firme paso. Podés gestionar y revisar los acopios desde tu panel.\"; \"Gracias al compromiso de la comunidad, los cupos para este insumo se siguen completando. Podés revisar el estado del acopio desde tu panel.\")}}\r\n      </p>\r\n\r\n      <a href=\"https://handly.app/dashboard\" class=\"cta-button\">Ir al Panel de Gestión</a>\r\n    </div>\r\n\r\n    <div class=\"footer\">\r\n      Este es un mensaje automático generado por <strong>Handly</strong> en respuesta a eventos de la campaña.<br>\r\n      © 2026 Handly. Todos los derechos reservados.\r\n    </div>\r\n  </div>\r\n\r\n</body>\r\n</html>"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 528,
-                                    "y": -202
-                                },
-                                "restore": {
-                                    "parameters": {
-                                        "__IMTCONN__": {
-                                            "label": "Angel's Resend connection",
-                                            "data": {
-                                                "scoped": "true",
-                                                "connection": "resend"
-                                            }
-                                        }
-                                    },
-                                    "expect": {
-                                        "to": {
-                                            "mode": "chose",
-                                            "items": [
-                                                null
-                                            ]
-                                        },
-                                        "bcc": {
-                                            "mode": "chose"
-                                        },
-                                        "cc": {
-                                            "mode": "chose"
-                                        },
-                                        "replyTo": {
-                                            "mode": "chose"
-                                        },
-                                        "sendEmailAs": {
-                                            "mode": "chose",
-                                            "label": "HTML"
-                                        },
-                                        "tags": {
-                                            "mode": "chose"
-                                        },
-                                        "attachments": {
-                                            "mode": "chose"
-                                        },
-                                        "headers": {
-                                            "mode": "chose"
-                                        }
-                                    }
-                                },
-                                "parameters": [
-                                    {
-                                        "name": "__IMTCONN__",
-                                        "type": "account:resend",
-                                        "label": "Connection",
-                                        "required": true
-                                    }
-                                ],
-                                "expect": [
-                                    {
-                                        "name": "from",
-                                        "type": "text",
-                                        "label": "From",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "to",
-                                        "type": "array",
-                                        "label": "To",
-                                        "required": true,
-                                        "spec": {
-                                            "type": "email",
-                                            "name": "value"
-                                        }
-                                    },
-                                    {
-                                        "name": "bcc",
-                                        "type": "array",
-                                        "label": "BCC",
-                                        "spec": {
-                                            "type": "email",
-                                            "name": "value"
-                                        }
-                                    },
-                                    {
-                                        "name": "cc",
-                                        "type": "array",
-                                        "label": "CC",
-                                        "spec": {
-                                            "type": "email",
-                                            "name": "value"
-                                        }
-                                    },
-                                    {
-                                        "name": "replyTo",
-                                        "type": "array",
-                                        "label": "Reply-To",
-                                        "spec": {
-                                            "type": "email",
-                                            "name": "value"
-                                        }
-                                    },
-                                    {
-                                        "name": "subject",
-                                        "type": "text",
-                                        "label": "Subject",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "scheduled_at",
-                                        "type": "date",
-                                        "label": "Schedule For",
-                                        "time": true
-                                    },
-                                    {
-                                        "name": "sendEmailAs",
-                                        "type": "select",
-                                        "label": "Send Email As",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "html",
-                                                "text"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "tags",
-                                        "type": "array",
-                                        "label": "Tags",
-                                        "spec": [
-                                            {
-                                                "name": "name",
-                                                "type": "text",
-                                                "label": "Name"
-                                            },
-                                            {
-                                                "name": "value",
-                                                "type": "text",
-                                                "label": "Value"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "name": "attachments",
-                                        "type": "array",
-                                        "label": "Attachments",
-                                        "spec": [
-                                            {
-                                                "name": "filename",
-                                                "type": "filename",
-                                                "label": "File name"
-                                            },
-                                            {
-                                                "name": "path",
-                                                "type": "text",
-                                                "label": "Path"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "type": "array",
-                                        "label": "Custom Headers",
-                                        "spec": {
-                                            "spec": [
-                                                {
-                                                    "name": "key",
-                                                    "type": "text",
-                                                    "label": "Key"
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Header",
-                                            "name": "value"
-                                        }
-                                    },
-                                    {
-                                        "name": "html",
-                                        "type": "text",
-                                        "label": "HTML Content"
-                                    },
-                                    {
-                                        "name": "text",
-                                        "type": "text",
-                                        "label": "Plain Text Version"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
+                  "x": 637,
+                  "y": 215,
+                  "name": "Unknown Mail Type"
                 },
-                {
-                    "flow": [
+                "restore": {
+                  "expect": {
+                    "cc": {
+                      "mode": "chose"
+                    },
+                    "to": {
+                      "mode": "chose",
+                      "items": [null]
+                    },
+                    "bcc": {
+                      "mode": "chose"
+                    },
+                    "tags": {
+                      "mode": "chose"
+                    },
+                    "headers": {
+                      "mode": "chose"
+                    },
+                    "replyTo": {
+                      "mode": "chose"
+                    },
+                    "attachments": {
+                      "mode": "chose"
+                    },
+                    "sendEmailAs": {
+                      "mode": "chose",
+                      "label": "HTML"
+                    }
+                  },
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "data": {
+                        "scoped": "true",
+                        "connection": "resend"
+                      },
+                      "label": "Angel's Resend connection"
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account:resend",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "from",
+                    "type": "text",
+                    "label": "From",
+                    "required": true
+                  },
+                  {
+                    "name": "to",
+                    "spec": {
+                      "name": "value",
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "To",
+                    "required": true
+                  },
+                  {
+                    "name": "bcc",
+                    "spec": {
+                      "name": "value",
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "BCC"
+                  },
+                  {
+                    "name": "cc",
+                    "spec": {
+                      "name": "value",
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "CC"
+                  },
+                  {
+                    "name": "replyTo",
+                    "spec": {
+                      "name": "value",
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "Reply-To"
+                  },
+                  {
+                    "name": "subject",
+                    "type": "text",
+                    "label": "Subject",
+                    "required": true
+                  },
+                  {
+                    "name": "scheduled_at",
+                    "time": true,
+                    "type": "date",
+                    "label": "Schedule For"
+                  },
+                  {
+                    "name": "sendEmailAs",
+                    "type": "select",
+                    "label": "Send Email As",
+                    "required": true,
+                    "validate": {
+                      "enum": ["html", "text"]
+                    }
+                  },
+                  {
+                    "name": "tags",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name"
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Tags"
+                  },
+                  {
+                    "name": "attachments",
+                    "spec": [
+                      {
+                        "name": "filename",
+                        "type": "filename",
+                        "label": "File name"
+                      },
+                      {
+                        "name": "path",
+                        "type": "text",
+                        "label": "Path"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Attachments"
+                  },
+                  {
+                    "name": "headers",
+                    "spec": {
+                      "name": "value",
+                      "spec": [
                         {
-                            "id": 7,
-                            "module": "resend:sendAnEmail",
-                            "version": 1,
-                            "parameters": {
-                                "__IMTCONN__": 10488338
-                            },
-                            "filter": {
-                                "name": "Tipo desconocido",
-                                "conditions": null
-                            },
-                            "mapper": {
-                                "to": [
-                                    "ramirorodcas.dev@gmail.com"
-                                ],
-                                "from": "noreply@handly.angelcorzo.dev",
-                                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Alerta de Sistema - Handly</title>\r\n  <style>\r\n    body {\r\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\r\n      background-color: #0f172a;\r\n      margin: 0;\r\n      padding: 0;\r\n      color: #e2e8f0;\r\n    }\r\n    .container {\r\n      max-width: 620px;\r\n      margin: 30px auto;\r\n      background-color: #1e293b;\r\n      border-radius: 12px;\r\n      overflow: hidden;\r\n      border: 1px solid #334155;\r\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);\r\n    }\r\n    .header {\r\n      background-color: #ef4444;\r\n      padding: 20px 25px;\r\n      color: #ffffff;\r\n      display: flex;\r\n      align-items: center;\r\n    }\r\n    .header h1 {\r\n      margin: 0;\r\n      font-size: 20px;\r\n      font-weight: 700;\r\n      letter-spacing: -0.3px;\r\n    }\r\n    .badge {\r\n      display: inline-block;\r\n      background-color: #b91c1c;\r\n      color: #fef2f2;\r\n      padding: 4px 10px;\r\n      border-radius: 6px;\r\n      font-size: 12px;\r\n      font-weight: 700;\r\n      margin-top: 6px;\r\n      text-transform: uppercase;\r\n    }\r\n    .content {\r\n      padding: 25px;\r\n    }\r\n    .alert-title {\r\n      font-size: 16px;\r\n      font-weight: 600;\r\n      color: #f87171;\r\n      margin-bottom: 12px;\r\n    }\r\n    .message {\r\n      font-size: 14px;\r\n      line-height: 1.6;\r\n      color: #94a3b8;\r\n      margin-bottom: 20px;\r\n    }\r\n    .card {\r\n      background-color: #0f172a;\r\n      border: 1px solid #334155;\r\n      border-radius: 8px;\r\n      padding: 16px;\r\n      margin-bottom: 20px;\r\n    }\r\n    .card-title {\r\n      font-size: 12px;\r\n      text-transform: uppercase;\r\n      color: #64748b;\r\n      font-weight: 700;\r\n      margin-bottom: 10px;\r\n      letter-spacing: 0.5px;\r\n    }\r\n    .data-row {\r\n      padding: 6px 0;\r\n      font-size: 14px;\r\n    }\r\n    .data-label {\r\n      color: #94a3b8;\r\n    }\r\n    .data-value {\r\n      font-weight: 600;\r\n      color: #f8fafc;\r\n      font-family: monospace;\r\n      background-color: #1e293b;\r\n      padding: 2px 6px;\r\n      border-radius: 4px;\r\n    }\r\n    .code-block {\r\n      background-color: #020617;\r\n      border: 1px solid #1e293b;\r\n      border-radius: 8px;\r\n      padding: 14px;\r\n      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;\r\n      font-size: 12px;\r\n      color: #38bdf8;\r\n      overflow-x: auto;\r\n      white-space: pre-wrap;\r\n      word-break: break-all;\r\n    }\r\n    .footer {\r\n      background-color: #0f172a;\r\n      padding: 16px 25px;\r\n      text-align: center;\r\n      font-size: 12px;\r\n      color: #64748b;\r\n      border-top: 1px solid #1e293b;\r\n    }\r\n  </style>\r\n</head>\r\n<body>\r\n\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <div>\r\n        <h1>⚠️ Unhandled Webhook Event</h1>\r\n        <div class=\"badge\">Error de Ruteo / Fallback</div>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"content\">\r\n      <div class=\"alert-title\">Evento no procesado en la automatización</div>\r\n      <div class=\"message\">\r\n        El escenario de Make/n8n recibió una petición webhook con un tipo de evento que no coincide con ninguno de los filtros configurados en el Router.\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">Detalles de la Petición</div>\r\n        \r\n        <div class=\"data-row\">\r\n          <span class=\"data-label\">Event Type recibido:</span>\r\n          <span class=\"data-value\">{{2.event_type}}</span>\r\n        </div>\r\n        \r\n        <div class=\"data-row\" style=\"margin-top: 6px;\">\r\n          <span class=\"data-label\">Destinatario original:</span>\r\n          <span class=\"data-value\">{{2.recipient_email}}</span>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"card-title\">Payload Recibido (Raw JSON)</div>\r\n      <div class=\"code-block\">\r\n{\r\n  \"event_type\": \"{{2.event_type}}\",\r\n  \"recipient_email\": \"{{2.recipient_email}}\",\r\n  \"data\": {{2.data}}\r\n}\r\n      </div>\r\n\r\n    </div>\r\n\r\n    <div class=\"footer\">\r\n      Alerta automática para Dev/Staff • <strong>Handly Core System</strong>\r\n    </div>\r\n  </div>\r\n\r\n</body>\r\n</html>",
-                                "subject": "⚠️ [Handly System Alert] Evento de webhook no reconocido: {{2.event_type}}",
-                                "sendEmailAs": "html"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 637,
-                                    "y": 215,
-                                    "name": "Unknown Mail Type"
-                                },
-                                "restore": {
-                                    "expect": {
-                                        "cc": {
-                                            "mode": "chose"
-                                        },
-                                        "to": {
-                                            "mode": "chose",
-                                            "items": [
-                                                null
-                                            ]
-                                        },
-                                        "bcc": {
-                                            "mode": "chose"
-                                        },
-                                        "tags": {
-                                            "mode": "chose"
-                                        },
-                                        "headers": {
-                                            "mode": "chose"
-                                        },
-                                        "replyTo": {
-                                            "mode": "chose"
-                                        },
-                                        "attachments": {
-                                            "mode": "chose"
-                                        },
-                                        "sendEmailAs": {
-                                            "mode": "chose",
-                                            "label": "HTML"
-                                        }
-                                    },
-                                    "parameters": {
-                                        "__IMTCONN__": {
-                                            "data": {
-                                                "scoped": "true",
-                                                "connection": "resend"
-                                            },
-                                            "label": "Angel's Resend connection"
-                                        }
-                                    }
-                                },
-                                "parameters": [
-                                    {
-                                        "name": "__IMTCONN__",
-                                        "type": "account:resend",
-                                        "label": "Connection",
-                                        "required": true
-                                    }
-                                ],
-                                "expect": [
-                                    {
-                                        "name": "from",
-                                        "type": "text",
-                                        "label": "From",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "to",
-                                        "spec": {
-                                            "name": "value",
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "To",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "bcc",
-                                        "spec": {
-                                            "name": "value",
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "BCC"
-                                    },
-                                    {
-                                        "name": "cc",
-                                        "spec": {
-                                            "name": "value",
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "CC"
-                                    },
-                                    {
-                                        "name": "replyTo",
-                                        "spec": {
-                                            "name": "value",
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "Reply-To"
-                                    },
-                                    {
-                                        "name": "subject",
-                                        "type": "text",
-                                        "label": "Subject",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "scheduled_at",
-                                        "time": true,
-                                        "type": "date",
-                                        "label": "Schedule For"
-                                    },
-                                    {
-                                        "name": "sendEmailAs",
-                                        "type": "select",
-                                        "label": "Send Email As",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "html",
-                                                "text"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "tags",
-                                        "spec": [
-                                            {
-                                                "name": "name",
-                                                "type": "text",
-                                                "label": "Name"
-                                            },
-                                            {
-                                                "name": "value",
-                                                "type": "text",
-                                                "label": "Value"
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Tags"
-                                    },
-                                    {
-                                        "name": "attachments",
-                                        "spec": [
-                                            {
-                                                "name": "filename",
-                                                "type": "filename",
-                                                "label": "File name"
-                                            },
-                                            {
-                                                "name": "path",
-                                                "type": "text",
-                                                "label": "Path"
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Attachments"
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": {
-                                            "name": "value",
-                                            "spec": [
-                                                {
-                                                    "name": "key",
-                                                    "type": "text",
-                                                    "label": "Key"
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Header"
-                                        },
-                                        "type": "array",
-                                        "label": "Custom Headers"
-                                    },
-                                    {
-                                        "name": "html",
-                                        "type": "text",
-                                        "label": "HTML Content"
-                                    },
-                                    {
-                                        "name": "text",
-                                        "type": "text",
-                                        "label": "Plain Text Version"
-                                    }
-                                ]
-                            }
+                          "name": "key",
+                          "type": "text",
+                          "label": "Key"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
                         }
-                    ]
-                }
-            ]
+                      ],
+                      "type": "collection",
+                      "label": "Header"
+                    },
+                    "type": "array",
+                    "label": "Custom Headers"
+                  },
+                  {
+                    "name": "html",
+                    "type": "text",
+                    "label": "HTML Content"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Plain Text Version"
+                  }
+                ]
+              }
+            }
+          ]
         }
-    ],
-    "metadata": {
-        "instant": true,
-        "version": 1,
-        "scenario": {
-            "roundtrips": 1,
-            "maxErrors": 3,
-            "autoCommit": true,
-            "autoCommitTriggerLast": true,
-            "sequential": false,
-            "slots": null,
-            "confidential": false,
-            "dataloss": false,
-            "dlq": false,
-            "freshVariables": false
-        },
-        "designer": {
-            "orphans": []
-        },
-        "zone": "us2.make.com",
-        "notes": []
+      ]
     }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us2.make.com",
+    "notes": []
+  }
 }

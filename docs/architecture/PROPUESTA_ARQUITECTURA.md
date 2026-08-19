@@ -80,12 +80,12 @@ flowchart TD
     SA_Acopio -->|Actualizar a Received| Persistencia
 ```
 
-| Capa                        | Tecnología                           | Propósito en el MVP                                                                      |
-| :-------------------------- | :----------------------------------- | :--------------------------------------------------------------------------------------- |
-| **Framework Fullstack**     | Next.js (App Router, Server Actions) | Frontend reactivo y backend en una sola base de código con SSR.                          |
-| **Inteligencia Artificial** | Vercel AI SDK + OpenAI / Gemini      | Extracción estructurada (_Structured Outputs / Tool Calling_) del triage de necesidades. |
-| **Estilos y UI**            | Tailwind CSS + Lucide Icons          | Interfaz móvil limpia, rápida y de alto impacto visual para la demo.                     |
-| **Base de Datos**           | PostgreSQL (Supabase / Neon)         | Transacciones ACID, integridad referencial y autenticación integrada.                    |
+| Capa | Tecnología | Propósito en el MVP |
+| :-- | :-- | :-- |
+| **Framework Fullstack** | Next.js (App Router, Server Actions) | Frontend reactivo y backend en una sola base de código con SSR. |
+| **Inteligencia Artificial** | Vercel AI SDK + OpenAI / Gemini | Extracción estructurada (_Structured Outputs / Tool Calling_) del triage de necesidades. |
+| **Estilos y UI** | Tailwind CSS + Lucide Icons | Interfaz móvil limpia, rápida y de alto impacto visual para la demo. |
+| **Base de Datos** | PostgreSQL (Supabase / Neon) | Transacciones ACID, integridad referencial y autenticación integrada. |
 
 ---
 
@@ -310,10 +310,10 @@ El cálculo de expiración se fija al momento de la reserva según la urgencia d
 
 ## 6. Cronograma de Desarrollo y Entregables (5 Días)
 
-| Día       | Foco Principal                        | Tareas Clave                                                                                                                                             |
-| :-------- | :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Día 1** | **Setup, Schema & IA Triage**         | Inicialización del proyecto Next.js, conexión a Supabase, migración DDL y endpoint/Server Action de ingesta con LLM (Vercel AI SDK + Zod).               |
-| **Día 2** | **Portal Público & Flujo de Reserva** | Catálogo público con filtros de zona/urgencia, visualización de progreso y modal de compromiso con transacción `FOR UPDATE` + generación de `SOS-XXXX`.  |
-| **Día 3** | **Panel de Organización & Recepción** | Login con Supabase Auth, formulario con asistente IA integrado y mesa de recepción para validación de códigos de donación.                               |
-| **Día 4** | **Pulido de UX, Mobile & Deploy**     | Revisión mobile-first, seed de datos realistas para la demo, testing de flujos punta a punta y deploy a producción (Vercel + Supabase).                  |
+| Día | Foco Principal | Tareas Clave |
+| :-- | :-- | :-- |
+| **Día 1** | **Setup, Schema & IA Triage** | Inicialización del proyecto Next.js, conexión a Supabase, migración DDL y endpoint/Server Action de ingesta con LLM (Vercel AI SDK + Zod). |
+| **Día 2** | **Portal Público & Flujo de Reserva** | Catálogo público con filtros de zona/urgencia, visualización de progreso y modal de compromiso con transacción `FOR UPDATE` + generación de `SOS-XXXX`. |
+| **Día 3** | **Panel de Organización & Recepción** | Login con Supabase Auth, formulario con asistente IA integrado y mesa de recepción para validación de códigos de donación. |
+| **Día 4** | **Pulido de UX, Mobile & Deploy** | Revisión mobile-first, seed de datos realistas para la demo, testing de flujos punta a punta y deploy a producción (Vercel + Supabase). |
 | **Día 5** | **Video Pitch (2 min) & Postulación** | **Slot prioritario:** Redacción de guión de 2 minutos, grabación de pantalla y pitch, edición ágil, publicación en redes y envío del formulario oficial. |

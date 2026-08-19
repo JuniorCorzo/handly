@@ -1,28 +1,29 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
 import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  type ColumnFiltersState,
-  type SortingState
-} from '@tanstack/react-table'
-import { DataTable } from '@/components/ui/table/DataTable'
-import { DataTablePagination } from '@/components/ui/table/DataTablePagination'
-import { NeedItemsTableToolbar } from './NeedItemsTableToolbar'
-import { columns } from './columns'
-import type { NeedItemTableRow } from './types'
+} from "@tanstack/react-table";
+import type { ColumnFiltersState, SortingState } from "@tanstack/react-table";
+import { useState } from "react";
+
+import { DataTable } from "@/components/ui/table/DataTable";
+import { DataTablePagination } from "@/components/ui/table/DataTablePagination";
+
+import { columns } from "./columns";
+import { NeedItemsTableToolbar } from "./NeedItemsTableToolbar";
+import type { NeedItemTableRow } from "./types";
 
 interface NeedItemsTableProps {
-  data: NeedItemTableRow[]
+  data: NeedItemTableRow[];
 }
 
 export function NeedItemsTable({ data }: NeedItemsTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -30,7 +31,7 @@ export function NeedItemsTable({ data }: NeedItemsTableProps) {
     columns,
     state: {
       sorting,
-      columnFilters
+      columnFilters,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -40,19 +41,19 @@ export function NeedItemsTable({ data }: NeedItemsTableProps) {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 10
-      }
-    }
-  })
+        pageSize: 10,
+      },
+    },
+  });
 
   return (
-    <div className='flex flex-col gap-4 w-full'>
+    <div className="flex w-full flex-col gap-4">
       <NeedItemsTableToolbar table={table} />
       <DataTable
         table={table}
-        emptyMessage='No se encontraron ítems de necesidad registrados.'
+        emptyMessage="No se encontraron ítems de necesidad registrados."
       />
       <DataTablePagination table={table} />
     </div>
-  )
+  );
 }
