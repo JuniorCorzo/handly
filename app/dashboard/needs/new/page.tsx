@@ -28,8 +28,6 @@ export default async function NewNeedItemPage() {
   }
 
   const orgIds = memberships?.map((m) => m.org_id) ?? [];
-  const isAdmin =
-    memberships?.some((m) => m.role === "admin") ?? orgIds.length > 0;
 
   let campaigns: { id: string; name: string }[] = [];
   let collectionPoints: { id: string; location_adress: string }[] = [];
@@ -109,7 +107,6 @@ export default async function NewNeedItemPage() {
           campaigns={campaigns}
           collectionPoints={collectionPoints}
           action={createNeedItem}
-          isAdmin={isAdmin}
         />
       </div>
     </main>

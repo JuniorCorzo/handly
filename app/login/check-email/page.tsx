@@ -4,6 +4,7 @@ export default function CheckEmailPage() {
       <div className="w-full max-w-md rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] sm:p-10">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-[var(--radius-pill)] bg-[var(--primary)]/10 text-[var(--primary)]">
           <svg
+            aria-hidden="true"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"

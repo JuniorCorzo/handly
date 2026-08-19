@@ -13,9 +13,8 @@ export default async function EditNeedItemPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params; // async params — required in Next.js 16
-
-  // ⚠️ createClient is server-only — uses cookies()
+  // async params — required in Next.js 16
+  const { id } = await params;
   const supabase = await createClient();
   const {
     data: { user },
@@ -48,9 +47,6 @@ export default async function EditNeedItemPage({
   }
 
   const orgIds = memberships?.map((m: { org_id: string }) => m.org_id) ?? [];
-  const isAdmin =
-    memberships?.some((m: { role: string }) => m.role === "admin") ??
-    orgIds.length > 0;
 
   const [{ data: campaigns }, { data: collectionPoints }] = await Promise.all([
     supabase.from("campaign").select("id, name").in("organization_id", orgIds),
@@ -103,7 +99,6 @@ export default async function EditNeedItemPage({
             collection_point_ids: selectedPointIds,
           }}
           submitLabel="Guardar cambios"
-          isAdmin={isAdmin}
         />
       </div>
     </main>

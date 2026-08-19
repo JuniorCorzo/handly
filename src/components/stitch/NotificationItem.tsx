@@ -50,14 +50,22 @@ const kindMap: Record<
   },
 };
 
+// Module-scope static: avoids per-render object recreation
+const ICON_COMMON = {
+  width: 18,
+  height: 18,
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.75,
+} as const;
+
+const DATE_FORMATTER = new Intl.DateTimeFormat("es-AR", {
+  dateStyle: "short",
+  timeStyle: "short",
+});
+
 function KindIcon({ kind }: { kind: NotificationKind }) {
-  const common = {
-    width: 18,
-    height: 18,
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.75,
-  } as const;
+  const common = ICON_COMMON;
   if (kind === "critical") {
     return (
       <svg
@@ -136,10 +144,7 @@ function formatTimestamp(value: string | Date): string {
     return String(value);
   }
   try {
-    return new Intl.DateTimeFormat("es-AR", {
-      dateStyle: "short",
-      timeStyle: "short",
-    }).format(d);
+    return DATE_FORMATTER.format(d);
   } catch {
     return d.toLocaleString("es-AR");
   }

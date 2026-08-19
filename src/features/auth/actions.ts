@@ -9,22 +9,16 @@ export async function signInWithMagicLink(formData: FormData) {
   const email = formData.get("email") as string;
 
   if (!email || typeof email !== "string") {
-    console.warn("[Auth Warning] signInWithMagicLink called without email");
     redirect("/login?error=Email+is+required");
   }
 
   const normalizedEmail = email.trim().toLowerCase();
   const redirectUrl = `${env.siteUrl}/auth/callback`;
 
-  console.log("[Auth Info] Requesting Magic Link OTP", {
-    email: normalizedEmail,
-    emailRedirectTo: redirectUrl,
-  });
-
   try {
     const supabase = await createClient();
 
-    const { data, error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email: normalizedEmail,
       options: {
         emailRedirectTo: redirectUrl,
@@ -39,36 +33,34 @@ export async function signInWithMagicLink(formData: FormData) {
         email: normalizedEmail,
       });
 
-      let userFriendlyMessage = error.message;
-
-      if (
+      let userFriendlyMessage: string;
+      const isRateLimited =
+        error.status === 429 || error.message.includes("rate limit");
+      const isEmailSendError =
         error.message.includes("Error sending magic link email") ||
         error.name === "AuthRetryableFetchError" ||
-        error.status === 500
-      ) {
+        error.status === 500;
+
+      if (isEmailSendError) {
         userFriendlyMessage =
           "No se pudo enviar el correo de acceso. El servicio de correo de Supabase alcanzó su límite de envíos o requiere un proveedor SMTP configurado en el Dashboard.";
-      } else if (error.status === 429 || error.message.includes("rate limit")) {
+      } else if (isRateLimited) {
         userFriendlyMessage =
           "Demasiados intentos seguidos. Aguardá unos minutos antes de volver a solicitar un enlace.";
+      } else {
+        userFriendlyMessage = error.message;
       }
 
       redirect(`/login?error=${encodeURIComponent(userFriendlyMessage)}`);
     }
-
-    console.log("[Auth Success] Supabase accepted OTP request:", {
-      email: normalizedEmail,
-      data,
-    });
   } catch (error: unknown) {
-    // Re-throw Next.js redirect errors so navigation works as expected
-    if (
-      error &&
+    const isRedirect =
+      error !== null &&
       typeof error === "object" &&
       "digest" in error &&
       typeof (error as { digest: string }).digest === "string" &&
-      (error as { digest: string }).digest.startsWith("NEXT_REDIRECT")
-    ) {
+      (error as { digest: string }).digest.startsWith("NEXT_REDIRECT");
+    if (isRedirect) {
       throw error;
     }
 

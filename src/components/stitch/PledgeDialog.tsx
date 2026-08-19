@@ -4,6 +4,9 @@ import { useState, useId, useRef } from "react";
 
 import { SOSBadge } from "./SOSBadge";
 
+type PledgeResult = { code: string };
+type PledgeConfirmResult = PledgeResult | undefined;
+
 export type PledgeDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -14,7 +17,7 @@ export type PledgeDialogProps = {
   zoneHint: string;
   onConfirm: (
     quantity: number
-  ) => Promise<{ code: string } | void> | { code: string } | void;
+  ) => Promise<PledgeConfirmResult> | PledgeConfirmResult;
   successCode?: string | null;
 };
 
@@ -31,7 +34,7 @@ export function PledgeDialog({
 }: PledgeDialogProps) {
   const [quantity, setQuantity] = useState(defaultQuantity);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [localCode, setLocalCode] = useState<string | null>(successCode);
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,22 +51,22 @@ export function PledgeDialog({
     Math.max(1, Math.min(maxQuantity, Math.trunc(n) || 1));
 
   const handleConfirm = async () => {
-    setError(null);
+    setFormError(null);
     if (quantity < 1 || quantity > maxQuantity) {
-      setError(`La cantidad debe estar entre 1 y ${maxQuantity}.`);
+      setFormError(`La cantidad debe estar entre 1 y ${maxQuantity}.`);
       return;
     }
     setSubmitting(true);
     try {
-      const res = (await onConfirm(quantity)) as { code?: string } | void;
-      const code = (res as { code?: string })?.code ?? null;
+      const res = await onConfirm(quantity);
+      const code = (res as { code?: string } | undefined)?.code ?? null;
       if (code) {
         setLocalCode(code);
       }
     } catch (error) {
-      setError(
+      setFormError(
         error instanceof Error
-          ? error.message
+          ? (error as Error).message
           : "No se pudo confirmar el compromiso."
       );
     } finally {
@@ -166,8 +169,8 @@ export function PledgeDialog({
                 max={maxQuantity}
                 value={quantity}
                 onChange={(e) => setQuantity(clamp(Number(e.target.value)))}
-                aria-describedby={`${helperId} ${error ? errorId : ""}`.trim()}
-                aria-invalid={Boolean(error)}
+                aria-describedby={`${helperId} ${formError ? errorId : ""}`.trim()}
+                aria-invalid={Boolean(formError)}
                 className="h-12 w-full border border-[var(--border)] bg-[var(--surface)] px-14 text-center font-mono text-lg text-[var(--ink)] focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
               />
               <button
@@ -212,13 +215,13 @@ export function PledgeDialog({
               </svg>
               {zoneHint}
             </p>
-            {error ? (
+            {formError ? (
               <p
                 id={errorId}
                 role="alert"
                 className="rounded-[var(--radius-sm)] border border-[var(--critical)]/20 bg-[var(--critical)]/10 px-3 py-2 text-sm text-[var(--critical)]"
               >
-                {error}
+                {formError}
               </p>
             ) : null}
           </div>

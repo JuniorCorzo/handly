@@ -96,13 +96,26 @@ export default async function DashboardPage() {
       console.error("[Dashboard] Error fetching need items:", error);
     } else if (needItems) {
       const items = needItems as unknown as NeedItemQueryItem[];
-      // Filtrar únicamente los ítems que correspondan a las organizaciones del usuario
-      needItemRows = items
-        .filter(
-          (item) =>
-            !item.campaign || orgIds.includes(item.campaign.organization_id)
-        )
-        .map((item) => ({
+      const allowedOrgIds = new Set(orgIds);
+      needItemRows = [];
+      for (const item of items) {
+        if (
+          item.campaign &&
+          !allowedOrgIds.has(item.campaign.organization_id)
+        ) {
+          continue;
+        }
+        const points: { id: string; location_adress: string }[] = [];
+        for (const p of item.need_items_collection_points ?? []) {
+          const pid = p.collection_points?.id ?? "";
+          if (pid) {
+            points.push({
+              id: pid,
+              location_adress: p.collection_points?.location_adress ?? "",
+            });
+          }
+        }
+        needItemRows.push({
           id: item.id,
           campaign_id: item.campaign_id,
           campaign_name: item.campaign?.name ?? "",
@@ -113,14 +126,9 @@ export default async function DashboardPage() {
           urgency: item.urgency as UrgencyLevel,
           status: item.status as NeedStatus,
           created_at: item.created_at,
-          collection_points:
-            item.need_items_collection_points
-              ?.map((p) => ({
-                id: p.collection_points?.id ?? "",
-                location_adress: p.collection_points?.location_adress ?? "",
-              }))
-              .filter((p) => Boolean(p.id)) ?? [],
-        }));
+          collection_points: points,
+        });
+      }
     }
   }
 

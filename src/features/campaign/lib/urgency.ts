@@ -47,7 +47,7 @@ export const URGENCY_META: Record<UrgencyLevel, UrgencyMeta> = {
 export function sortByUrgency<T extends { urgency: UrgencyLevel }>(
   items: T[]
 ): T[] {
-  return [...items].sort(
+  return items.toSorted(
     (a, b) => URGENCY_META[a.urgency].weight - URGENCY_META[b.urgency].weight
   );
 }

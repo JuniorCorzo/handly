@@ -56,6 +56,7 @@ export function MapView({
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIYZMuspCJs8gFIExCDgYgFFaAeDKLXyO2QDbeBuAAEzO3CPXxxvuqqi3dmtDWoHk8FmyEv5lNwdJg_v-OGfSNsVAYJFNd7E_abrV7tTW_dqMzsTJ3aHo9e3avZSveZzZJFWld2b1E5-DDPbylPHTSIGJzXUtWGwq0L-hywo6nm-XlU9Ej-jYHECUqU2uZmJng0epIKklCpipxkylgzrs_8BUq9DzD-bwzWcrG5pWwSNs6n5havg"
           alt=""
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover opacity-70"
           unoptimized
         />
@@ -64,6 +65,7 @@ export function MapView({
           className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--surface)] bg-[var(--primary)] text-[var(--surface)] shadow"
         >
           <svg
+            aria-hidden="true"
             width="20"
             height="20"
             viewBox="0 0 24 24"
