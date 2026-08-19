@@ -35,7 +35,7 @@
     "oxlint": "^1.79.0",
     "oxlint-plugin-react-doctor": "^0.9.12",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "typescript": "^7",
     "ultracite": "^7.10.5"
   },
   "packageManager": "pnpm@11.15.0"
