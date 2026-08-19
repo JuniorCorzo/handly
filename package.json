@@ -12,7 +12,7 @@
     "ultracite:check": "ultracite check",
     "ultracite:fix": "ultracite fix",
     "ultracite:check:type-aware": "ultracite check --type-aware",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install || true"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
