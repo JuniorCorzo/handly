@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "eslint",
-    "format": "prettier --write \"{app,components,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs",
-    "format:check": "prettier --check \"{app,components,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs"
+    "format": "prettier --write \"{app,src,docs,supabase}/**/*.{ts,tsx,md,css}\" *.ts *.mjs",
+    "format:check": "prettier --check \"{app,src,docs,supabase}/**/*.{ts,tsx,md,css}\" *.ts *.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

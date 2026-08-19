@@ -3,8 +3,8 @@
 import { revalidatePath } from 'next/cache'
 // ⚠️ server-only — uses cookies(). Never import from a Client Component.
 import { createClient } from '@/lib/supabase/server'
-import { NeedItemSchema, NeedItemErrorCode } from '@/lib/schemas/need-item'
-import type { NeedItemInput } from '@/lib/schemas/need-item'
+import { NeedItemSchema, NeedItemErrorCode } from '@/lib/validations/need-item'
+import type { NeedItemInput } from '@/lib/validations/need-item'
 
 // ── Return type ─────────────────────────────────────────────────────
 export type NeedItemActionState =

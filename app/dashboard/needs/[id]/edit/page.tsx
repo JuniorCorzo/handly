@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
-import { NeedItemForm } from '../../new/_components/NeedItemForm'
-import { updateNeedItem } from '@/app/actions/need-items'
+import { NeedItemForm } from '@/features/needs/components/NeedItemForm'
+import { updateNeedItem } from '@/features/needs/actions'
 
 // Opt into blocking prerender — page uses cookies() via createClient
 export const instant = false
