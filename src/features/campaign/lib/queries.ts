@@ -57,7 +57,7 @@ interface PublicCampaignQueryRow {
 }
 
 const UUID_RE =
-  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/u;
 
 /**
  * Carga la campaña pública con sus necesidades activas y puntos de acopio.

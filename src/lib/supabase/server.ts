@@ -13,9 +13,9 @@ export async function createClient() {
       },
       setAll(cookiesToSet) {
         try {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          );
+          for (const { name, value, options } of cookiesToSet) {
+            cookieStore.set(name, value, options);
+          }
         } catch {
           // Called from a Server Component — cookies cannot be mutated here.
           // If you have a proxy refreshing sessions, this can be ignored.

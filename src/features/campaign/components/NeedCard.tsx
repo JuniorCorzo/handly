@@ -17,16 +17,20 @@ function formatTime(time: string): string {
   return time.slice(0, 5);
 }
 
+function getStatusLabel(status: string): string | null {
+  if (status === "fulfilled") {
+    return "Agotado";
+  }
+  if (status === "cancelled") {
+    return "Cancelado";
+  }
+  return null;
+}
+
 export const NeedCard: FC<NeedCardProps> = ({ need }) => {
   const meta = URGENCY_META[need.urgency];
   const isDisabled = need.status !== "active";
-
-  const statusLabel =
-    need.status === "fulfilled"
-      ? "Agotado"
-      : need.status === "cancelled"
-        ? "Cancelado"
-        : null;
+  const statusLabel = getStatusLabel(need.status);
 
   return (
     <article className="relative rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-none transition-shadow duration-150 hover:shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)]">

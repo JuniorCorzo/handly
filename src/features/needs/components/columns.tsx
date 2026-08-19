@@ -5,14 +5,17 @@ import Link from "next/link";
 
 import type { NeedItemTableRow, UrgencyLevel, NeedStatus } from "./types";
 
+const URGENCY_RED = "bg-red-50 text-red-700 border-red-200" as const;
+const URGENCY_CRITICAL = {
+  label: "Crítico (4h)",
+  className: URGENCY_RED,
+} as const;
+
 export const URGENCY_MAP: Record<
   UrgencyLevel,
   { label: string; className: string }
 > = {
-  critical_4h: {
-    label: "Crítico (4h)",
-    className: "bg-red-50 text-red-700 border-red-200",
-  },
+  critical_4h: URGENCY_CRITICAL,
   urgent_12h: {
     label: "Urgente (12h)",
     className: "bg-amber-50 text-amber-800 border-amber-200",
@@ -22,6 +25,12 @@ export const URGENCY_MAP: Record<
     className: "bg-blue-50 text-blue-700 border-blue-200",
   },
 };
+
+const GRAY_FALLBACK = "bg-gray-100 text-gray-700 border-gray-200" as const;
+const STATUS_FALLBACK = {
+  label: "Desconocido",
+  className: GRAY_FALLBACK,
+} as const;
 
 export const STATUS_MAP: Record<
   NeedStatus,
@@ -37,9 +46,11 @@ export const STATUS_MAP: Record<
   },
   cancelled: {
     label: "Cancelado",
-    className: "bg-gray-100 text-gray-700 border-gray-200",
+    className: STATUS_FALLBACK.className,
   },
 };
+
+const COLLECTION_POINTS_HEADER = "Centros de Acopio" as const;
 
 export const columns: ColumnDef<NeedItemTableRow>[] = [
   {
@@ -87,7 +98,7 @@ export const columns: ColumnDef<NeedItemTableRow>[] = [
       const { urgency } = row.original;
       const config = URGENCY_MAP[urgency] ?? {
         label: urgency,
-        className: "bg-gray-100 text-gray-700 border-gray-200",
+        className: GRAY_FALLBACK,
       };
       return (
         <span
@@ -106,7 +117,7 @@ export const columns: ColumnDef<NeedItemTableRow>[] = [
       const { status } = row.original;
       const config = STATUS_MAP[status] ?? {
         label: status,
-        className: "bg-gray-100 text-gray-700 border-gray-200",
+        className: GRAY_FALLBACK,
       };
       return (
         <span
@@ -119,7 +130,7 @@ export const columns: ColumnDef<NeedItemTableRow>[] = [
   },
   {
     accessorKey: "collection_points",
-    header: "Centros de Acopio",
+    header: COLLECTION_POINTS_HEADER,
     cell: ({ row }) => {
       const points = row.original.collection_points;
       if (!points || points.length === 0) {
@@ -128,7 +139,8 @@ export const columns: ColumnDef<NeedItemTableRow>[] = [
       return (
         <div
           className="flex items-center gap-1.5"
-          title={points.map((p) => p.location_adress).join("\n")}
+          aria-label={points.map((p) => p.location_adress).join(", ")}
+          role="group"
         >
           <span className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--background)] px-2 py-0.5 text-xs font-medium text-[var(--ink)]">
             {points.length} {points.length === 1 ? "centro" : "centros"}

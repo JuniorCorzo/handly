@@ -40,7 +40,7 @@ export function DataTableSearchFilter<TData, TValue>({
           type="button"
           onClick={() => handleChange("")}
           className="absolute top-1/2 right-2.5 -translate-y-1/2 text-xs text-[var(--muted)] hover:text-[var(--ink)]"
-          title="Limpiar búsqueda"
+          aria-label="Limpiar búsqueda"
         >
           ×
         </button>

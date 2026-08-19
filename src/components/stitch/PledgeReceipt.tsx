@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { SOSBadge } from "./SOSBadge";
 
@@ -64,6 +65,7 @@ export function PledgeReceipt({
                 className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[var(--success)]/10 text-[var(--success)]"
               >
                 <svg
+                  aria-hidden="true"
                   width="14"
                   height="14"
                   viewBox="0 0 24 24"
@@ -112,6 +114,7 @@ export function PledgeReceipt({
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOY3AzHo85mOCl0H3SVtRA1i8ryO4cXtDcGuwW2ODCDgj0nEgonxbSPhbm__1-1qw4zL1h-ObGnhVGsMzKjGT420arpqnAsrHfu7VPc4-r7slqArUI5Sq6CP9H91h9Wy3Cw-EsrYoXpUuTJxtBdHb2Xn-W6-AOH2Ay3oKXSglNpGqvXfAv54C4RZ140FN_x-YyezTG8BXKikwt-hjaJJn8KH3WYGElFxjBszoK9CQ54WrH3p93LA"
               alt=""
               fill
+              sizes="(max-width: 768px) 100vw, 672px"
               className="object-cover opacity-80"
               unoptimized
             />
@@ -120,6 +123,7 @@ export function PledgeReceipt({
               className="absolute top-1/2 left-1/2 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--primary)] text-[var(--surface)] shadow"
             >
               <svg
+                aria-hidden="true"
                 width="18"
                 height="18"
                 viewBox="0 0 24 24"
@@ -179,18 +183,18 @@ export function PledgeReceipt({
       <div className="flex flex-col gap-3 border-t border-[var(--border)] pt-6">
         {isSuccess ? (
           <>
-            <a
+            <Link
               href="/needs"
               className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--surface)] focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Volver a necesidades
-            </a>
-            <a
+            </Link>
+            <Link
               href="/settings"
               className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-medium text-[var(--ink)] hover:bg-[var(--background)] focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Ver perfil
-            </a>
+            </Link>
           </>
         ) : (
           <button

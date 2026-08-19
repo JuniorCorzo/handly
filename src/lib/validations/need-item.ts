@@ -3,6 +3,7 @@ import { z } from "zod";
 // ── Error codes — single source of truth ────────────────────────────
 // Actions return these codes. Never return human-readable strings from the server.
 // The frontend maps codes → display messages (see NeedItemForm.tsx).
+// oxlint-disable-next-line no-redeclare — value + type share name intentionally (TypeScript pattern)
 export const NeedItemErrorCode = {
   // Validation
   CAMPAIGN_REQUIRED: "CAMPAIGN_REQUIRED",
@@ -32,7 +33,7 @@ export const URGENCY_LEVELS = [
 export type UrgencyLevel = (typeof URGENCY_LEVELS)[number];
 
 export const NeedItemSchema = z.object({
-  campaign_id: z.string().uuid(NeedItemErrorCode.CAMPAIGN_REQUIRED),
+  campaign_id: z.uuid(NeedItemErrorCode.CAMPAIGN_REQUIRED),
   category: z
     .string()
     .min(1, NeedItemErrorCode.CATEGORY_REQUIRED)
@@ -52,7 +53,7 @@ export const NeedItemSchema = z.object({
   urgency: z.enum(URGENCY_LEVELS, { error: NeedItemErrorCode.URGENCY_INVALID }),
   // Collection points — array of UUIDs; handled via formData.getAll() in the action
   collection_point_ids: z
-    .array(z.string().uuid())
+    .array(z.uuid())
     .min(1, NeedItemErrorCode.COLLECTION_POINTS_REQUIRED),
 });
 
