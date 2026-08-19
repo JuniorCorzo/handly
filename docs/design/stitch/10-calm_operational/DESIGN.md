@@ -122,11 +122,13 @@ The style is a strict interpretation of **Minimalism**, prioritizing whitespace,
 The palette is governed by **The Restrained Rule**, ensuring the primary Institutional Teal never exceeds 10% of any viewport. Chromatic presence is reserved for actions and selection states to maintain focus. The canvas uses a teal-tinted "Paper" background to eliminate glare and enhance readability in outdoor, high-glare emergency environments.
 
 ### Named Rules
+
 - **The Non-Color Urgency Rule:** Urgency must never be communicated by color alone. Every priority state must use a badge, an icon, and a specific sort order.
 - **The No-Cream Rule:** Warm sand, beige, or cream tones are strictly forbidden. The neutrals must remain teal-tinted and cool.
 - **Contrast:** All text-on-background combinations are strictly WCAG AA compliant. The primary "Ink" on "Paper" provides a high-contrast 15.95:1 ratio for maximum legibility.
 
 ### Semantic Roles
+
 - **Critical:** Reserved for life-saving needs (4h TTL).
 - **Urgent:** Elevated needs (12h TTL).
 - **Standard:** Routine operational needs (24h+ TTL).
@@ -173,10 +175,13 @@ Hard-edged (0px) shapes are avoided to maintain the "hospitable" aspect of the b
 ## Components
 
 ### Buttons
+
 Primary buttons use the Institutional Teal fill with white text. Secondary buttons are white with a 1px border stroke. Interactive states include a 2px `focus` ring with a 2px offset for accessibility. No gradient or glass effects are permitted.
 
 ### Need Cards
+
 Need cards are the primary data unit. They must include:
+
 1. **Urgency Badge:** Redundant cue (icon + text + color).
 2. **Title:** Geist Title weight.
 3. **Quantity:** Geist Mono for unambiguous reading.
@@ -184,10 +189,13 @@ Need cards are the primary data unit. They must include:
 5. **Progress:** A dual-tone bar showing fulfillment levels.
 
 ### Pledge Dialog
+
 A focused modal using Level 2 elevation. Labels are placed strictly above input fields. Confirmation screens display an unambiguous Crockford Base32 short code (`SOS-XXXX`) in Geist Mono for manual verification at receiving centers.
 
 ### SOS Badges
+
 High-contrast pills using Geist Mono. These are the primary link between the digital system and physical logistics. They must have a "copy" affordance and maintain a bold tracking for clarity in low-light intake environments.
 
 ### Empty & Loading States
+
 Skeleton screens must match the exact geometry of the final component. Centered spinners are forbidden; instead, use shimmering blocks that respect the 8px/12px radius scale.

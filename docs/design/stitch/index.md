@@ -14,18 +14,18 @@
 
 ## Mapa mockup → ruta → componente
 
-| # | Mockup (raw `stitch_coderhub_design_system/`) | Ruta `docs/design/stitch/` | Ruta `app/` propuesta | Componente `src/components/stitch/` | Estado traducción |
-|---|-----------------------------------------------|-----------------------------|-----------------------|--------------------------------------|-------------------|
-| 01 | `guest_onboarding/` (`code.html` + `screen.png`) | `01-guest_onboarding/` | `app/page.tsx` (hero + ancla `#como-funciona`) + `app/(public)/bienvenida/page.tsx` si onboarding dedicado | `OnboardingSteps.tsx` | ✅ ES neutro — “Escaneá necesidades” → “Explorá necesidades”, “Pledge Items” → “Comprometete con insumos”, “Drop Off” → “Entregá en el centro” |
-| 02 | `needs_catalog/` | `02-needs_catalog/` | `app/needs/page.tsx` (público donante); `app/dashboard/needs/*` queda para organizaciones | `NeedCard.tsx`, `NeedGrid.tsx`, `NeedFilters.tsx` | ✅ “Needs Today” → “Necesidades hoy”, “Pledge to Help” → “Comprometerse”, “Quantity Needed” → “Cantidad necesaria”, “Location” → “Zona” |
-| 03 | `pledge_dialog/` | `03-pledge_dialog/` | Intercepting route `app/needs/@modal/(.)pledge/[id]/page.tsx` + `app/needs/[id]/pledge/page.tsx` fallback | `PledgeDialog.tsx`, `SOSBadge.tsx` | ✅ “Pledge Quantity” → “Cantidad a comprometer”, “Confirm Pledge” → “Confirmar compromiso”, “Delivery required to…” → “Entrega en…” |
-| 04 | `pledge_receipt_operational/` | `04-pledge_receipt_operational/` | `app/pledges/[id]/page.tsx` (fusionado con 07) | `PledgeReceipt.tsx` (fusiona 04 + 07), `SOSBadge.tsx` | ✅ “Pledge Confirmed” → “Compromiso confirmado”, “Awaiting Delivery” → “Pendiente de entrega”, “Manifest” → “Detalle”, “Logistics” → “Logística” |
-| 05 | `map_view/` | `05-map_view/` | `app/map/page.tsx` — **Fase 2** (deferred `next/dynamic`, no en nav MVP) | `MapView.tsx` | ✅ “Search locations or zones…” → “Buscar zonas o centros…”, “Navigate to Center” → “Cómo llegar” |
-| 06 | `donor_profile/` | `06-donor_profile/` | `app/(donor)/perfil/page.tsx` | Reusa `PledgeReceipt.tsx` + `SOSBadge.tsx` (lista “Mis compromisos”) | ✅ “Donor Profile” → “Perfil del donante”, “Total Pledges” → “Compromisos totales”, “Ready for Drop-off” → “Listo para entregar” |
-| 07 | `donation_confirmed_success/` | `07-donation_confirmed_success/` | Fusionado en `app/pledges/[id]/page.tsx` (estado `success`) | `PledgeReceipt.tsx` (variante success) | ✅ “Impact Confirmed” → “Entrega confirmada”, “Return to Needs” → “Volver a necesidades”, “View Profile” → “Ver perfil” |
-| 08 | `notifications/` | `08-notifications/` | `app/notifications/page.tsx` | `NotificationItem.tsx` + `NeedFilters.tsx` (filtros) | ✅ “Notifications” → “Notificaciones”, “Urgent Need in Zone 7A” → “Necesidad urgente en Zona 7A”, “Pledge Reminder” → “Recordatorio de compromiso” — **sin** `w-1` side-stripe |
-| 09 | `settings/` | `09-settings/` | `app/settings/page.tsx` | `SettingsSection.tsx`, `ThemePicker.tsx` | ✅ Header bug fix: “Donor Profile” → “Configuración”, “Appearance” → “Apariencia”, “Claro / Oscuro / Sistema”, “Support” → “Ayuda” |
-| 10 | `calm_operational/DESIGN.md` | `10-calm_operational/DESIGN.md` | — (doc fundacional, no ruta) | Tokens en `src/styles/globals.css` | — Owner file canónico OKLCH, teal ≤10 %, Restrained, Geist only |
+| #   | Mockup (raw `stitch_coderhub_design_system/`)    | Ruta `docs/design/stitch/`       | Ruta `app/` propuesta                                                                                      | Componente `src/components/stitch/`                                  | Estado traducción                                                                                                                                                              |
+| --- | ------------------------------------------------ | -------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 01  | `guest_onboarding/` (`code.html` + `screen.png`) | `01-guest_onboarding/`           | `app/page.tsx` (hero + ancla `#como-funciona`) + `app/(public)/bienvenida/page.tsx` si onboarding dedicado | `OnboardingSteps.tsx`                                                | ✅ ES neutro — “Escaneá necesidades” → “Explorá necesidades”, “Pledge Items” → “Comprometete con insumos”, “Drop Off” → “Entregá en el centro”                                 |
+| 02  | `needs_catalog/`                                 | `02-needs_catalog/`              | `app/needs/page.tsx` (público donante); `app/dashboard/needs/*` queda para organizaciones                  | `NeedCard.tsx`, `NeedGrid.tsx`, `NeedFilters.tsx`                    | ✅ “Needs Today” → “Necesidades hoy”, “Pledge to Help” → “Comprometerse”, “Quantity Needed” → “Cantidad necesaria”, “Location” → “Zona”                                        |
+| 03  | `pledge_dialog/`                                 | `03-pledge_dialog/`              | Intercepting route `app/needs/@modal/(.)pledge/[id]/page.tsx` + `app/needs/[id]/pledge/page.tsx` fallback  | `PledgeDialog.tsx`, `SOSBadge.tsx`                                   | ✅ “Pledge Quantity” → “Cantidad a comprometer”, “Confirm Pledge” → “Confirmar compromiso”, “Delivery required to…” → “Entrega en…”                                            |
+| 04  | `pledge_receipt_operational/`                    | `04-pledge_receipt_operational/` | `app/pledges/[id]/page.tsx` (fusionado con 07)                                                             | `PledgeReceipt.tsx` (fusiona 04 + 07), `SOSBadge.tsx`                | ✅ “Pledge Confirmed” → “Compromiso confirmado”, “Awaiting Delivery” → “Pendiente de entrega”, “Manifest” → “Detalle”, “Logistics” → “Logística”                               |
+| 05  | `map_view/`                                      | `05-map_view/`                   | `app/map/page.tsx` — **Fase 2** (deferred `next/dynamic`, no en nav MVP)                                   | `MapView.tsx`                                                        | ✅ “Search locations or zones…” → “Buscar zonas o centros…”, “Navigate to Center” → “Cómo llegar”                                                                              |
+| 06  | `donor_profile/`                                 | `06-donor_profile/`              | `app/(donor)/perfil/page.tsx`                                                                              | Reusa `PledgeReceipt.tsx` + `SOSBadge.tsx` (lista “Mis compromisos”) | ✅ “Donor Profile” → “Perfil del donante”, “Total Pledges” → “Compromisos totales”, “Ready for Drop-off” → “Listo para entregar”                                               |
+| 07  | `donation_confirmed_success/`                    | `07-donation_confirmed_success/` | Fusionado en `app/pledges/[id]/page.tsx` (estado `success`)                                                | `PledgeReceipt.tsx` (variante success)                               | ✅ “Impact Confirmed” → “Entrega confirmada”, “Return to Needs” → “Volver a necesidades”, “View Profile” → “Ver perfil”                                                        |
+| 08  | `notifications/`                                 | `08-notifications/`              | `app/notifications/page.tsx`                                                                               | `NotificationItem.tsx` + `NeedFilters.tsx` (filtros)                 | ✅ “Notifications” → “Notificaciones”, “Urgent Need in Zone 7A” → “Necesidad urgente en Zona 7A”, “Pledge Reminder” → “Recordatorio de compromiso” — **sin** `w-1` side-stripe |
+| 09  | `settings/`                                      | `09-settings/`                   | `app/settings/page.tsx`                                                                                    | `SettingsSection.tsx`, `ThemePicker.tsx`                             | ✅ Header bug fix: “Donor Profile” → “Configuración”, “Appearance” → “Apariencia”, “Claro / Oscuro / Sistema”, “Support” → “Ayuda”                                             |
+| 10  | `calm_operational/DESIGN.md`                     | `10-calm_operational/DESIGN.md`  | — (doc fundacional, no ruta)                                                                               | Tokens en `src/styles/globals.css`                                   | — Owner file canónico OKLCH, teal ≤10 %, Restrained, Geist only                                                                                                                |
 
 ## Decisiones documentadas
 
@@ -39,27 +39,26 @@
 
 ## Traducciones clave (ES neutro, operativa serena)
 
-| EN (Stitch raw) | ES (componente) |
-|-----------------|-----------------|
-| Needs Today | Necesidades hoy |
-| Critical | Crítico |
-| Urgent | Urgente |
-| Standard | Estándar |
-| Pledge to Help / Pledge Now | Comprometerse |
-| Quantity Needed | Cantidad necesaria |
-| Location | Zona |
-| Fulfillment | Avance |
-| Pledge Quantity | Cantidad a comprometer |
-| Confirm Pledge | Confirmar compromiso |
-| Delivery required to… | Entrega en… |
-| Intake Verification Code | Código de verificación |
-| Copy Code | Copiar código |
-| Open Map / Navigate to Center | Abrir mapa / Cómo llegar |
-| Need Assistance? | ¿Necesitás ayuda? |
-| Impact Confirmed | Entrega confirmada |
-| Return to Needs | Volver a necesidades |
-| Notifications | Notificaciones |
-| Donor Profile | Perfil del donante (settings: Configuración) |
-| Appearance — Light / Dark / System | Apariencia — Claro / Oscuro / Sistema |
-| Search locations or zones… | Buscar zonas o centros… |
-
+| EN (Stitch raw)                    | ES (componente)                              |
+| ---------------------------------- | -------------------------------------------- |
+| Needs Today                        | Necesidades hoy                              |
+| Critical                           | Crítico                                      |
+| Urgent                             | Urgente                                      |
+| Standard                           | Estándar                                     |
+| Pledge to Help / Pledge Now        | Comprometerse                                |
+| Quantity Needed                    | Cantidad necesaria                           |
+| Location                           | Zona                                         |
+| Fulfillment                        | Avance                                       |
+| Pledge Quantity                    | Cantidad a comprometer                       |
+| Confirm Pledge                     | Confirmar compromiso                         |
+| Delivery required to…              | Entrega en…                                  |
+| Intake Verification Code           | Código de verificación                       |
+| Copy Code                          | Copiar código                                |
+| Open Map / Navigate to Center      | Abrir mapa / Cómo llegar                     |
+| Need Assistance?                   | ¿Necesitás ayuda?                            |
+| Impact Confirmed                   | Entrega confirmada                           |
+| Return to Needs                    | Volver a necesidades                         |
+| Notifications                      | Notificaciones                               |
+| Donor Profile                      | Perfil del donante (settings: Configuración) |
+| Appearance — Light / Dark / System | Apariencia — Claro / Oscuro / Sistema        |
+| Search locations or zones…         | Buscar zonas o centros…                      |

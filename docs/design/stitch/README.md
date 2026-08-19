@@ -2,97 +2,97 @@
 name: Handly
 description: Donation coordination in emergencies — donor-first pledge flow (guest), calm operational UI.
 colors:
-  background: "#F6FAF8"
-  surface: "#FFFFFF"
-  ink: "#13201C"
-  muted: "#52635D"
-  border: "#CBD8D2"
-  primary: "#0F5C59"
-  focus: "#1D4ED8"
-  critical: "#B42318"
-  urgent: "#A14B00"
-  standard: "#1D5F74"
-  success: "#176B45"
+  background: '#F6FAF8'
+  surface: '#FFFFFF'
+  ink: '#13201C'
+  muted: '#52635D'
+  border: '#CBD8D2'
+  primary: '#0F5C59'
+  focus: '#1D4ED8'
+  critical: '#B42318'
+  urgent: '#A14B00'
+  standard: '#1D5F74'
+  success: '#176B45'
 typography:
   display:
-    fontFamily: "Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "40px"
+    fontFamily: 'Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif'
+    fontSize: '40px'
     fontWeight: 700
     lineHeight: 1.1
-    letterSpacing: "-0.02em"
+    letterSpacing: '-0.02em'
   headline:
-    fontFamily: "Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "32px"
+    fontFamily: 'Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif'
+    fontSize: '32px'
     fontWeight: 600
     lineHeight: 1.2
-    letterSpacing: "-0.015em"
+    letterSpacing: '-0.015em'
   title:
-    fontFamily: "Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "18px"
+    fontFamily: 'Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif'
+    fontSize: '18px'
     fontWeight: 600
     lineHeight: 1.4
   body:
-    fontFamily: "Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "16px"
+    fontFamily: 'Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif'
+    fontSize: '16px'
     fontWeight: 400
     lineHeight: 1.6
   label:
-    fontFamily: "Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "14px"
+    fontFamily: 'Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif'
+    fontSize: '14px'
     fontWeight: 500
     lineHeight: 1.4
-    letterSpacing: "0.01em"
+    letterSpacing: '0.01em'
   mono:
-    fontFamily: "Geist Mono, ui-monospace, monospace"
-    fontSize: "14px"
+    fontFamily: 'Geist Mono, ui-monospace, monospace'
+    fontSize: '14px'
     fontWeight: 400
     lineHeight: 1.4
 rounded:
-  sm: "8px"
-  md: "12px"
-  pill: "999px"
+  sm: '8px'
+  md: '12px'
+  pill: '999px'
 spacing:
-  xs: "4px"
-  sm: "8px"
-  md: "16px"
-  lg: "24px"
-  xl: "32px"
+  xs: '4px'
+  sm: '8px'
+  md: '16px'
+  lg: '24px'
+  xl: '32px'
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.sm}"
-    padding: "10px 20px"
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.surface}'
+    rounded: '{rounded.sm}'
+    padding: '10px 20px'
   button-primary-hover:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.surface}'
   button-secondary:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.sm}"
-    padding: "10px 20px"
+    backgroundColor: '{colors.surface}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.sm}'
+    padding: '10px 20px'
   badge-critical:
-    backgroundColor: "{colors.critical}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.critical}'
+    textColor: '{colors.surface}'
+    rounded: '{rounded.pill}'
   badge-urgent:
-    backgroundColor: "{colors.urgent}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.urgent}'
+    textColor: '{colors.surface}'
+    rounded: '{rounded.pill}'
   badge-standard:
-    backgroundColor: "{colors.standard}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.pill}"
+    backgroundColor: '{colors.standard}'
+    textColor: '{colors.surface}'
+    rounded: '{rounded.pill}'
   card-need:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
-    padding: "20px"
+    backgroundColor: '{colors.surface}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.md}'
+    padding: '20px'
   input-field:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.sm}"
-    padding: "10px 12px"
+    backgroundColor: '{colors.surface}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.sm}'
+    padding: '10px 12px'
 ---
 
 # Design System: Handly
@@ -110,6 +110,7 @@ Aesthetic philosophy: **Linear / Notion minimal, airy, type-perfect.** Restraine
 What this system explicitly rejects: warm cream/sand AI-default backgrounds, gradient text, glassmorphism, side-stripe borders, hero-metric clichés, identical tiny-card grids, uppercase eyebrows on every section, sketchy SVG illustrations, and any urgency styling that is color-only.
 
 **Key Characteristics:**
+
 - Operativa serena: calm under pressure, direct, hospitable, never panicked
 - Restrained OKLCH palette — teal accent disciplines the page
 - Airy catalog — few large need cards, generous whitespace, mobile-first
@@ -261,21 +262,20 @@ Nested cards, side-stripe `border-left >1px` urgency accents, gradient text, gla
 
 ## Appendix — Tokens for Stitch Variables (exportable)
 
-| Token | OKLCH | sRGB | Role |
-|---|---|---|---|
-| `background` | `oklch(0.982 0.005 165)` | `#F6FAF8` | Page |
-| `surface` | `oklch(1 0 0)` | `#FFFFFF` | Card/dialog/input |
-| `ink` | `oklch(0.23 0.02 173)` | `#13201C` | Text |
-| `muted` | `oklch(0.484 0.023 172)` | `#52635D` | Secondary text |
-| `border` | `oklch(0.871 0.016 167)` | `#CBD8D2` | Dividers |
-| `primary` | `oklch(0.431 0.07 191)` | `#0F5C59` | Action |
-| `focus` | `oklch(0.488 0.217 264)` | `#1D4ED8` | Focus ring |
-| `critical` | `oklch(0.50 0.182 30)` | `#B42318` | Critical |
-| `urgent` | `oklch(0.514 0.134 51)` | `#A14B00` | Urgent |
-| `standard` | `oklch(0.454 0.073 223)` | `#1D5F74` | Standard |
-| `success` | `oklch(0.469 0.099 158)` | `#176B45` | Success |
+| Token        | OKLCH                    | sRGB      | Role              |
+| ------------ | ------------------------ | --------- | ----------------- |
+| `background` | `oklch(0.982 0.005 165)` | `#F6FAF8` | Page              |
+| `surface`    | `oklch(1 0 0)`           | `#FFFFFF` | Card/dialog/input |
+| `ink`        | `oklch(0.23 0.02 173)`   | `#13201C` | Text              |
+| `muted`      | `oklch(0.484 0.023 172)` | `#52635D` | Secondary text    |
+| `border`     | `oklch(0.871 0.016 167)` | `#CBD8D2` | Dividers          |
+| `primary`    | `oklch(0.431 0.07 191)`  | `#0F5C59` | Action            |
+| `focus`      | `oklch(0.488 0.217 264)` | `#1D4ED8` | Focus ring        |
+| `critical`   | `oklch(0.50 0.182 30)`   | `#B42318` | Critical          |
+| `urgent`     | `oklch(0.514 0.134 51)`  | `#A14B00` | Urgent            |
+| `standard`   | `oklch(0.454 0.073 223)` | `#1D5F74` | Standard          |
+| `success`    | `oklch(0.469 0.099 158)` | `#176B45` | Success           |
 
 WCAG AA notes: ink 15.95:1 on background, muted 6.04:1 on background, action/critical/urgent/standard/success all ≥5.9:1 on white (body ≥4.5:1, large ≥3:1 satisfied). Dark mode holds same hierarchy at shifted lightness. Placeholder contrast = body contrast (never muted-grey-on-white).
 
 **Foundation scope — explicitly excluded:** final logo artwork, `app/page.tsx` UI, DB migrations/RLS/Auth, pledge/TTL/SOS runtime, AI prompts/models, Resend templates, Make blueprint edits/deploys, offline/maps/SMS, analytics, IA prompts. This file is foundation only.
-
