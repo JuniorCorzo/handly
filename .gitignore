@@ -49,5 +49,8 @@ opencode.jsonc
 .atl/*
 !.atl/skill-registry.md
 
+# local audio notes — never commit voice messages
+audios/
+
 # SDD runtime ledger (tracked state)
 .gentle-ai/
