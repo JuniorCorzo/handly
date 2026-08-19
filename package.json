@@ -36,7 +36,6 @@
     "oxlint-plugin-react-doctor": "^0.9.12",
     "prettier": "^3.9.6",
     "prettier-config-standard": "^7.0.0",
-    "stylelint": "^17.14.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "ultracite": "^7.10.5"
