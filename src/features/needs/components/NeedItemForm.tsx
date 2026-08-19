@@ -3,9 +3,9 @@
 import { useActionState, useState, useTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import type { NeedItemActionState } from '@/app/actions/need-items'
-import { createCampaign } from '@/app/actions/campaigns'
-import { URGENCY_LEVELS, NeedItemErrorCode } from '@/lib/schemas/need-item'
+import type { NeedItemActionState } from '@/features/needs/actions'
+import { createCampaign } from '@/features/campaigns/actions'
+import { URGENCY_LEVELS, NeedItemErrorCode } from '@/lib/validations/need-item'
 
 type Campaign = { id: string; name: string }
 type CollectionPoint = { id: string; location_adress: string }

@@ -1,6 +1,8 @@
-# Propuesta de Arquitectura y Producto MVP: Triage SOS (1 Semana)
+# Propuesta de Arquitectura y Producto MVP: Handly (1 Semana)
 
 Plataforma de Coordinación de Donaciones en Emergencias con Ingesta y Priorización Asistida por Inteligencia Artificial.
+
+> **Naming:** El producto es **Handly**. _Triage_ nombra solo la feature interna de clasificación asistida por IA (ingesta de necesidades), no el producto.
 
 ---
 
@@ -8,7 +10,7 @@ Plataforma de Coordinación de Donaciones en Emergencias con Ingesta y Priorizac
 
 En situaciones de emergencia humanitaria o desastres naturales, el principal cuello de botella es la **descoordinación logística**: sobre-donación de insumos no prioritarios y desabastecimiento crítico de recursos vitales.
 
-**Triage SOS** resuelve este problema mediante dos pilares:
+**Handly** resuelve este problema mediante dos pilares:
 
 1. **Asistente de Ingesta y Triage con IA:** Permite a los operadores en terreno cargar pedidos en lenguaje natural (texto o voz transcrita). El modelo clasifica automáticamente categoría, cantidades estandarizadas y nivel de urgencia en segundos.
 2. **Motor Transaccional de Cupos Justos:** Bloqueo atómico de reservas para evitar sobre-donaciones, con expiración dinámica por urgencia y validación rápida en centros de acopio sin fricción de contraseñas.
@@ -62,10 +64,11 @@ flowchart TD
     end
 
     subgraph Persistencia [PostgreSQL / Supabase]
-        T_Zones[(zones)]
         T_Org[(organizations)]
+        T_Campaign[(campaign)]
         T_Needs[(need_items)]
         T_Pledge[(pledges)]
+        T_CP[(collection_points)]
     end
 
     V_Org -->|Texto Libre de Emergencia| AI_Service
@@ -90,32 +93,33 @@ flowchart TD
 
 ```mermaid
 erDiagram
-    ORGANIZATION ||--o{ CAMPAIGN : owns
-    ORGANIZATION ||--o{ ORG_MEMBERS : includes
-    CAMPAIGN ||--o{ NEED_ITEM : contains
-    NEED_ITEM ||--o{ PLEDGE : receives
-    NEED_ITEM ||--o{ NEED_ITEMS_COLLECTION_POINTS : mapped_in
-    COLLECTION_POINT ||--o{ NEED_ITEMS_COLLECTION_POINTS : serves
+    ORGANIZATION ||--o{ ORG_MEMBERS : "tiene miembros"
+    ORGANIZATION ||--o{ CAMPAIGN : "lanza"
+    ORGANIZATION ||--o{ COLLECTION_POINT : "gestiona"
+    CAMPAIGN ||--o{ NEED_ITEM : "contiene"
+    NEED_ITEM ||--o{ PLEDGE : "recibe"
+    NEED_ITEM ||--o{ NEED_ITEMS_COLLECTION_POINTS : "se entrega en"
+    COLLECTION_POINT ||--o{ NEED_ITEMS_COLLECTION_POINTS : "recibe"
 
     ORGANIZATION {
         uuid id PK
         string name
         string email UK
         string phone
-        string zone_code
+        string zone_code "zona publica ej CABA, heredada por campañas"
         timestamptz created_at
     }
 
     ORG_MEMBERS {
         uuid auth_user_id PK
         uuid org_id PK
-        text role
+        text role "admin | member"
     }
 
     CAMPAIGN {
         uuid id PK
+        uuid organization_id FK "una org dueña — 1:N"
         string name
-        uuid organization_id FK
         timestamptz created_at
         timestamptz updated_at
     }
@@ -134,7 +138,8 @@ erDiagram
 
     COLLECTION_POINT {
         uuid id PK
-        text item_location_adress
+        uuid organization_id FK
+        string location_adress "direccion PUBLICA — visible sin compromiso"
         float latitude
         float longitude
         time open_time
@@ -144,23 +149,27 @@ erDiagram
     }
 
     NEED_ITEMS_COLLECTION_POINTS {
-        uuid need_item_id PK, FK
-        uuid collection_point_id PK, FK
+        uuid need_item_id PK_FK
+        uuid collection_point_id PK_FK
         timestamptz created_at
     }
 
     PLEDGE {
         uuid id PK
         uuid need_item_id FK
-        string short_code UK
+        string short_code UK "SOS-XXXX Crockford Base32"
         string donor_name
         string donor_phone
         int quantity
         pledge_status status
-        timestamptz expires_at
+        timestamptz expires_at "4h | 12h | 24h según urgency"
         timestamptz created_at
     }
 ```
+
+> **Nota de modelado (MVP):** `campaign.organization_id` es **1:N** (una campaña pertenece a una sola organización). El catálogo público muestra múltiples campañas —incluso de distintas organizaciones para el mismo evento (ej. terremoto Colombia)— y el donante compara por punto de entrega más cercano. `public_zone` no existe: `collection_points.location_adress` es **pública** por diseño. `zone_code` vive en `organizations` y se hereda; no se duplica en `campaign`. Colaboración N:M entre organizaciones en una misma campaña (`campaign_organizations`) queda como **Fase 2**.
+
+**Flujo canónico (acordado):** `Organización → Campaña → Ítems` (asociando `collection_points`). El formulario de ítem ofrece como **atajo opcional** el botón `+ Nueva campaña` (solo `admin`) para no salir del flujo, pero el flujo principal es crear la campaña primero y luego sus ítems.
 
 ### Definición DDL (PostgreSQL)
 
@@ -211,9 +220,12 @@ CREATE TABLE need_items (
 );
 
 -- Tabla de Puntos de Acopio / Recolección
+-- Nota: location_adress es PÚBLICA por diseño (visible en catálogo sin compromiso).
+-- No existe public_zone; zona se hereda de organizations.zone_code.
 CREATE TABLE collection_points (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    item_location_adress TEXT NOT NULL,
+    organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    location_adress TEXT NOT NULL,
     latitude FLOAT8,
     longitude FLOAT8,
     open_time TIME,

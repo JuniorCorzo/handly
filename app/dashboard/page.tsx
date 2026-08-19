@@ -1,13 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
-import { signOut } from '@/app/actions/auth'
+import { signOut } from '@/features/auth/actions'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { NeedItemsTable } from './_components/needs-table/NeedItemsTable'
+import { NeedItemsTable } from '@/features/needs/components/NeedItemsTable'
 import type {
   NeedItemTableRow,
   UrgencyLevel,
   NeedStatus
-} from './_components/needs-table/types'
+} from '@/features/needs/components/types'
 
 export const instant = false
 

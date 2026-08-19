@@ -1,4 +1,4 @@
-import { signInWithMagicLink } from '@/app/actions/auth'
+import { signInWithMagicLink } from '@/features/auth/actions'
 
 interface LoginPageProps {
   searchParams: Promise<{ error?: string }>
