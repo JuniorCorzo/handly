@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: true
+  commands:
+    ultracite:
+      glob: "*.{js,jsx,ts,tsx,md,json}"
+      run: npx ultracite fix {staged_files}
+      stage_fixed: true
+pre-push:
+  commands:
+    ultracite:
+      run: npx ultracite check
+    typecheck:
+      run: pnpm tsc --noEmit
