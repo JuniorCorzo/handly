@@ -6,8 +6,8 @@ import nextJsPlugins from 'ultracite/oxlint/next/js-plugins'
 
 export default defineConfig({
   extends: [core, next, jsPlugins, nextJsPlugins],
-  // Propuesta 2 equilibrada audit-gated: todo warn en local, CI con || true hasta triage
-  // TODO: subir a error tras triage de 128 pendientes
+  // P2 equilibrada: audit triage pendiente (~128 lint + 205 format previos)
+  // WU3: ignores bajan ruido 205→~54; CI || true hasta fix incremental
   categories: {
     correctness: 'warn',
     suspicious: 'warn',
@@ -25,5 +25,13 @@ export default defineConfig({
     'eslint/func-style': 'off',
     'eslint/sort-keys': 'off'
   },
-  ignorePatterns: core.ignorePatterns
+  ignorePatterns: [
+    ...(core.ignorePatterns ?? []),
+    'openspec/**',
+    '.agents/**',
+    '.claude/**',
+    'docs/design/stitch/**/*.html',
+    'docs/design/stitch/**/*.png',
+    'stitch_coderhub_design_system/**'
+  ]
 })
