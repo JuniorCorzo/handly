@@ -13,26 +13,29 @@ export type NeedCardProps = {
   onPledge?: () => void;
 };
 
+const SURFACE_TEXT = "text-[var(--surface)]" as const;
+const URGENCY_CRITICAL_LABEL = "Crítico" as const;
+
 const urgencyConfig: Record<
   NeedUrgency,
   { label: string; bg: string; fg: string; icon: string }
 > = {
   critical: {
-    label: "Crítico",
+    label: URGENCY_CRITICAL_LABEL,
     bg: "bg-[var(--critical)]",
-    fg: "text-[var(--surface)]",
+    fg: SURFACE_TEXT,
     icon: "priority_high",
   },
   urgent: {
     label: "Urgente",
     bg: "bg-[var(--urgent)]",
-    fg: "text-[var(--surface)]",
+    fg: SURFACE_TEXT,
     icon: "warning",
   },
   standard: {
     label: "Estándar",
     bg: "bg-[var(--standard)]",
-    fg: "text-[var(--surface)]",
+    fg: SURFACE_TEXT,
     icon: "info",
   },
 };
@@ -161,7 +164,7 @@ export function NeedCard({
         </div>
         <div className="h-2 overflow-hidden rounded-[var(--radius-pill)] bg-[var(--background)]">
           <div
-            className="h-full rounded-[var(--radius-pill)] bg-[var(--primary)] transition-all"
+            className="h-full rounded-[var(--radius-pill)] bg-[var(--primary)] transition-colors"
             style={{ width: `${clamped}%` }}
             role="progressbar"
             aria-valuenow={clamped}

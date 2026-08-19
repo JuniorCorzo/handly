@@ -59,8 +59,8 @@ export function DataTablePagination<TData>({
             type="button"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-all hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
-            title="Primera página"
+            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
+            aria-label="Primera página"
           >
             «
           </button>
@@ -68,8 +68,8 @@ export function DataTablePagination<TData>({
             type="button"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-all hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
-            title="Página anterior"
+            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
+            aria-label="Página anterior"
           >
             ‹
           </button>
@@ -77,8 +77,8 @@ export function DataTablePagination<TData>({
             type="button"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-all hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
-            title="Página siguiente"
+            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
+            aria-label="Página siguiente"
           >
             ›
           </button>
@@ -86,8 +86,8 @@ export function DataTablePagination<TData>({
             type="button"
             onClick={() => table.setPageIndex(pageCount - 1)}
             disabled={!table.getCanNextPage()}
-            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-all hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
-            title="Última página"
+            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] disabled:pointer-events-none disabled:opacity-40"
+            aria-label="Última página"
           >
             »
           </button>

@@ -84,13 +84,27 @@ export function NeedFilters({
         })}
       </div>
 
-      {typeof resultCount === "number" ? (
-        <p aria-live="polite" className="text-sm text-[var(--muted)]">
-          {resultCount === 0
-            ? "Sin resultados con los filtros actuales."
-            : `${resultCount} ${resultCount === 1 ? "necesidad encontrada" : "necesidades encontradas"}.`}
-        </p>
-      ) : null}
+      {typeof resultCount === "number"
+        ? (() => {
+            if (resultCount === 0) {
+              return (
+                <p aria-live="polite" className="text-sm text-[var(--muted)]">
+                  Sin resultados con los filtros actuales.
+                </p>
+              );
+            }
+            const label =
+              resultCount === 1
+                ? "necesidad encontrada"
+                : "necesidades encontradas";
+            return (
+              <p
+                aria-live="polite"
+                className="text-sm text-[var(--muted)]"
+              >{`${resultCount} ${label}.`}</p>
+            );
+          })()
+        : null}
     </div>
   );
 }
