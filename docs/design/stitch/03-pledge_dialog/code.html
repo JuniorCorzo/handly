@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Handly - Pledge Dialog</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed": "#002111",
+                        "on-surface-variant": "#3f4948",
+                        "tertiary": "#004529",
+                        "secondary": "#26667b",
+                        "surface-container-highest": "#d7e6df",
+                        "inverse-surface": "#26332f",
+                        "tertiary-fixed": "#a4f4c3",
+                        "on-secondary-container": "#29687d",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "surface-container": "#e2f1ea",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-background": "#111e1a",
+                        "critical": "#B42318",
+                        "on-tertiary-container": "#88d7a8",
+                        "on-primary-fixed-variant": "#00504d",
+                        "surface-bright": "#eefdf6",
+                        "on-secondary": "#ffffff",
+                        "muted": "#52635D",
+                        "on-surface": "#111e1a",
+                        "on-tertiary-fixed-variant": "#005232",
+                        "inverse-on-surface": "#e5f4ed",
+                        "primary-container": "#0f5c59",
+                        "background": "#eefdf6",
+                        "urgent": "#A14B00",
+                        "border": "#CBD8D2",
+                        "paper-bg": "#F6FAF8",
+                        "error": "#ba1a1a",
+                        "outline": "#6f7978",
+                        "surface": "#FFFFFF",
+                        "surface-variant": "#d7e6df",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#88d7a8",
+                        "on-primary-fixed": "#00201f",
+                        "tertiary-container": "#005f3a",
+                        "outline-variant": "#bec9c7",
+                        "surface-dim": "#ceddd7",
+                        "secondary-container": "#aae6fe",
+                        "error-container": "#ffdad6",
+                        "focus": "#1D4ED8",
+                        "surface-tint": "#226865",
+                        "on-secondary-fixed": "#001f29",
+                        "inverse-primary": "#90d2ce",
+                        "secondary-fixed": "#b9eaff",
+                        "on-primary": "#ffffff",
+                        "primary": "#004341",
+                        "primary-fixed-dim": "#90d2ce",
+                        "surface-container-high": "#dcece5",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#e8f7f0",
+                        "secondary-fixed-dim": "#94cfe7",
+                        "primary-fixed": "#abefea",
+                        "on-primary-container": "#8fd2ce"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        sm: "8px",
+                        xs: "4px",
+                        "max-width": "1200px",
+                        xl: "32px",
+                        lg: "24px",
+                        "margin-desktop": "32px",
+                        md: "16px",
+                        gutter: "24px",
+                        "margin-mobile": "16px"
+                    },
+                    fontFamily: {
+                        title: ["Geist"],
+                        body: ["Geist"],
+                        label: ["Geist"],
+                        display: ["Geist"],
+                        mono: ["Geist Mono"],
+                        headline: ["Geist"]
+                    },
+                    fontSize: {
+                        title: ["18px", { lineHeight: "1.4", fontWeight: "600" }],
+                        body: ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+                        label: ["14px", { lineHeight: "1.4", letterSpacing: "0.01em", fontWeight: "500" }],
+                        display: ["40px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        mono: ["14px", { lineHeight: "1.4", fontWeight: "400" }],
+                        headline: ["32px", { lineHeight: "1.2", letterSpacing: "-0.015em", fontWeight: "600" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Backdrop blur for a subtle effect behind the modal */
+        .modal-backdrop {
+            background-color: rgba(17, 30, 26, 0.4);
+            backdrop-filter: blur(2px);
+        }
+        
+        /* Level 2 Elevation for Modal */
+        .shadow-level-2 {
+            box-shadow: 0 8px 24px oklch(0.23 0.02 173 / 0.12);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="h-full bg-background font-body text-body text-on-background antialiased flex flex-col relative overflow-hidden">
+<!-- Background App View (Needs Catalog) - Blurred and dim behind modal -->
+<div class="flex-1 flex flex-col pointer-events-none opacity-50 filter blur-[1px]">
+<!-- TopAppBar (Simulated background) -->
+<header class="w-full top-0 sticky bg-paper-bg border-b border-outline-variant flex items-center justify-between px-margin-mobile h-16 max-w-max-width mx-auto">
+<button class="text-on-surface-variant flex items-center justify-center p-2 rounded-full">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-display text-headline font-bold text-primary tracking-tight">Handly</h1>
+<button class="text-on-surface-variant flex items-center justify-center p-2 rounded-full">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Background Content (Simulated) -->
+<main class="flex-1 p-margin-mobile flex flex-col gap-md">
+<!-- Dummy Need Card 1 -->
+<div class="bg-surface border border-border rounded-lg p-lg">
+<div class="flex items-center gap-xs text-critical mb-sm">
+<span class="material-symbols-outlined text-[16px]">emergency</span>
+<span class="font-label text-label uppercase">Critical Need</span>
+</div>
+<h2 class="font-title text-title text-on-surface mb-xs">Infant Formula (Stage 1)</h2>
+<div class="font-mono text-mono text-on-surface-variant mb-md">Qty: 40 units needed</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full mb-xs">
+<div class="bg-primary h-full rounded-full" style="width: 25%"></div>
+</div>
+<div class="font-label text-label text-on-surface-variant text-right">25% fulfilled</div>
+</div>
+<!-- Dummy Need Card 2 -->
+<div class="bg-surface border border-border rounded-lg p-lg">
+<div class="flex items-center gap-xs text-urgent mb-sm">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+<span class="font-label text-label uppercase">High Priority</span>
+</div>
+<h2 class="font-title text-title text-on-surface mb-xs">Thermal Blankets</h2>
+<div class="font-mono text-mono text-on-surface-variant mb-md">Qty: 100 units needed</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full mb-xs">
+<div class="bg-primary h-full rounded-full" style="width: 10%"></div>
+</div>
+<div class="font-label text-label text-on-surface-variant text-right">10% fulfilled</div>
+</div>
+</main>
+<!-- BottomNavBar (Simulated background) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-paper-bg border-t border-outline-variant z-10">
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">emergency</span>
+<span class="font-label text-label mt-1">Needs</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">volunteer_activism</span>
+<span class="font-label text-label mt-1">My Pledges</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">distance</span>
+<span class="font-label text-label mt-1">Map</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-label mt-1">Profile</span>
+</button>
+</nav>
+</div>
+<!-- MODAL OVERLAY -->
+<div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-margin-mobile modal-backdrop">
+<!-- PLEDGE DIALOG -->
+<div aria-labelledby="modal-title" aria-modal="true" class="bg-surface w-full sm:max-w-md rounded-t-xl sm:rounded-xl shadow-level-2 border border-border flex flex-col transform transition-transform duration-300 translate-y-0 relative overflow-hidden" role="dialog">
+<!-- Drag Handle (Mobile only) -->
+<div class="w-full flex justify-center pt-md pb-sm sm:hidden cursor-grab">
+<div class="w-12 h-1 bg-outline-variant rounded-full"></div>
+</div>
+<!-- Close Button (Absolute top right) -->
+<button aria-label="Close dialog" class="absolute top-md right-md sm:top-lg sm:right-lg text-on-surface-variant hover:text-on-surface transition-colors p-2 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
+<span class="material-symbols-outlined">close</span>
+</button>
+<!-- Dialog Header -->
+<div class="px-lg pt-lg sm:pt-xl pb-md border-b border-border">
+<div class="flex items-center gap-xs text-critical mb-sm">
+<span class="material-symbols-outlined text-[16px]">emergency</span>
+<span class="font-label text-label uppercase tracking-widest text-xs font-bold">Critical Need</span>
+</div>
+<h2 class="font-title text-[24px] leading-tight font-semibold text-on-surface mb-2" id="modal-title">Infant Formula (Stage 1)</h2>
+<p class="font-body text-body text-on-surface-variant">Commit to providing units for the intake center.</p>
+</div>
+<!-- Dialog Body - Form -->
+<form class="p-lg flex flex-col gap-xl">
+<!-- Input Group -->
+<div class="flex flex-col gap-sm">
+<label class="font-label text-label text-on-surface flex items-center justify-between" for="quantity">
+                        Pledge Quantity
+                        <span class="font-mono text-mono text-muted text-xs">Max: 30 units needed</span>
+</label>
+<div class="relative flex items-center">
+<!-- Minus Button -->
+<button aria-label="Decrease quantity" class="absolute left-0 top-0 bottom-0 px-4 text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center border-r border-border rounded-l-lg bg-surface hover:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 z-10" type="button">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<!-- Input Field -->
+<input aria-describedby="quantity-helper" class="w-full h-12 text-center font-mono text-[18px] text-on-surface bg-surface border border-border rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors px-14 appearance-none" id="quantity" max="30" min="1" name="quantity" type="number" value="5"/>
+<!-- Plus Button -->
+<button aria-label="Increase quantity" class="absolute right-0 top-0 bottom-0 px-4 text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center border-l border-border rounded-r-lg bg-surface hover:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 z-10" type="button">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<!-- Helper Text -->
+<div class="flex items-start gap-xs mt-1 text-muted" id="quantity-helper">
+<span class="material-symbols-outlined text-[16px] mt-[2px]">location_on</span>
+<p class="font-body text-[14px] leading-snug">Delivery required to Zone C Intake Center. Exact address provided upon confirmation.</p>
+</div>
+</div>
+<!-- Action Area -->
+<div class="flex flex-col gap-md pt-sm border-t border-border border-dashed">
+<!-- Confirmation Button -->
+<button class="w-full h-12 bg-primary text-on-primary font-label text-label uppercase tracking-widest font-bold rounded-lg flex items-center justify-center gap-sm hover:bg-primary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 active:scale-[0.98]" type="button">
+                        Confirm Pledge
+                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+</button>
+<!-- Simulated Success State / SOS Badge (Static for design demonstration) -->
+<div aria-hidden="true" class="w-full bg-surface-container-lowest border border-border rounded-lg p-md flex flex-col items-center justify-center mt-2 opacity-50 grayscale">
+<span class="font-label text-[12px] uppercase text-muted mb-1 tracking-wider">Reference Code</span>
+<div class="bg-inverse-surface text-inverse-on-surface font-mono text-[20px] font-bold px-4 py-2 rounded flex items-center gap-md">
+                            SOS-8429
+                            <span class="material-symbols-outlined text-[18px] cursor-not-allowed opacity-50">content_copy</span>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</body></html>

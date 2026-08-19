@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Handly - Impact Confirmed</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#88d7a8",
+                        "surface-container-highest": "#d7e6df",
+                        "on-error-container": "#93000a",
+                        "secondary": "#26667b",
+                        "surface-container-high": "#dcece5",
+                        "background": "#eefdf6",
+                        "tertiary-container": "#005f3a",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#0f5c59",
+                        "surface-bright": "#eefdf6",
+                        "secondary-fixed-dim": "#94cfe7",
+                        "tertiary": "#004529",
+                        "on-surface": "#111e1a",
+                        "on-tertiary-container": "#88d7a8",
+                        "muted": "#52635D",
+                        "on-tertiary-fixed-variant": "#005232",
+                        "surface-dim": "#ceddd7",
+                        "inverse-primary": "#90d2ce",
+                        "on-background": "#111e1a",
+                        "surface-container-low": "#e8f7f0",
+                        "outline-variant": "#bec9c7",
+                        "surface-variant": "#d7e6df",
+                        "tertiary-fixed": "#a4f4c3",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#e5f4ed",
+                        "surface-container": "#e2f1ea",
+                        "critical": "#B42318",
+                        "on-secondary-container": "#29687d",
+                        "primary-fixed-dim": "#90d2ce",
+                        "secondary-container": "#aae6fe",
+                        "error": "#ba1a1a",
+                        "surface": "#FFFFFF",
+                        "on-surface-variant": "#3f4948",
+                        "on-primary-fixed-variant": "#00504d",
+                        "primary": "#004341",
+                        "inverse-surface": "#26332f",
+                        "on-secondary-fixed": "#001f29",
+                        "paper-bg": "#F6FAF8",
+                        "border": "#CBD8D2",
+                        "primary-fixed": "#abefea",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#004d61",
+                        "on-primary-container": "#8fd2ce",
+                        "focus": "#1D4ED8",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#b9eaff",
+                        "surface-tint": "#226865",
+                        "urgent": "#A14B00",
+                        "on-tertiary-fixed": "#002111",
+                        "outline": "#6f7978",
+                        "on-primary-fixed": "#00201f",
+                        "on-error": "#ffffff"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "max-width": "1200px",
+                        xs: "4px",
+                        sm: "8px",
+                        md: "16px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        xl: "32px",
+                        lg: "24px",
+                        gutter: "24px"
+                    },
+                    fontFamily: {
+                        display: ["Geist"],
+                        body: ["Geist"],
+                        label: ["Geist"],
+                        mono: ["Geist Mono"],
+                        headline: ["Geist"],
+                        title: ["Geist"]
+                    },
+                    fontSize: {
+                        display: ["40px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        body: ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+                        label: ["14px", { lineHeight: "1.4", letterSpacing: "0.01em", fontWeight: "500" }],
+                        mono: ["14px", { lineHeight: "1.4", fontWeight: "400" }],
+                        headline: ["32px", { lineHeight: "1.2", letterSpacing: "-0.015em", fontWeight: "600" }],
+                        title: ["18px", { lineHeight: "1.4", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Fallback for Geist fonts if not installed locally */
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400&display=swap');
+        body { font-family: 'Geist', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-paper-bg text-on-surface antialiased min-h-screen flex flex-col items-center justify-center p-margin-mobile">
+<!-- 
+      Note: TopAppBar and BottomNavBar are intentionally suppressed per the 
+      "Semantic Shell Mandate" for transactional Success/Confirmation screens.
+    -->
+<main class="w-full max-w-[480px] flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
+<!-- Success Indicator -->
+<div class="w-24 h-24 rounded-full bg-surface-container-low border border-border flex items-center justify-center mb-lg shadow-sm">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-size: 48px; font-variation-settings: 'FILL' 1;">
+                check_circle
+            </span>
+</div>
+<!-- Headline & Gratitude -->
+<div class="text-center mb-xl">
+<h1 class="font-display text-display text-on-surface mb-sm tracking-tight">Impact Confirmed</h1>
+<p class="font-body text-body text-muted max-w-sm mx-auto">
+                Your contribution is now being processed for immediate distribution. Thank you for your support.
+            </p>
+</div>
+<!-- Receipt & Impact Bento Grid -->
+<div class="w-full grid grid-cols-1 gap-sm mb-xl">
+<!-- Delivery Details Box -->
+<div class="bg-surface border border-border rounded-lg p-md flex flex-col gap-md shadow-sm">
+<div class="flex items-start justify-between border-b border-border pb-md last:border-0 last:pb-0">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-muted" data-icon="inventory_2">inventory_2</span>
+<span class="font-title text-title text-on-surface">Infant Formula (Stage 1)</span>
+</div>
+<span class="font-mono text-mono text-on-surface bg-surface-container-lowest px-2 py-1 rounded border border-border">
+                        5 units
+                    </span>
+</div>
+<div class="flex items-center justify-between border-b border-border pb-md last:border-0 last:pb-0">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-muted" data-icon="location_on">location_on</span>
+<span class="font-body text-body text-on-surface-variant">Zone C Intake Center</span>
+</div>
+<span class="material-symbols-outlined text-tertiary-container" data-icon="verified">verified</span>
+</div>
+</div>
+<!-- Impact Summary Box -->
+<div class="bg-surface border border-border rounded-lg p-md flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="volunteer_activism">volunteer_activism</span>
+<span class="font-body text-body text-on-surface-variant">Total Pledges</span>
+</div>
+<span class="font-mono text-mono text-primary font-bold">
+                    13
+                </span>
+</div>
+</div>
+<!-- Call to Actions -->
+<div class="w-full flex flex-col gap-sm">
+<button class="w-full h-[44px] bg-primary text-on-primary font-label text-label rounded flex items-center justify-center hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 transition-colors duration-200">
+                Return to Needs
+            </button>
+<button class="w-full h-[44px] bg-surface text-on-surface border border-outline font-label text-label rounded flex items-center justify-center hover:bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 transition-colors duration-200">
+                View Profile
+            </button>
+</div>
+</main>
+<style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body></html>
