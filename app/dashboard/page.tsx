@@ -8,6 +8,7 @@ import type {
   UrgencyLevel,
   NeedStatus,
 } from "@/features/needs/components/types";
+import { getUserOrganizations } from "@/lib/organizations";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 
 export const instant = false;
@@ -25,22 +26,10 @@ export default async function DashboardPage() {
   const adminClient = createAdminClient();
   const db = adminClient ?? supabase;
 
-  // 1. Obtener membresías de la organización
-  const { data: memberships, error: memberError } = await db
-    .from("org_members")
-    .select("org_id, role, organizations(name)")
-    .eq("auth_user_id", user.id);
-
-  if (memberError) {
-    console.error("[Dashboard] Error fetching memberships:", memberError);
-  }
-
-  const orgIds = memberships?.map((m) => m.org_id) ?? [];
-  const firstOrg = memberships?.[0]?.organizations as unknown;
-  const orgName =
-    (Array.isArray(firstOrg)
-      ? (firstOrg[0] as { name?: string })?.name
-      : (firstOrg as { name?: string } | null)?.name) ?? "Mi Organización";
+  // 1. Obtener membresías de la organización de forma resiliente
+  const memberships = await getUserOrganizations(user.id, user.email);
+  const orgIds = memberships.map((m) => m.org_id);
+  const orgName = memberships[0]?.organization_name ?? "Mi Organización";
 
   // 2. Obtener ítems de necesidad con su campaña y centros de acopio
   let needItemRows: NeedItemTableRow[] = [];

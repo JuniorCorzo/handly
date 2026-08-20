@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 
-import { createClient } from "@/lib/supabase/server";
+import { getUserOrganizations } from "@/lib/organizations";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 
 export type CreateCampaignResult =
   | { success: true; campaign: { id: string; name: string } }
@@ -25,18 +26,14 @@ export async function createCampaign(
     return { success: false, error: "El nombre de la campaña es obligatorio" };
   }
 
-  // Obtener la membresía del usuario como admin
-  const { data: memberships, error: memErr } = await supabase
-    .from("org_members")
-    .select("org_id, role")
-    .eq("auth_user_id", user.id);
+  const adminClient = createAdminClient();
+  const db = adminClient ?? supabase;
 
-  if (memErr) {
-    return { success: false, error: "Error al verificar organización" };
-  }
-
+  // Obtener la membresía del usuario como admin de forma resiliente
+  const memberships = await getUserOrganizations(user.id, user.email);
   const adminOrg =
-    memberships?.find((m) => m.role === "admin") ?? memberships?.[0];
+    memberships.find((m) => m.role === "admin") ?? memberships[0];
+
   if (!adminOrg) {
     return {
       success: false,
@@ -44,7 +41,7 @@ export async function createCampaign(
     };
   }
 
-  const { data: campaign, error: campErr } = await supabase
+  const { data: campaign, error: campErr } = await db
     .from("campaign")
     .insert({
       name,

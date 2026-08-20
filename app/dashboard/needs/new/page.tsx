@@ -3,13 +3,13 @@ import { redirect } from "next/navigation";
 
 import { createNeedItem } from "@/features/needs/actions";
 import { NeedItemForm } from "@/features/needs/components/NeedItemForm";
-import { createClient } from "@/lib/supabase/server";
+import { getUserOrganizations } from "@/lib/organizations";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 
 // Opt into blocking prerender — page uses cookies() via createClient
 export const instant = false;
 
 export default async function NewNeedItemPage() {
-  // ⚠️ createClient is server-only — uses cookies()
   const supabase = await createClient();
   const {
     data: { user },
@@ -18,27 +18,19 @@ export default async function NewNeedItemPage() {
     redirect("/login");
   }
 
-  const { data: memberships, error: memErr } = await supabase
-    .from("org_members")
-    .select("org_id, role")
-    .eq("auth_user_id", user.id);
+  const adminClient = createAdminClient();
+  const db = adminClient ?? supabase;
 
-  if (memErr) {
-    console.error("[Dashboard Needs] Error fetching memberships:", memErr);
-  }
-
-  const orgIds = memberships?.map((m) => m.org_id) ?? [];
+  const memberships = await getUserOrganizations(user.id, user.email);
+  const orgIds = memberships.map((m) => m.org_id);
 
   let campaigns: { id: string; name: string }[] = [];
   let collectionPoints: { id: string; location_adress: string }[] = [];
 
   if (orgIds.length > 0) {
     const [campRes, cpRes] = await Promise.all([
-      supabase
-        .from("campaign")
-        .select("id, name")
-        .in("organization_id", orgIds),
-      supabase
+      db.from("campaign").select("id, name").in("organization_id", orgIds),
+      db
         .from("collection_points")
         .select("id, location_adress")
         .in("organization_id", orgIds),

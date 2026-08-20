@@ -3,7 +3,8 @@ import { redirect, notFound } from "next/navigation";
 
 import { updateNeedItem } from "@/features/needs/actions";
 import { NeedItemForm } from "@/features/needs/components/NeedItemForm";
-import { createClient } from "@/lib/supabase/server";
+import { getUserOrganizations } from "@/lib/organizations";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 
 // Opt into blocking prerender — page uses cookies() via createClient
 export const instant = false;
@@ -23,8 +24,11 @@ export default async function EditNeedItemPage({
     redirect("/login");
   }
 
-  const [{ data: needItem }, { data: memberships }] = await Promise.all([
-    supabase
+  const adminClient = createAdminClient();
+  const db = adminClient ?? supabase;
+
+  const [{ data: needItem }, memberships] = await Promise.all([
+    db
       .from("need_items")
       .select(
         `
@@ -36,21 +40,18 @@ export default async function EditNeedItemPage({
       )
       .eq("id", id)
       .single(),
-    supabase
-      .from("org_members")
-      .select("org_id, role")
-      .eq("auth_user_id", user.id),
+    getUserOrganizations(user.id, user.email),
   ]);
 
   if (!needItem) {
     notFound();
   }
 
-  const orgIds = memberships?.map((m: { org_id: string }) => m.org_id) ?? [];
+  const orgIds = memberships.map((m) => m.org_id);
 
   const [{ data: campaigns }, { data: collectionPoints }] = await Promise.all([
-    supabase.from("campaign").select("id, name").in("organization_id", orgIds),
-    supabase
+    db.from("campaign").select("id, name").in("organization_id", orgIds),
+    db
       .from("collection_points")
       .select("id, location_adress")
       .in("organization_id", orgIds),

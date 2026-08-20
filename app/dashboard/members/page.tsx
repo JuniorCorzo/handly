@@ -8,6 +8,7 @@ import {
   RevokeInvitationButton,
   RemoveMemberButton,
 } from "@/features/members/components/MemberActions";
+import { getUserOrganizations } from "@/lib/organizations";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import type { OrgMemberRole } from "@/lib/validations/member";
 
@@ -49,29 +50,13 @@ export default async function MembersPage() {
   const adminClient = createAdminClient();
   const db = adminClient ?? supabase;
 
-  // 1. Obtener organización del usuario
-  const { data: memberships, error: memberError } = await db
-    .from("org_members")
-    .select("org_id, role, organizations(name)")
-    .eq("auth_user_id", user.id);
-
-  if (memberError) {
-    console.error(
-      "[Dashboard Members] Error fetching memberships:",
-      memberError
-    );
-  }
-
-  const primaryMembership = memberships?.[0];
+  // 1. Obtener organización del usuario de forma resiliente
+  const memberships = await getUserOrganizations(user.id, user.email);
+  const [primaryMembership] = memberships;
   const orgId = primaryMembership?.org_id;
   const userRole = primaryMembership?.role;
   const isAdmin = userRole === "admin";
-
-  const firstOrg = primaryMembership?.organizations as unknown;
-  const orgName =
-    (Array.isArray(firstOrg)
-      ? (firstOrg[0] as { name?: string })?.name
-      : (firstOrg as { name?: string } | null)?.name) ?? "Mi Organización";
+  const orgName = primaryMembership?.organization_name ?? "Mi Organización";
 
   let members: OrgMemberRow[] = [];
   let invitations: InvitationRow[] = [];
