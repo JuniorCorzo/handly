@@ -2,7 +2,9 @@ import { createServerClient } from "@supabase/ssr";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const PROTECTED_ROUTES = ["/dashboard"];
+const DASHBOARD_PATH = "/dashboard";
+const ONBOARDING_PATH = "/onboarding";
+const PROTECTED_ROUTES = [DASHBOARD_PATH, ONBOARDING_PATH];
 
 function getSupabaseEnv(): { url: string; anonKey: string } {
   const url = process.env.SUPABASE_URL;
@@ -48,6 +50,25 @@ export async function proxy(request: NextRequest) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
     return NextResponse.redirect(loginUrl);
+  }
+
+  if (user) {
+    const hasCompletedOnboarding = Boolean(
+      user.user_metadata?.onboarding_completed
+    );
+    const { pathname } = request.nextUrl;
+
+    if (!hasCompletedOnboarding && pathname.startsWith(DASHBOARD_PATH)) {
+      const onboardingUrl = request.nextUrl.clone();
+      onboardingUrl.pathname = ONBOARDING_PATH;
+      return NextResponse.redirect(onboardingUrl);
+    }
+
+    if (hasCompletedOnboarding && pathname.startsWith(ONBOARDING_PATH)) {
+      const dashboardUrl = request.nextUrl.clone();
+      dashboardUrl.pathname = DASHBOARD_PATH;
+      return NextResponse.redirect(dashboardUrl);
+    }
   }
 
   return supabaseResponse;
