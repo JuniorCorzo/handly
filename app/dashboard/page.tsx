@@ -8,7 +8,8 @@ import type {
   UrgencyLevel,
   NeedStatus,
 } from "@/features/needs/components/types";
-import { createClient } from "@/lib/supabase/server";
+import { getUserOrganizations } from "@/lib/organizations";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 
 export const instant = false;
 
@@ -22,24 +23,19 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  // 1. Obtener membresías de la organización
-  const { data: memberships } = await supabase
-    .from("org_members")
-    .select("org_id, role, organizations(name)")
-    .eq("auth_user_id", user.id);
+  const adminClient = createAdminClient();
+  const db = adminClient ?? supabase;
 
-  const orgIds = memberships?.map((m) => m.org_id) ?? [];
-  const firstOrg = memberships?.[0]?.organizations as unknown;
-  const orgName =
-    (Array.isArray(firstOrg)
-      ? (firstOrg[0] as { name?: string })?.name
-      : (firstOrg as { name?: string } | null)?.name) ?? "Mi Organización";
+  // 1. Obtener membresías de la organización de forma resiliente
+  const memberships = await getUserOrganizations(user.id, user.email);
+  const orgIds = memberships.map((m) => m.org_id);
+  const orgName = memberships[0]?.organization_name ?? "Mi Organización";
 
   // 2. Obtener ítems de necesidad con su campaña y centros de acopio
   let needItemRows: NeedItemTableRow[] = [];
 
   if (orgIds.length > 0) {
-    const { data: needItems, error } = await supabase
+    const { data: needItems, error } = await db
       .from("need_items")
       .select(
         `
@@ -174,6 +170,22 @@ export default async function DashboardPage() {
             </form>
           </div>
         </header>
+
+        {/* Tab Navigation */}
+        <nav className="flex gap-4 border-b border-[var(--border)] text-sm">
+          <Link
+            href="/dashboard"
+            className="border-b-2 border-[var(--primary)] pb-3 font-semibold text-[var(--primary)]"
+          >
+            Ítems de Necesidad
+          </Link>
+          <Link
+            href="/dashboard/members"
+            className="pb-3 font-medium text-[var(--muted)] hover:text-[var(--ink)]"
+          >
+            Miembros del Equipo
+          </Link>
+        </nav>
 
         {/* Diagnostic Banner if no org */}
         {orgIds.length === 0 && (

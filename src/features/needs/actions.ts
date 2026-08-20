@@ -3,12 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { createClient } from "@/src/lib/supabase/server";
-import {
-  NeedItemSchema,
-  NeedItemErrorCode,
-} from "@/src/lib/validations/need-item";
-import type { NeedItemInput } from "@/src/lib/validations/need-item";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
+import { NeedItemSchema, NeedItemErrorCode } from "@/lib/validations/need-item";
+import type { NeedItemInput } from "@/lib/validations/need-item";
 
 // ── Return type ─────────────────────────────────────────────────────
 export type NeedItemActionState =
@@ -37,6 +34,9 @@ export async function createNeedItem(
   const supabase = await createClient();
   await requireUser(supabase);
 
+  const adminClient = createAdminClient();
+  const db = adminClient ?? supabase;
+
   const rawData = {
     ...Object.fromEntries(formData),
     collection_point_ids: formData.getAll("collection_point_ids"),
@@ -58,7 +58,7 @@ export async function createNeedItem(
   } = parsed.data;
 
   // 1. Insert need_item
-  const { data: ni, error: niErr } = await supabase
+  const { data: ni, error: niErr } = await db
     .from("need_items")
     .insert({
       campaign_id,
@@ -85,12 +85,12 @@ export async function createNeedItem(
     collection_point_id: cpId,
   }));
 
-  const { error: pivotErr } = await supabase
+  const { error: pivotErr } = await db
     .from("need_items_collection_points")
     .insert(pivotRows);
 
   if (pivotErr) {
-    await supabase.from("need_items").delete().eq("id", ni.id);
+    await db.from("need_items").delete().eq("id", ni.id);
     return {
       success: false,
       errors: { _root: [NeedItemErrorCode.PIVOT_LINK_FAILED] },
@@ -110,6 +110,9 @@ export async function updateNeedItem(
 ): Promise<NeedItemActionState> {
   const supabase = await createClient();
   await requireUser(supabase);
+
+  const adminClient = createAdminClient();
+  const db = adminClient ?? supabase;
 
   const rawData = {
     ...Object.fromEntries(formData),
@@ -132,7 +135,7 @@ export async function updateNeedItem(
   } = parsed.data;
 
   // 1. Update need_item fields
-  const { error: niErr } = await supabase
+  const { error: updateErr } = await db
     .from("need_items")
     .update({
       campaign_id,
@@ -144,15 +147,15 @@ export async function updateNeedItem(
     })
     .eq("id", needItemId);
 
-  if (niErr) {
+  if (updateErr) {
     return {
       success: false,
       errors: { _root: [NeedItemErrorCode.UPDATE_FAILED] },
     };
   }
 
-  // 2. Re-sync pivot records: delete existing links and insert selected ones
-  const { error: delErr } = await supabase
+  // 2. Replace collection points in pivot table
+  const { error: delErr } = await db
     .from("need_items_collection_points")
     .delete()
     .eq("need_item_id", needItemId);
@@ -164,20 +167,22 @@ export async function updateNeedItem(
     };
   }
 
-  const pivotRows = collection_point_ids.map((cpId) => ({
-    need_item_id: needItemId,
-    collection_point_id: cpId,
-  }));
+  if (collection_point_ids.length > 0) {
+    const pivotRows = collection_point_ids.map((cpId) => ({
+      need_item_id: needItemId,
+      collection_point_id: cpId,
+    }));
 
-  const { error: insErr } = await supabase
-    .from("need_items_collection_points")
-    .insert(pivotRows);
+    const { error: insErr } = await db
+      .from("need_items_collection_points")
+      .insert(pivotRows);
 
-  if (insErr) {
-    return {
-      success: false,
-      errors: { _root: [NeedItemErrorCode.PIVOT_LINK_FAILED] },
-    };
+    if (insErr) {
+      return {
+        success: false,
+        errors: { _root: [NeedItemErrorCode.PIVOT_LINK_FAILED] },
+      };
+    }
   }
 
   revalidatePath("/dashboard");
