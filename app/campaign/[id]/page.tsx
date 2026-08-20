@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { NeedItemCard } from "@/components/NeedItemCard";
 import { CampaignHeader } from "@/features/campaign/components/CampaignHeader";
-import { NeedCard } from "@/features/campaign/components/NeedCard";
 import { getPublicCampaign } from "@/features/campaign/lib/queries";
 
 export const instant = false;
@@ -58,7 +58,7 @@ export default async function CampaignPage({
 
   return (
     <main className="min-h-screen bg-[var(--background)] px-4 py-10 font-sans text-[var(--ink)] antialiased sm:px-6 sm:py-12">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-5xl">
         <CampaignHeader campaign={campaign} />
 
         {campaign.needs.length === 0 ? (
@@ -68,9 +68,9 @@ export default async function CampaignPage({
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {campaign.needs.map((need) => (
-              <NeedCard key={need.id} need={need} />
+              <NeedItemCard key={need.id} item={need} showCampaignTag={false} />
             ))}
           </div>
         )}

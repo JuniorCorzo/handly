@@ -1,7 +1,8 @@
 import Link from "next/link";
 
+import type { PublicNeedItem } from "@/components/NeedItemCard";
+import type { UrgencyLevel } from "@/lib/validations/need-item";
 import { PublicNeedsCatalog } from "@/src/features/needs/components/PublicNeedsCatalog";
-import type { PublicNeedItem } from "@/src/features/needs/components/PublicNeedsCatalog";
 import { createClient } from "@/src/lib/supabase/server";
 
 export const instant = false;
@@ -22,6 +23,7 @@ export default async function Home() {
       urgency,
       status,
       campaign:campaign_id (
+        id,
         name,
         organizations:organization_id (
           name
@@ -54,6 +56,7 @@ export default async function Home() {
     urgency: string;
     status: string;
     campaign: {
+      id: string;
       name: string;
       organizations: { name: string } | null;
     } | null;
@@ -116,12 +119,13 @@ export default async function Home() {
         item_name: item.item_name,
         category: item.category,
         unit: item.unit,
-        urgency: item.urgency,
+        urgency: item.urgency as UrgencyLevel,
         target_quantity: item.target_quantity,
         committed_quantity: committed,
         remaining_quantity: remaining,
         progress_percentage: progress,
         is_fulfilled: remaining === 0,
+        campaign_id: item.campaign?.id,
         campaign_name: item.campaign?.name,
         org_name: item.campaign?.organizations?.name,
         collection_points: collectionPoints,
