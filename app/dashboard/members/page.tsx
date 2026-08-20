@@ -63,17 +63,52 @@ export default async function MembersPage() {
   const userMap = new Map<string, UserProfileMeta>();
 
   if (orgId) {
-    // 2. Obtener miembros activos de la organización
-    const { data: membersData, error: memError } = await db
-      .from("org_members")
-      .select("auth_user_id, org_id, role")
-      .eq("org_id", orgId);
+    // 2. Obtener miembros con sus perfiles mediante la función RPC SECURITY DEFINER
+    const { data: memberProfiles, error: rpcErr } = await supabase.rpc(
+      "get_org_member_profiles",
+      { p_org_id: orgId }
+    );
 
-    if (memError) {
-      console.error("[Dashboard Members] Error fetching members:", memError);
+    if (!rpcErr && Array.isArray(memberProfiles)) {
+      members = (
+        memberProfiles as {
+          auth_user_id: string;
+          role: OrgMemberRole;
+          email?: string;
+          full_name?: string;
+          job_title?: string;
+        }[]
+      ).map((p) => {
+        userMap.set(p.auth_user_id, {
+          email: p.email,
+          full_name: p.full_name,
+          job_title: p.job_title,
+        });
+        return {
+          auth_user_id: p.auth_user_id,
+          org_id: orgId,
+          role: p.role,
+        };
+      });
+    } else {
+      // Fallback a consulta directa de org_members
+      const { data: membersData, error: memError } = await db
+        .from("org_members")
+        .select("auth_user_id, org_id, role")
+        .eq("org_id", orgId);
+
+      if (memError) {
+        console.error("[Dashboard Members] Error fetching members:", memError);
+      }
+
+      members = (membersData as OrgMemberRow[]) ?? [];
+
+      userMap.set(user.id, {
+        email: user.email,
+        full_name: (user.user_metadata?.full_name as string) || undefined,
+        job_title: (user.user_metadata?.job_title as string) || undefined,
+      });
     }
-
-    members = (membersData as OrgMemberRow[]) ?? [];
 
     // 3. Obtener invitaciones pendientes
     const { data: invitationsData, error: invError } = await db
@@ -91,33 +126,6 @@ export default async function MembersPage() {
     }
 
     invitations = (invitationsData as InvitationRow[]) ?? [];
-
-    // 4. Enriquecer datos con la información del usuario actual y del directorio de auth
-    userMap.set(user.id, {
-      email: user.email,
-      full_name: (user.user_metadata?.full_name as string) || undefined,
-      job_title: (user.user_metadata?.job_title as string) || undefined,
-    });
-
-    if (adminClient) {
-      try {
-        const {
-          data: { users },
-        } = await adminClient.auth.admin.listUsers({ perPage: 1000 });
-        for (const u of users) {
-          userMap.set(u.id, {
-            email: u.email,
-            full_name: (u.user_metadata?.full_name as string) || undefined,
-            job_title: (u.user_metadata?.job_title as string) || undefined,
-          });
-        }
-      } catch (error) {
-        console.error(
-          "[Dashboard Members] Error loading users metadata:",
-          error
-        );
-      }
-    }
   }
 
   return (
