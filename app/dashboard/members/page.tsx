@@ -92,7 +92,13 @@ export default async function MembersPage() {
 
     invitations = (invitationsData as InvitationRow[]) ?? [];
 
-    // 4. Enriquecer datos de miembros con nombres y correos de auth.users
+    // 4. Enriquecer datos con la información del usuario actual y del directorio de auth
+    userMap.set(user.id, {
+      email: user.email,
+      full_name: (user.user_metadata?.full_name as string) || undefined,
+      job_title: (user.user_metadata?.job_title as string) || undefined,
+    });
+
     if (adminClient) {
       try {
         const {
@@ -216,8 +222,13 @@ export default async function MembersPage() {
                     const isSelf = m.auth_user_id === user.id;
                     const profile = userMap.get(m.auth_user_id);
                     const displayName =
-                      profile?.full_name || profile?.email || m.auth_user_id;
-                    const displayEmail = profile?.email;
+                      profile?.full_name ||
+                      profile?.email ||
+                      (isSelf
+                        ? (user.email ?? "Tú")
+                        : `Miembro (${m.auth_user_id.slice(0, 8)})`);
+                    const displayEmail =
+                      profile?.email || (isSelf ? user.email : undefined);
                     const avatarLetter = (displayName[0] || "?").toUpperCase();
 
                     return (
