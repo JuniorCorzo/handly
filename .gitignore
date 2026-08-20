@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -48,8 +49,16 @@ opencode.jsonc
 .atl/*
 !.atl/skill-registry.md
 
+# local audio notes — never commit voice messages
+audios/
+
 # SDD runtime ledger (tracked state)
 .gentle-ai/
 
 # commandcode - local agents, memory, and runtime state (no commitear)
+=======
+# stitch raw — externo, no commit (ver docs/design/stitch/)
+stitch_coderhub_design_system/
+
 .commandcode/
+

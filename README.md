@@ -13,7 +13,7 @@ Typography: Geist via `next/font` — literal names in `@theme inline`, no Arial
 ## Getting Started
 
 ```bash
-pnpm install
+pnpm install # auto-instala hooks lefthook
 pnpm dev
 ```
 
@@ -34,6 +34,16 @@ Find the Supabase values at: <https://supabase.com/dashboard/project/_/settings/
 > All three are validated server-side in `lib/env.ts`. `SITE_URL` is used by Supabase auth redirects, so it must match the URL the browser reaches.
 
 Edit `app/page.tsx` — auto-reload on save.
+
+## Calidad (Ultracite + Oxlint/Oxfmt) — para todos, técnico o no
+
+Hooks corren solos tras `pnpm install` (`prepare` → `lefthook install`).
+
+- Commit: `npx ultracite fix` sobre staged (auto-fix + `stage_fixed`).
+- Push: `npx ultracite check` + `pnpm tsc --noEmit` (bloquea si hay errores).
+- Si te bloqueó: corre `pnpm lint` (muestra), `pnpm format` (arregla), commit de nuevo.
+- Formato: `npx oxfmt --check .` debe dar 0 (ya 0 en `main`).
+- Todo el check manual: `pnpm ultracite:check && pnpm tsc --noEmit && pnpm build`.
 
 ## Design
 

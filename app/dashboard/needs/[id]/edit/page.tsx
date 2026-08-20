@@ -1,29 +1,31 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect, notFound } from 'next/navigation'
-import Link from 'next/link'
-import { NeedItemForm } from '../../new/_components/NeedItemForm'
-import { updateNeedItem } from '@/app/actions/need-items'
+import Link from "next/link";
+import { redirect, notFound } from "next/navigation";
+
+import { updateNeedItem } from "@/features/needs/actions";
+import { NeedItemForm } from "@/features/needs/components/NeedItemForm";
+import { createClient } from "@/lib/supabase/server";
 
 // Opt into blocking prerender — page uses cookies() via createClient
-export const instant = false
+export const instant = false;
 
 export default async function EditNeedItemPage({
-  params
+  params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params // async params — required in Next.js 16
-
-  // ⚠️ createClient is server-only — uses cookies()
-  const supabase = await createClient()
+  // async params — required in Next.js 16
+  const { id } = await params;
+  const supabase = await createClient();
   const {
-    data: { user }
-  } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    redirect("/login");
+  }
 
   const [{ data: needItem }, { data: memberships }] = await Promise.all([
     supabase
-      .from('need_items')
+      .from("need_items")
       .select(
         `
         *,
@@ -32,54 +34,53 @@ export default async function EditNeedItemPage({
         )
       `
       )
-      .eq('id', id)
+      .eq("id", id)
       .single(),
     supabase
-      .from('org_members')
-      .select('org_id, role')
-      .eq('auth_user_id', user.id)
-  ])
+      .from("org_members")
+      .select("org_id, role")
+      .eq("auth_user_id", user.id),
+  ]);
 
-  if (!needItem) notFound()
+  if (!needItem) {
+    notFound();
+  }
 
-  const orgIds = memberships?.map((m: { org_id: string }) => m.org_id) ?? []
-  const isAdmin =
-    memberships?.some((m: { role: string }) => m.role === 'admin') ??
-    orgIds.length > 0
+  const orgIds = memberships?.map((m: { org_id: string }) => m.org_id) ?? [];
 
   const [{ data: campaigns }, { data: collectionPoints }] = await Promise.all([
-    supabase.from('campaign').select('id, name').in('organization_id', orgIds),
+    supabase.from("campaign").select("id, name").in("organization_id", orgIds),
     supabase
-      .from('collection_points')
-      .select('id, location_adress')
-      .in('organization_id', orgIds)
-  ])
+      .from("collection_points")
+      .select("id, location_adress")
+      .in("organization_id", orgIds),
+  ]);
 
   const selectedPointIds =
     needItem.need_items_collection_points?.map(
       (p: { collection_point_id: string }) => p.collection_point_id
-    ) ?? []
+    ) ?? [];
 
-  const boundAction = updateNeedItem.bind(null, id)
+  const boundAction = updateNeedItem.bind(null, id);
 
   return (
-    <main className='flex min-h-screen items-center justify-center bg-[var(--background)] px-4 py-12 font-sans text-[var(--ink)] antialiased'>
-      <div className='w-full max-w-lg rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] sm:p-10'>
-        <div className='mb-6'>
+    <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-4 py-12 font-sans text-[var(--ink)] antialiased">
+      <div className="w-full max-w-lg rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] sm:p-10">
+        <div className="mb-6">
           <Link
-            href='/dashboard'
-            className='inline-flex items-center gap-1 text-xs font-medium text-[var(--muted)] hover:text-[var(--ink)] mb-3 transition-colors'
+            href="/dashboard"
+            className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
           >
             ← Volver al panel de necesidades
           </Link>
           <div>
-            <span className='inline-block text-xs font-semibold tracking-wider text-[var(--primary)] uppercase'>
+            <span className="inline-block text-xs font-semibold tracking-wider text-[var(--primary)] uppercase">
               Handly
             </span>
-            <h1 className='mt-1 text-2xl font-bold tracking-tight text-[var(--ink)]'>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight text-[var(--ink)]">
               Editar ítem de necesidad
             </h1>
-            <p className='mt-2 text-sm text-[var(--muted)]'>
+            <p className="mt-2 text-sm text-[var(--muted)]">
               Actualizá los datos del requerimiento de asistencia.
             </p>
           </div>
@@ -95,12 +96,11 @@ export default async function EditNeedItemPage({
             target_quantity: needItem.target_quantity,
             unit: needItem.unit,
             urgency: needItem.urgency,
-            collection_point_ids: selectedPointIds
+            collection_point_ids: selectedPointIds,
           }}
-          submitLabel='Guardar cambios'
-          isAdmin={isAdmin}
+          submitLabel="Guardar cambios"
         />
       </div>
     </main>
-  )
+  );
 }

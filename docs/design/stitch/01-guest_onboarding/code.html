@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Handly - Guest Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-bright": "#eefdf6",
+                "on-secondary-fixed-variant": "#004d61",
+                "on-surface": "#111e1a",
+                "on-secondary": "#ffffff",
+                "primary-fixed": "#abefea",
+                "secondary": "#26667b",
+                "on-surface-variant": "#3f4948",
+                "on-tertiary": "#ffffff",
+                "surface-container": "#e2f1ea",
+                "inverse-surface": "#26332f",
+                "muted": "#52635D",
+                "on-primary-fixed": "#00201f",
+                "on-tertiary-fixed": "#002111",
+                "surface": "#FFFFFF",
+                "outline": "#6f7978",
+                "surface-container-high": "#dcece5",
+                "tertiary": "#004529",
+                "border": "#CBD8D2",
+                "urgent": "#A14B00",
+                "surface-container-low": "#e8f7f0",
+                "primary-container": "#0f5c59",
+                "on-primary-container": "#8fd2ce",
+                "on-error-container": "#93000a",
+                "critical": "#B42318",
+                "inverse-on-surface": "#e5f4ed",
+                "primary": "#004341",
+                "tertiary-fixed": "#a4f4c3",
+                "on-primary-fixed-variant": "#00504d",
+                "on-error": "#ffffff",
+                "surface-container-highest": "#d7e6df",
+                "secondary-fixed-dim": "#94cfe7",
+                "on-primary": "#ffffff",
+                "surface-variant": "#d7e6df",
+                "paper-bg": "#F6FAF8",
+                "focus": "#1D4ED8",
+                "on-background": "#111e1a",
+                "secondary-container": "#aae6fe",
+                "tertiary-fixed-dim": "#88d7a8",
+                "surface-tint": "#226865",
+                "primary-fixed-dim": "#90d2ce",
+                "on-secondary-fixed": "#001f29",
+                "surface-container-lowest": "#ffffff",
+                "secondary-fixed": "#b9eaff",
+                "tertiary-container": "#005f3a",
+                "on-secondary-container": "#29687d",
+                "error-container": "#ffdad6",
+                "inverse-primary": "#90d2ce",
+                "on-tertiary-fixed-variant": "#005232",
+                "surface-dim": "#ceddd7",
+                "error": "#ba1a1a",
+                "on-tertiary-container": "#88d7a8",
+                "background": "#eefdf6",
+                "outline-variant": "#bec9c7"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "max-width": "1200px",
+                "xs": "4px",
+                "margin-mobile": "16px",
+                "sm": "8px",
+                "md": "16px",
+                "gutter": "24px",
+                "lg": "24px",
+                "xl": "32px",
+                "margin-desktop": "32px"
+        },
+        "fontFamily": {
+                "label": [
+                        "Geist", "sans-serif"
+                ],
+                "body": [
+                        "Geist", "sans-serif"
+                ],
+                "display": [
+                        "Geist", "sans-serif"
+                ],
+                "title": [
+                        "Geist", "sans-serif"
+                ],
+                "headline": [
+                        "Geist", "sans-serif"
+                ],
+                "mono": [
+                        "Geist Mono", "monospace"
+                ]
+        },
+        "fontSize": {
+                "label": [
+                        "14px",
+                        {
+                                "lineHeight": "1.4",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display": [
+                        "40px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "title": [
+                        "18px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.015em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "mono": [
+                        "14px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+<!-- Suppressing Shell Navigation: Guest Onboarding is a linear/transactional flow. -->
+<main class="flex-grow flex flex-col px-margin-mobile md:px-margin-desktop py-xl md:py-[64px] items-center justify-center">
+<div class="w-full max-w-[480px] flex flex-col">
+<!-- Header Section -->
+<header class="mb-[64px]">
+<div class="flex items-center gap-2 mb-8 text-primary">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<span class="font-title text-title font-bold tracking-tight">Handly</span>
+</div>
+<h1 class="font-display text-display text-on-surface">Help exactly where it’s needed.</h1>
+</header>
+<!-- Instruction Steps -->
+<div class="flex flex-col gap-y-[48px] mb-[64px]">
+<!-- Step 1 -->
+<div class="flex items-start gap-x-6">
+<div class="shrink-0 flex items-center justify-center mt-0.5">
+<span class="material-symbols-outlined text-[32px] text-secondary">list_alt</span>
+</div>
+<div class="flex flex-col gap-y-1">
+<h2 class="font-title text-title text-on-surface">Scan Needs</h2>
+<p class="font-body text-body text-on-surface-variant">See real-time emergency requirements in your area.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex items-start gap-x-6">
+<div class="shrink-0 flex items-center justify-center mt-0.5">
+<span class="material-symbols-outlined text-[32px] text-secondary">volunteer_activism</span>
+</div>
+<div class="flex flex-col gap-y-1">
+<h2 class="font-title text-title text-on-surface">Pledge Items</h2>
+<p class="font-body text-body text-on-surface-variant">Commit to bringing specific supplies to a center.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex items-start gap-x-6">
+<div class="shrink-0 flex items-center justify-center mt-0.5">
+<span class="material-symbols-outlined text-[32px] text-secondary">location_on</span>
+</div>
+<div class="flex flex-col gap-y-1">
+<h2 class="font-title text-title text-on-surface">Drop Off</h2>
+<p class="font-body text-body text-on-surface-variant">Present your SOS code at the intake center for immediate distribution.</p>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="mt-auto w-full pt-8 border-t border-border">
+<button class="w-full h-[48px] bg-primary text-on-primary font-label text-label rounded flex items-center justify-center hover:bg-on-primary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2 active:scale-[0.98] duration-150">
+          Get Started
+        </button>
+</div>
+</div>
+</main>
+</body></html>

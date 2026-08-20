@@ -2,17 +2,23 @@
   "name": "handly",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "lint": "eslint",
-    "format": "prettier --write \"{app,components,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs",
-    "format:check": "prettier --check \"{app,components,lib,docs}/**/*.{ts,tsx,md,css}\" *.ts *.mjs"
+    "lint": "ultracite check",
+    "format": "ultracite fix",
+    "format:check": "ultracite check",
+    "ultracite:check": "ultracite check",
+    "ultracite:fix": "ultracite fix",
+    "ultracite:check:type-aware": "ultracite check --type-aware",
+    "prepare": "lefthook install || true"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.3",
     "@tanstack/react-table": "^8.21.3",
+    "@vercel/analytics": "^2.0.1",
     "next": "16.3.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -23,12 +29,16 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.3.1",
-    "prettier": "^3.9.6",
-    "prettier-config-standard": "^7.0.0",
+    "eslint-plugin-github": "^6.1.2",
+    "eslint-plugin-sonarjs": "^4.2.0",
+    "lefthook": "^2.1.10",
+    "oxfmt": "^0.64.0",
+    "oxlint": "^1.79.0",
+    "oxlint-plugin-react-doctor": "^0.9.12",
+    "supabase": "^2.115.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "ultracite": "^7.10.5"
   },
   "packageManager": "pnpm@11.15.0"
 }
