@@ -50,3 +50,6 @@ opencode.jsonc
 
 # SDD runtime ledger (tracked state)
 .gentle-ai/
+
+# commandcode - local agents, memory, and runtime state (no commitear)
+.commandcode/
