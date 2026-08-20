@@ -56,7 +56,6 @@ audios/
 .gentle-ai/
 
 # commandcode - local agents, memory, and runtime state (no commitear)
-=======
 # stitch raw — externo, no commit (ver docs/design/stitch/)
 stitch_coderhub_design_system/
 
