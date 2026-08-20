@@ -3,11 +3,11 @@ pre-commit:
   commands:
     ultracite:
       glob: "*.{js,jsx,ts,tsx,mjs,cjs}"
-      run: npx ultracite fix {staged_files} || true
+      run: pnpm exec ultracite fix {staged_files} || true
       stage_fixed: true
 pre-push:
   commands:
     ultracite:
-      run: npx ultracite check
+      run: pnpm exec ultracite check
     typecheck:
       run: pnpm tsc --noEmit
