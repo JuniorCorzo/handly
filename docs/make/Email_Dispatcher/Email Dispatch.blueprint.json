@@ -1,961 +1,933 @@
 {
-    "name": "Donation Email Dispatch",
-    "flow": [
-        {
-            "id": 2,
-            "module": "gateway:CustomWebHook",
-            "version": 1,
-            "parameters": {
-                "hook": 2703382,
-                "maxResults": 1
+  "name": "Donation Email Dispatch",
+  "flow": [
+    {
+      "id": 2,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 2703382,
+        "maxResults": 1
+      },
+      "mapper": {},
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 300,
+          "name": "Donation Webhook"
+        },
+        "restore": {
+          "parameters": {
+            "hook": {
+              "data": {
+                "editable": "true"
+              },
+              "label": "donation_webhook"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook:gateway-webhook",
+            "label": "Webhook",
+            "required": true
+          },
+          {
+            "name": "maxResults",
+            "type": "number",
+            "label": "Maximum number of results"
+          }
+        ],
+        "interface": [
+          {
+            "name": "event_type",
+            "type": "text"
+          },
+          {
+            "name": "recipient_email",
+            "type": "text"
+          },
+          {
+            "name": "data",
+            "spec": [
+              {
+                "name": "org_name",
+                "type": "text"
+              },
+              {
+                "name": "campaign_name",
+                "type": "text"
+              },
+              {
+                "name": "item_goal",
+                "type": "text"
+              },
+              {
+                "name": "item_name",
+                "type": "text"
+              },
+              {
+                "name": "goal_reached",
+                "type": "text"
+              },
+              {
+                "name": "goal",
+                "type": "text"
+              }
+            ],
+            "type": "collection"
+          }
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "module": "util:SetVariables",
+      "version": 1,
+      "parameters": {},
+      "filter": null,
+      "mapper": {
+        "variables": [
+          {
+            "name": "brand_primary",
+            "value": "#FF6B4A"
+          },
+          {
+            "name": "brand_primary_gradient",
+            "value": "linear-gradient(135deg, #FF6B4A 0%, #FF8E53 100%)"
+          },
+          {
+            "name": "bg_main",
+            "value": "#f4f6f8"
+          },
+          {
+            "name": "text_dark",
+            "value": "#1e293b"
+          },
+          {
+            "name": "font_family",
+            "value": "'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+          }
+        ],
+        "scope": "roundtrip"
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 300
+        },
+        "restore": {
+          "expect": {
+            "variables": {
+              "items": [null, null, null, null, null]
             },
-            "mapper": {},
-            "metadata": {
+            "scope": {
+              "label": "One cycle"
+            }
+          }
+        },
+        "expect": [
+          {
+            "name": "variables",
+            "type": "array",
+            "label": "Variables",
+            "validate": {
+              "unique": {
+                "by": "name"
+              }
+            },
+            "spec": {
+              "type": "collection",
+              "label": "Variable",
+              "spec": [
+                {
+                  "name": "name",
+                  "label": "Variable name",
+                  "type": "text",
+                  "required": true
+                },
+                {
+                  "name": "value",
+                  "label": "Variable value",
+                  "type": "any"
+                }
+              ],
+              "name": "value"
+            }
+          },
+          {
+            "name": "scope",
+            "type": "select",
+            "label": "Variable lifetime",
+            "required": true,
+            "validate": {
+              "enum": ["roundtrip", "execution"]
+            }
+          }
+        ],
+        "interface": [
+          {
+            "name": "brand_primary",
+            "label": "brand_primary",
+            "type": "any"
+          },
+          {
+            "name": "brand_primary_gradient",
+            "label": "brand_primary_gradient",
+            "type": "any"
+          },
+          {
+            "name": "bg_main",
+            "label": "bg_main",
+            "type": "any"
+          },
+          {
+            "name": "text_dark",
+            "label": "text_dark",
+            "type": "any"
+          },
+          {
+            "name": "font_family",
+            "label": "font_family",
+            "type": "any"
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "parameters": {
+        "else": 1
+      },
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 300,
+          "name": "Classify Email"
+        }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 6,
+              "module": "resend:sendAnEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 10488338
+              },
+              "filter": {
+                "name": "Meta alcanzada",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{2.event_type}}",
+                      "b": "GOAL_ACHIEVED",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "to": ["{{2.recipient_email}}"],
+                "from": "noreply@handly.angelcorzo.dev",
+                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Progreso de Meta - Handly</title>\r\n  <style>\r\n    body { font-family: {{25.font_family}}; background-color: {{25.bg_main}}; margin: 0; padding: 0; color: #333333; }\r\n    .container { max-width: 600px; margin: 30px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }\r\n    .header { background: {{25.brand_primary_gradient}}; padding: 30px 20px; text-align: center; color: #ffffff; }\r\n    .header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }\r\n    .badge { display: inline-block; background-color: rgba(255, 255, 255, 0.25); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px; }\r\n    .content { padding: 30px 25px; }\r\n    .greeting { font-size: 18px; font-weight: 600; color: {{25.text_dark}}; margin-bottom: 12px; }\r\n    .message { font-size: 15px; line-height: 1.6; color: #4b5563; margin-bottom: 25px; }\r\n    .card { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; margin-bottom: 25px; }\r\n    .card-title { font-size: 14px; text-transform: uppercase; color: #6b7280; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }\r\n    .data-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 15px; }\r\n    .data-label { color: #6b7280; }\r\n    .data-value { font-weight: 600; color: {{25.text_dark}}; }\r\n    .progress-box { margin-top: 15px; background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px; text-align: center; color: #065f46; font-weight: 600; font-size: 15px; }\r\n    .cta-button { display: block; width: 100%; text-align: center; background-color: {{25.text_dark}}; color: #ffffff !important; text-decoration: none; padding: 14px 0; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 20px; }\r\n    .footer { background-color: {{25.bg_main}}; padding: 20px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #f3f4f6; }\r\n  </style>\r\n</head>\r\n<body>\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <h1>{{if(2.data.goal_type = \"campaign\"; \"¡Campaña Acelerando! 🏆\"; \"¡Hito Alcanzado! 🎯\")}}</h1>\r\n      <div class=\"badge\">{{if(2.data.goal_type = \"campaign\"; \"Progreso de Campaña\"; \"Progreso de Insumo\")}}</div>\r\n    </div>\r\n    <div class=\"content\">\r\n      <div class=\"greeting\">¡Hola, equipo de {{2.data.org_name}}!</div>\r\n      <div class=\"message\">{{if(2.data.goal_type = \"campaign\"; \"¡Grandes noticias! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> de la meta global para la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\"; \"¡Excelente progreso! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> del objetivo para el insumo <strong>\" + 2.data.item_name + \"</strong> en la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\")}}</div>\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">{{if(2.data.goal_type = \"campaign\"; \"Resumen de la Campaña\"; \"Detalle del Insumo\")}}</div>\r\n        <div class=\"data-row\"><span class=\"data-label\">Campaña:</span><span class=\"data-value\">{{2.data.campaign_name}}</span></div>\r\n        {{if(2.data.goal_type != \"campaign\"; \"<div class='data-row'><span class='data-label'>Ítem:</span><span class='data-value'>\" + 2.data.item_name + \"</span></div>\"; )}}\r\n        <div class=\"data-row\"><span class=\"data-label\">Meta objetivo:</span><span class=\"data-value\">{{2.data.goal}} unidades</span></div>\r\n        <div class=\"progress-box\">📈 Recolectado/comprometido: <strong>{{2.data.goal_reached}} unidades ({{round((2.data.goal_reached / 2.data.goal) * 100)}}%)</strong></div>\r\n      </div>\r\n      <p class=\"message\">{{if(2.data.goal_type = \"campaign\"; \"Gracias a la respuesta de los donantes, la campaña avanza a firme paso. Podés gestionar y revisar los acopios desde tu panel.\"; \"Gracias al compromiso de la comunidad, los cupos para este insumo se siguen completando. Podés revisar el estado del acopio desde tu panel.\")}}</p>\r\n      <a href=\"https://handly.app/dashboard\" class=\"cta-button\">Ir al Panel de Gestión</a>\r\n    </div>\r\n    <div class=\"footer\">Este es un mensaje automático generado por <strong>Handly</strong> en respuesta a eventos de la campaña.<br>© 2026 Handly. Todos los derechos reservados.</div>\r\n  </div>\r\n</body>\r\n</html>",
+                "subject": "{{if(2.data.goal_type = \"campaign\"; \"🎉 ¡Campaña Completada!\"; \"🎯 Meta Alcanzada en Ítem\")}} — {{2.data.campaign_name}}",
+                "sendEmailAs": "html"
+              },
+              "metadata": {
                 "designer": {
-                    "x": 0,
-                    "y": 300,
-                    "name": "Donation Webhook"
+                  "x": 900,
+                  "y": 0,
+                  "name": "Goal"
                 },
                 "restore": {
-                    "parameters": {
-                        "hook": {
-                            "data": {
-                                "editable": "true"
-                            },
-                            "label": "donation_webhook"
-                        }
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "Angel's Resend connection"
                     }
+                  },
+                  "expect": {
+                    "sendEmailAs": {
+                      "mode": "chose",
+                      "label": "HTML",
+                      "nested": [
+                        {
+                          "name": "html",
+                          "type": "text",
+                          "label": "HTML Content",
+                          "multiline": true
+                        },
+                        {
+                          "help": "Optional plain text version of the message, shown by email clients that cannot display HTML. If left empty, Resend generates it automatically from the HTML content.",
+                          "name": "text",
+                          "type": "text",
+                          "label": "Plain Text Version",
+                          "multiline": true
+                        }
+                      ]
+                    }
+                  }
                 },
                 "parameters": [
-                    {
-                        "name": "hook",
-                        "type": "hook:gateway-webhook",
-                        "label": "Webhook",
-                        "required": true
-                    },
-                    {
-                        "name": "maxResults",
-                        "type": "number",
-                        "label": "Maximum number of results"
-                    }
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account:resend",
+                    "label": "Connection",
+                    "required": true
+                  }
                 ],
-                "interface": [
-                    {
-                        "name": "event_type",
-                        "type": "text"
+                "expect": [
+                  {
+                    "name": "from",
+                    "type": "text",
+                    "label": "From",
+                    "required": true
+                  },
+                  {
+                    "name": "to",
+                    "spec": {
+                      "type": "email"
                     },
-                    {
-                        "name": "recipient_email",
-                        "type": "text"
+                    "type": "array",
+                    "label": "To",
+                    "required": true
+                  },
+                  {
+                    "name": "bcc",
+                    "spec": {
+                      "type": "email"
                     },
-                    {
-                        "name": "data",
-                        "spec": [
-                            {
-                                "name": "org_name",
-                                "type": "text"
-                            },
-                            {
-                                "name": "campaign_name",
-                                "type": "text"
-                            },
-                            {
-                                "name": "item_goal",
-                                "type": "text"
-                            },
-                            {
-                                "name": "item_name",
-                                "type": "text"
-                            },
-                            {
-                                "name": "goal_reached",
-                                "type": "text"
-                            },
-                            {
-                                "name": "goal",
-                                "type": "text"
-                            }
-                        ],
-                        "type": "collection"
+                    "type": "array",
+                    "label": "BCC",
+                    "advanced": true
+                  },
+                  {
+                    "name": "cc",
+                    "spec": {
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "CC",
+                    "advanced": true
+                  },
+                  {
+                    "name": "replyTo",
+                    "spec": {
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "Reply-To",
+                    "advanced": true
+                  },
+                  {
+                    "name": "subject",
+                    "type": "text",
+                    "label": "Subject",
+                    "required": true
+                  },
+                  {
+                    "name": "scheduled_at",
+                    "time": true,
+                    "type": "date",
+                    "label": "Schedule For",
+                    "advanced": true
+                  },
+                  {
+                    "name": "sendEmailAs",
+                    "type": "select",
+                    "label": "Send Email As",
+                    "required": true,
+                    "validate": {
+                      "enum": ["html", "text"]
                     }
+                  },
+                  {
+                    "name": "html",
+                    "type": "text",
+                    "label": "HTML Content"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Plain Text Version"
+                  },
+                  {
+                    "name": "tags",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": false
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value",
+                        "required": false
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Tags",
+                    "advanced": true
+                  },
+                  {
+                    "name": "attachments",
+                    "spec": [
+                      {
+                        "name": "filename",
+                        "type": "filename",
+                        "label": "File name"
+                      },
+                      {
+                        "name": "path",
+                        "type": "text",
+                        "label": "Path"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Attachments",
+                    "advanced": true
+                  },
+                  {
+                    "name": "headers",
+                    "spec": {
+                      "spec": [
+                        {
+                          "name": "key",
+                          "type": "text",
+                          "label": "Key"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "Header"
+                    },
+                    "type": "array",
+                    "label": "Custom Headers",
+                    "labels": {
+                      "add": "Add header"
+                    },
+                    "advanced": true
+                  }
                 ]
+              }
             }
+          ]
         },
         {
-            "id": 25,
-            "module": "util:SetVariables",
-            "version": 1,
-            "parameters": {},
-            "filter": null,
-            "mapper": {
-                "variables": [
-                    {
-                        "name": "brand_primary",
-                        "value": "#FF6B4A"
-                    },
-                    {
-                        "name": "brand_primary_gradient",
-                        "value": "linear-gradient(135deg, #FF6B4A 0%, #FF8E53 100%)"
-                    },
-                    {
-                        "name": "bg_main",
-                        "value": "#f4f6f8"
-                    },
-                    {
-                        "name": "text_dark",
-                        "value": "#1e293b"
-                    },
-                    {
-                        "name": "font_family",
-                        "value": "'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-                    }
-                ],
-                "scope": "roundtrip"
-            },
-            "metadata": {
+          "flow": [
+            {
+              "id": 7,
+              "module": "resend:sendAnEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 10488338
+              },
+              "filter": {
+                "name": "Tipo desconocido",
+                "conditions": null
+              },
+              "mapper": {
+                "to": ["ramirorodcas.dev@gmail.com"],
+                "from": "noreply@handly.angelcorzo.dev",
+                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Alerta de Sistema - Handly</title>\r\n  <style>\r\n    body { font-family: {{25.font_family}}; background-color: {{25.bg_main}}; margin: 0; padding: 0; color: #e2e8f0; }\r\n    .container { max-width: 620px; margin: 30px auto; background-color: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }\r\n    .header { background: {{25.brand_primary_gradient}}; padding: 20px 25px; color: #ffffff; }\r\n    .header h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }\r\n    .badge { display: inline-block; background-color: {{25.brand_primary}}; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; margin-top: 6px; text-transform: uppercase; }\r\n    .content { padding: 25px; }\r\n    .alert-title { font-size: 16px; font-weight: 600; color: {{25.brand_primary}}; margin-bottom: 12px; }\r\n    .message { font-size: 14px; line-height: 1.6; color: #94a3b8; margin-bottom: 20px; }\r\n    .card { background-color: {{25.text_dark}}; border: 1px solid #334155; border-radius: 8px; padding: 16px; margin-bottom: 20px; }\r\n    .card-title { font-size: 12px; text-transform: uppercase; color: #64748b; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }\r\n    .data-row { padding: 6px 0; font-size: 14px; }\r\n    .data-label { color: #94a3b8; }\r\n    .data-value { font-weight: 600; color: #f8fafc; font-family: monospace; background-color: #1e293b; padding: 2px 6px; border-radius: 4px; }\r\n    .code-block { background-color: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; color: {{25.brand_primary}}; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }\r\n    .footer { background-color: {{25.bg_main}}; padding: 16px 25px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #1e293b; }\r\n  </style>\r\n</head>\r\n<body>\r\n  <div class=\"container\">\r\n    <div class=\"header\"><h1>⚠️ Unhandled Webhook Event</h1><div class=\"badge\">Error de Ruteo / Fallback</div></div>\r\n    <div class=\"content\">\r\n      <div class=\"alert-title\">Evento no procesado en la automatización</div>\r\n      <div class=\"message\">El escenario de Make/n8n recibió una petición webhook con un tipo de evento que no coincide con ninguno de los filtros configurados en el Router.</div>\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">Detalles de la Petición</div>\r\n        <div class=\"data-row\"><span class=\"data-label\">Event Type recibido:</span><span class=\"data-value\">{{2.event_type}}</span></div>\r\n        <div class=\"data-row\" style=\"margin-top: 6px;\"><span class=\"data-label\">Destinatario original:</span><span class=\"data-value\">{{2.recipient_email}}</span></div>\r\n      </div>\r\n      <div class=\"card-title\">Payload Recibido (Raw JSON)</div>\r\n      <div class=\"code-block\">{\r\n  \"event_type\": \"{{2.event_type}}\",\r\n  \"recipient_email\": \"{{2.recipient_email}}\",\r\n  \"data\": {{2.data}}\r\n}</div>\r\n    </div>\r\n    <div class=\"footer\">Alerta automática para Dev/Staff • <strong>Handly Core System</strong></div>\r\n  </div>\r\n</body>\r\n</html>",
+                "subject": "⚠️ [Handly System Alert] Evento de webhook no reconocido: {{2.event_type}}",
+                "sendEmailAs": "html"
+              },
+              "metadata": {
                 "designer": {
-                    "x": 300,
-                    "y": 300
+                  "x": 900,
+                  "y": 300,
+                  "name": "Unknown Mail Type"
                 },
                 "restore": {
-                    "expect": {
-                        "variables": {
-                            "items": [
-                                null,
-                                null,
-                                null,
-                                null,
-                                null
-                            ]
-                        },
-                        "scope": {
-                            "label": "One cycle"
-                        }
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "Angel's Resend connection"
                     }
+                  },
+                  "expect": {
+                    "sendEmailAs": {
+                      "mode": "chose",
+                      "label": "HTML",
+                      "nested": [
+                        {
+                          "name": "html",
+                          "type": "text",
+                          "label": "HTML Content",
+                          "multiline": true
+                        },
+                        {
+                          "help": "Optional plain text version of the message, shown by email clients that cannot display HTML. If left empty, Resend generates it automatically from the HTML content.",
+                          "name": "text",
+                          "type": "text",
+                          "label": "Plain Text Version",
+                          "multiline": true
+                        }
+                      ]
+                    }
+                  }
                 },
-                "expect": [
-                    {
-                        "name": "variables",
-                        "type": "array",
-                        "label": "Variables",
-                        "validate": {
-                            "unique": {
-                                "by": "name"
-                            }
-                        },
-                        "spec": {
-                            "type": "collection",
-                            "label": "Variable",
-                            "spec": [
-                                {
-                                    "name": "name",
-                                    "label": "Variable name",
-                                    "type": "text",
-                                    "required": true
-                                },
-                                {
-                                    "name": "value",
-                                    "label": "Variable value",
-                                    "type": "any"
-                                }
-                            ],
-                            "name": "value"
-                        }
-                    },
-                    {
-                        "name": "scope",
-                        "type": "select",
-                        "label": "Variable lifetime",
-                        "required": true,
-                        "validate": {
-                            "enum": [
-                                "roundtrip",
-                                "execution"
-                            ]
-                        }
-                    }
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account:resend",
+                    "label": "Connection",
+                    "required": true
+                  }
                 ],
-                "interface": [
-                    {
-                        "name": "brand_primary",
-                        "label": "brand_primary",
-                        "type": "any"
+                "expect": [
+                  {
+                    "name": "from",
+                    "type": "text",
+                    "label": "From",
+                    "required": true
+                  },
+                  {
+                    "name": "to",
+                    "spec": {
+                      "type": "email"
                     },
-                    {
-                        "name": "brand_primary_gradient",
-                        "label": "brand_primary_gradient",
-                        "type": "any"
+                    "type": "array",
+                    "label": "To",
+                    "required": true
+                  },
+                  {
+                    "name": "bcc",
+                    "spec": {
+                      "type": "email"
                     },
-                    {
-                        "name": "bg_main",
-                        "label": "bg_main",
-                        "type": "any"
+                    "type": "array",
+                    "label": "BCC",
+                    "advanced": true
+                  },
+                  {
+                    "name": "cc",
+                    "spec": {
+                      "type": "email"
                     },
-                    {
-                        "name": "text_dark",
-                        "label": "text_dark",
-                        "type": "any"
+                    "type": "array",
+                    "label": "CC",
+                    "advanced": true
+                  },
+                  {
+                    "name": "replyTo",
+                    "spec": {
+                      "type": "email"
                     },
-                    {
-                        "name": "font_family",
-                        "label": "font_family",
-                        "type": "any"
+                    "type": "array",
+                    "label": "Reply-To",
+                    "advanced": true
+                  },
+                  {
+                    "name": "subject",
+                    "type": "text",
+                    "label": "Subject",
+                    "required": true
+                  },
+                  {
+                    "name": "scheduled_at",
+                    "time": true,
+                    "type": "date",
+                    "label": "Schedule For",
+                    "advanced": true
+                  },
+                  {
+                    "name": "sendEmailAs",
+                    "type": "select",
+                    "label": "Send Email As",
+                    "required": true,
+                    "validate": {
+                      "enum": ["html", "text"]
                     }
+                  },
+                  {
+                    "name": "html",
+                    "type": "text",
+                    "label": "HTML Content"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Plain Text Version"
+                  },
+                  {
+                    "name": "tags",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": false
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value",
+                        "required": false
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Tags",
+                    "advanced": true
+                  },
+                  {
+                    "name": "attachments",
+                    "spec": [
+                      {
+                        "name": "filename",
+                        "type": "filename",
+                        "label": "File name"
+                      },
+                      {
+                        "name": "path",
+                        "type": "text",
+                        "label": "Path"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Attachments",
+                    "advanced": true
+                  },
+                  {
+                    "name": "headers",
+                    "spec": {
+                      "spec": [
+                        {
+                          "name": "key",
+                          "type": "text",
+                          "label": "Key"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "Header"
+                    },
+                    "type": "array",
+                    "label": "Custom Headers",
+                    "labels": {
+                      "add": "Add header"
+                    },
+                    "advanced": true
+                  }
                 ]
+              }
             }
+          ]
         },
         {
-            "id": 3,
-            "module": "builtin:BasicRouter",
-            "version": 1,
-            "parameters": {
-                "else": 1
-            },
-            "mapper": null,
-            "metadata": {
+          "flow": [
+            {
+              "id": 23,
+              "module": "builtin:BasicFeeder",
+              "version": 1,
+              "parameters": {},
+              "filter": {
+                "name": "Compromiso de donacion",
+                "conditions": [
+                  [
+                    {
+                      "a": "{{2.event_type}}",
+                      "o": "text:equal",
+                      "b": "DONOR_COMMITMENT"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "array": "{{2.data.collection_points}}"
+              },
+              "metadata": {
                 "designer": {
-                    "x": 600,
-                    "y": 300,
-                    "name": "Classify Email"
-                }
+                  "x": 900,
+                  "y": 600
+                },
+                "restore": {},
+                "expect": [
+                  {
+                    "name": "array",
+                    "type": "array",
+                    "spec": [],
+                    "label": "Array",
+                    "editable": true,
+                    "mode": "edit"
+                  }
+                ]
+              }
             },
-            "routes": [
-                {
-                    "flow": [
-                        {
-                            "id": 6,
-                            "module": "resend:sendAnEmail",
-                            "version": 1,
-                            "parameters": {
-                                "__IMTCONN__": 10488338
-                            },
-                            "filter": {
-                                "name": "Meta alcanzada",
-                                "conditions": [
-                                    [
-                                        {
-                                            "a": "{{2.event_type}}",
-                                            "b": "GOAL_ACHIEVED",
-                                            "o": "text:equal"
-                                        }
-                                    ]
-                                ]
-                            },
-                            "mapper": {
-                                "to": [
-                                    "{{2.recipient_email}}"
-                                ],
-                                "from": "noreply@handly.angelcorzo.dev",
-                                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Progreso de Meta - Handly</title>\r\n  <style>\r\n    body { font-family: {{25.font_family}}; background-color: {{25.bg_main}}; margin: 0; padding: 0; color: #333333; }\r\n    .container { max-width: 600px; margin: 30px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }\r\n    .header { background: {{25.brand_primary_gradient}}; padding: 30px 20px; text-align: center; color: #ffffff; }\r\n    .header h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }\r\n    .badge { display: inline-block; background-color: rgba(255, 255, 255, 0.25); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px; }\r\n    .content { padding: 30px 25px; }\r\n    .greeting { font-size: 18px; font-weight: 600; color: {{25.text_dark}}; margin-bottom: 12px; }\r\n    .message { font-size: 15px; line-height: 1.6; color: #4b5563; margin-bottom: 25px; }\r\n    .card { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; margin-bottom: 25px; }\r\n    .card-title { font-size: 14px; text-transform: uppercase; color: #6b7280; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }\r\n    .data-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6; font-size: 15px; }\r\n    .data-label { color: #6b7280; }\r\n    .data-value { font-weight: 600; color: {{25.text_dark}}; }\r\n    .progress-box { margin-top: 15px; background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px; text-align: center; color: #065f46; font-weight: 600; font-size: 15px; }\r\n    .cta-button { display: block; width: 100%; text-align: center; background-color: {{25.text_dark}}; color: #ffffff !important; text-decoration: none; padding: 14px 0; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 20px; }\r\n    .footer { background-color: {{25.bg_main}}; padding: 20px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #f3f4f6; }\r\n  </style>\r\n</head>\r\n<body>\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <h1>{{if(2.data.goal_type = \"campaign\"; \"¡Campaña Acelerando! 🏆\"; \"¡Hito Alcanzado! 🎯\")}}</h1>\r\n      <div class=\"badge\">{{if(2.data.goal_type = \"campaign\"; \"Progreso de Campaña\"; \"Progreso de Insumo\")}}</div>\r\n    </div>\r\n    <div class=\"content\">\r\n      <div class=\"greeting\">¡Hola, equipo de {{2.data.org_name}}!</div>\r\n      <div class=\"message\">{{if(2.data.goal_type = \"campaign\"; \"¡Grandes noticias! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> de la meta global para la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\"; \"¡Excelente progreso! Se ha alcanzado el <strong>\" + round((2.data.goal_reached / 2.data.goal) * 100) + \"%</strong> del objetivo para el insumo <strong>\" + 2.data.item_name + \"</strong> en la campaña <strong>\" + 2.data.campaign_name + \"</strong>.\")}}</div>\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">{{if(2.data.goal_type = \"campaign\"; \"Resumen de la Campaña\"; \"Detalle del Insumo\")}}</div>\r\n        <div class=\"data-row\"><span class=\"data-label\">Campaña:</span><span class=\"data-value\">{{2.data.campaign_name}}</span></div>\r\n        {{if(2.data.goal_type != \"campaign\"; \"<div class='data-row'><span class='data-label'>Ítem:</span><span class='data-value'>\" + 2.data.item_name + \"</span></div>\"; )}}\r\n        <div class=\"data-row\"><span class=\"data-label\">Meta objetivo:</span><span class=\"data-value\">{{2.data.goal}} unidades</span></div>\r\n        <div class=\"progress-box\">📈 Recolectado/comprometido: <strong>{{2.data.goal_reached}} unidades ({{round((2.data.goal_reached / 2.data.goal) * 100)}}%)</strong></div>\r\n      </div>\r\n      <p class=\"message\">{{if(2.data.goal_type = \"campaign\"; \"Gracias a la respuesta de los donantes, la campaña avanza a firme paso. Podés gestionar y revisar los acopios desde tu panel.\"; \"Gracias al compromiso de la comunidad, los cupos para este insumo se siguen completando. Podés revisar el estado del acopio desde tu panel.\")}}</p>\r\n      <a href=\"https://handly.app/dashboard\" class=\"cta-button\">Ir al Panel de Gestión</a>\r\n    </div>\r\n    <div class=\"footer\">Este es un mensaje automático generado por <strong>Handly</strong> en respuesta a eventos de la campaña.<br>© 2026 Handly. Todos los derechos reservados.</div>\r\n  </div>\r\n</body>\r\n</html>",
-                                "subject": "{{if(2.data.goal_type = \"campaign\"; \"🎉 ¡Campaña Completada!\"; \"🎯 Meta Alcanzada en Ítem\")}} — {{2.data.campaign_name}}",
-                                "sendEmailAs": "html"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 900,
-                                    "y": 0,
-                                    "name": "Goal"
-                                },
-                                "restore": {
-                                    "parameters": {
-                                        "__IMTCONN__": {
-                                            "label": "Angel's Resend connection"
-                                        }
-                                    },
-                                    "expect": {
-                                        "sendEmailAs": {
-                                            "mode": "chose",
-                                            "label": "HTML",
-                                            "nested": [
-                                                {
-                                                    "name": "html",
-                                                    "type": "text",
-                                                    "label": "HTML Content",
-                                                    "multiline": true
-                                                },
-                                                {
-                                                    "help": "Optional plain text version of the message, shown by email clients that cannot display HTML. If left empty, Resend generates it automatically from the HTML content.",
-                                                    "name": "text",
-                                                    "type": "text",
-                                                    "label": "Plain Text Version",
-                                                    "multiline": true
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "parameters": [
-                                    {
-                                        "name": "__IMTCONN__",
-                                        "type": "account:resend",
-                                        "label": "Connection",
-                                        "required": true
-                                    }
-                                ],
-                                "expect": [
-                                    {
-                                        "name": "from",
-                                        "type": "text",
-                                        "label": "From",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "to",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "To",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "bcc",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "BCC",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "cc",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "CC",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "replyTo",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "Reply-To",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "subject",
-                                        "type": "text",
-                                        "label": "Subject",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "scheduled_at",
-                                        "time": true,
-                                        "type": "date",
-                                        "label": "Schedule For",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "sendEmailAs",
-                                        "type": "select",
-                                        "label": "Send Email As",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "html",
-                                                "text"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "html",
-                                        "type": "text",
-                                        "label": "HTML Content"
-                                    },
-                                    {
-                                        "name": "text",
-                                        "type": "text",
-                                        "label": "Plain Text Version"
-                                    },
-                                    {
-                                        "name": "tags",
-                                        "spec": [
-                                            {
-                                                "name": "name",
-                                                "type": "text",
-                                                "label": "Name",
-                                                "required": false
-                                            },
-                                            {
-                                                "name": "value",
-                                                "type": "text",
-                                                "label": "Value",
-                                                "required": false
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Tags",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "attachments",
-                                        "spec": [
-                                            {
-                                                "name": "filename",
-                                                "type": "filename",
-                                                "label": "File name"
-                                            },
-                                            {
-                                                "name": "path",
-                                                "type": "text",
-                                                "label": "Path"
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Attachments",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": {
-                                            "spec": [
-                                                {
-                                                    "name": "key",
-                                                    "type": "text",
-                                                    "label": "Key"
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Header"
-                                        },
-                                        "type": "array",
-                                        "label": "Custom Headers",
-                                        "labels": {
-                                            "add": "Add header"
-                                        },
-                                        "advanced": true
-                                    }
-                                ]
-                            }
-                        }
-                    ]
+            {
+              "id": 24,
+              "module": "util:TextAggregator",
+              "version": 1,
+              "parameters": {
+                "feeder": 23
+              },
+              "filter": null,
+              "mapper": {
+                "value": "<li style=\"padding: 10px 0; border-bottom: 1px dashed #cbd5e1; font-size: 14px;\"><strong>{{23.name}}:</strong> {{23.address}}{{if(23.schedule; \"<br><span style='color: #64748b; font-size: 13px;'>Horario: \" + 23.schedule + \"</span>\"; \"\")}}<br><a href=\"https://www.google.com/maps/search/?api=1&query={{23.latitude}},{{23.longitude}}\" target=\"_blank\" style=\"color: #FF6B4A; font-weight: 600; text-decoration: underline; font-size: 13px; display: inline-block; margin-top: 4px;\">📍 Abrir en Google Maps</a></li>"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1200,
+                  "y": 600
                 },
-                {
-                    "flow": [
-                        {
-                            "id": 7,
-                            "module": "resend:sendAnEmail",
-                            "version": 1,
-                            "parameters": {
-                                "__IMTCONN__": 10488338
-                            },
-                            "filter": {
-                                "name": "Tipo desconocido",
-                                "conditions": null
-                            },
-                            "mapper": {
-                                "to": [
-                                    "ramirorodcas.dev@gmail.com"
-                                ],
-                                "from": "noreply@handly.angelcorzo.dev",
-                                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Alerta de Sistema - Handly</title>\r\n  <style>\r\n    body { font-family: {{25.font_family}}; background-color: {{25.bg_main}}; margin: 0; padding: 0; color: #e2e8f0; }\r\n    .container { max-width: 620px; margin: 30px auto; background-color: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); }\r\n    .header { background: {{25.brand_primary_gradient}}; padding: 20px 25px; color: #ffffff; }\r\n    .header h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }\r\n    .badge { display: inline-block; background-color: {{25.brand_primary}}; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; margin-top: 6px; text-transform: uppercase; }\r\n    .content { padding: 25px; }\r\n    .alert-title { font-size: 16px; font-weight: 600; color: {{25.brand_primary}}; margin-bottom: 12px; }\r\n    .message { font-size: 14px; line-height: 1.6; color: #94a3b8; margin-bottom: 20px; }\r\n    .card { background-color: {{25.text_dark}}; border: 1px solid #334155; border-radius: 8px; padding: 16px; margin-bottom: 20px; }\r\n    .card-title { font-size: 12px; text-transform: uppercase; color: #64748b; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.5px; }\r\n    .data-row { padding: 6px 0; font-size: 14px; }\r\n    .data-label { color: #94a3b8; }\r\n    .data-value { font-weight: 600; color: #f8fafc; font-family: monospace; background-color: #1e293b; padding: 2px 6px; border-radius: 4px; }\r\n    .code-block { background-color: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; color: {{25.brand_primary}}; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }\r\n    .footer { background-color: {{25.bg_main}}; padding: 16px 25px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #1e293b; }\r\n  </style>\r\n</head>\r\n<body>\r\n  <div class=\"container\">\r\n    <div class=\"header\"><h1>⚠️ Unhandled Webhook Event</h1><div class=\"badge\">Error de Ruteo / Fallback</div></div>\r\n    <div class=\"content\">\r\n      <div class=\"alert-title\">Evento no procesado en la automatización</div>\r\n      <div class=\"message\">El escenario de Make/n8n recibió una petición webhook con un tipo de evento que no coincide con ninguno de los filtros configurados en el Router.</div>\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">Detalles de la Petición</div>\r\n        <div class=\"data-row\"><span class=\"data-label\">Event Type recibido:</span><span class=\"data-value\">{{2.event_type}}</span></div>\r\n        <div class=\"data-row\" style=\"margin-top: 6px;\"><span class=\"data-label\">Destinatario original:</span><span class=\"data-value\">{{2.recipient_email}}</span></div>\r\n      </div>\r\n      <div class=\"card-title\">Payload Recibido (Raw JSON)</div>\r\n      <div class=\"code-block\">{\r\n  \"event_type\": \"{{2.event_type}}\",\r\n  \"recipient_email\": \"{{2.recipient_email}}\",\r\n  \"data\": {{2.data}}\r\n}</div>\r\n    </div>\r\n    <div class=\"footer\">Alerta automática para Dev/Staff • <strong>Handly Core System</strong></div>\r\n  </div>\r\n</body>\r\n</html>",
-                                "subject": "⚠️ [Handly System Alert] Evento de webhook no reconocido: {{2.event_type}}",
-                                "sendEmailAs": "html"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 900,
-                                    "y": 300,
-                                    "name": "Unknown Mail Type"
-                                },
-                                "restore": {
-                                    "parameters": {
-                                        "__IMTCONN__": {
-                                            "label": "Angel's Resend connection"
-                                        }
-                                    },
-                                    "expect": {
-                                        "sendEmailAs": {
-                                            "mode": "chose",
-                                            "label": "HTML",
-                                            "nested": [
-                                                {
-                                                    "name": "html",
-                                                    "type": "text",
-                                                    "label": "HTML Content",
-                                                    "multiline": true
-                                                },
-                                                {
-                                                    "help": "Optional plain text version of the message, shown by email clients that cannot display HTML. If left empty, Resend generates it automatically from the HTML content.",
-                                                    "name": "text",
-                                                    "type": "text",
-                                                    "label": "Plain Text Version",
-                                                    "multiline": true
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "parameters": [
-                                    {
-                                        "name": "__IMTCONN__",
-                                        "type": "account:resend",
-                                        "label": "Connection",
-                                        "required": true
-                                    }
-                                ],
-                                "expect": [
-                                    {
-                                        "name": "from",
-                                        "type": "text",
-                                        "label": "From",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "to",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "To",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "bcc",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "BCC",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "cc",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "CC",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "replyTo",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "Reply-To",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "subject",
-                                        "type": "text",
-                                        "label": "Subject",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "scheduled_at",
-                                        "time": true,
-                                        "type": "date",
-                                        "label": "Schedule For",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "sendEmailAs",
-                                        "type": "select",
-                                        "label": "Send Email As",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "html",
-                                                "text"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "html",
-                                        "type": "text",
-                                        "label": "HTML Content"
-                                    },
-                                    {
-                                        "name": "text",
-                                        "type": "text",
-                                        "label": "Plain Text Version"
-                                    },
-                                    {
-                                        "name": "tags",
-                                        "spec": [
-                                            {
-                                                "name": "name",
-                                                "type": "text",
-                                                "label": "Name",
-                                                "required": false
-                                            },
-                                            {
-                                                "name": "value",
-                                                "type": "text",
-                                                "label": "Value",
-                                                "required": false
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Tags",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "attachments",
-                                        "spec": [
-                                            {
-                                                "name": "filename",
-                                                "type": "filename",
-                                                "label": "File name"
-                                            },
-                                            {
-                                                "name": "path",
-                                                "type": "text",
-                                                "label": "Path"
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Attachments",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": {
-                                            "spec": [
-                                                {
-                                                    "name": "key",
-                                                    "type": "text",
-                                                    "label": "Key"
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Header"
-                                        },
-                                        "type": "array",
-                                        "label": "Custom Headers",
-                                        "labels": {
-                                            "add": "Add header"
-                                        },
-                                        "advanced": true
-                                    }
-                                ]
-                            }
-                        }
-                    ]
+                "restore": {},
+                "parameters": [
+                  {
+                    "name": "rowSeparator",
+                    "label": "Row separator",
+                    "type": "select",
+                    "required": false,
+                    "advanced": true,
+                    "validate": {
+                      "enum": ["\n", "\t", "other"]
+                    }
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Text"
+                  }
+                ]
+              }
+            },
+            {
+              "id": 9,
+              "module": "resend:sendAnEmail",
+              "version": 1,
+              "parameters": {
+                "__IMTCONN__": 10488338
+              },
+              "mapper": {
+                "from": "noreply@handly.angelcorzo.dev",
+                "to": ["{{2.recipient_email}}"],
+                "subject": "¡Gracias por tu donación, {{2.data.donor_name}}! 🤝 Código: {{2.data.commitment_code}} — Handly",
+                "sendEmailAs": "html",
+                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Compromiso de Donación - Handly</title>\r\n  <style>\r\n    body {\r\n      font-family: {{25.font_family}};\r\n      background-color: {{25.bg_main}};\r\n      margin: 0;\r\n      padding: 0;\r\n      color: #333333;\r\n    }\r\n    .container {\r\n      max-width: 600px;\r\n      margin: 30px auto;\r\n      background-color: #ffffff;\r\n      border-radius: 12px;\r\n      overflow: hidden;\r\n      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);\r\n    }\r\n    .header {\r\n      background: {{25.brand_primary}};\r\n      background: {{25.brand_primary_gradient}};\r\n      color: #ffffff;\r\n      padding: 30px 20px;\r\n      text-align: center;\r\n    }\r\n    .header h1 {\r\n      margin: 0;\r\n      font-size: 24px;\r\n      font-weight: 700;\r\n    }\r\n    .content {\r\n      padding: 30px 25px;\r\n    }\r\n    .greeting {\r\n      font-size: 18px;\r\n      font-weight: 600;\r\n      color: {{25.text_dark}};\r\n      margin-bottom: 12px;\r\n    }\r\n    .message {\r\n      font-size: 15px;\r\n      line-height: 1.6;\r\n      color: #475569;\r\n      margin-top: 0;\r\n    }\r\n    .code-box {\r\n      background-color: #fff7ed;\r\n      border: 2px dashed {{25.brand_primary}};\r\n      border-radius: 10px;\r\n      padding: 20px;\r\n      text-align: center;\r\n      margin: 25px 0;\r\n    }\r\n    .code-title {\r\n      font-size: 13px;\r\n      text-transform: uppercase;\r\n      letter-spacing: 1px;\r\n      color: #c2410c;\r\n      font-weight: 700;\r\n      margin-bottom: 6px;\r\n    }\r\n    .code-value {\r\n      font-size: 32px;\r\n      font-weight: 800;\r\n      color: {{25.brand_primary}};\r\n      letter-spacing: 3px;\r\n      font-family: monospace;\r\n    }\r\n    .code-expiration {\r\n      font-size: 12px;\r\n      color: #9a3412;\r\n      margin-top: 8px;\r\n    }\r\n    .card {\r\n      background-color: #f8fafc;\r\n      border: 1px solid #e2e8f0;\r\n      border-radius: 8px;\r\n      padding: 18px;\r\n      margin-bottom: 20px;\r\n    }\r\n    .card-title {\r\n      font-size: 14px;\r\n      font-weight: 700;\r\n      color: #334155;\r\n      text-transform: uppercase;\r\n      letter-spacing: 0.5px;\r\n      margin-bottom: 12px;\r\n      border-bottom: 1px solid #e2e8f0;\r\n      padding-bottom: 6px;\r\n    }\r\n    .data-table {\r\n      width: 100%;\r\n      border-collapse: collapse;\r\n      font-size: 14px;\r\n    }\r\n    .data-table td {\r\n      padding: 4px 0;\r\n    }\r\n    .data-label {\r\n      color: #64748b;\r\n    }\r\n    .data-value {\r\n      font-weight: 600;\r\n      color: #0f172a;\r\n      text-align: right;\r\n    }\r\n    .location-list {\r\n      list-style-type: none;\r\n      padding-left: 0;\r\n      margin: 0;\r\n    }\r\n    .footer {\r\n      background-color: {{25.bg_main}};\r\n      padding: 20px;\r\n      text-align: center;\r\n      font-size: 12px;\r\n      color: #94a3b8;\r\n    }\r\n  </style>\r\n</head>\r\n<body>\r\n\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <h1>¡Compromiso Confirmado! 🤝</h1>\r\n    </div>\r\n\r\n    <div class=\"content\">\r\n      <div class=\"greeting\">¡Hola, {{2.data.donor_name}}!</div>\r\n      <p class=\"message\">\r\n        Muchas gracias por sumar tu apoyo a la campaña <strong>\"{{2.data.campaign_name}}\"</strong> organizada por <strong>{{2.data.org_name}}</strong>. Tu aporte marcará una diferencia enorme.\r\n      </p>\r\n\r\n      <div class=\"code-box\">\r\n        <div class=\"code-title\">Tu Código de Confirmación</div>\r\n        <div class=\"code-value\">{{2.data.commitment_code}}</div>\r\n        <div class=\"code-expiration\">⏰ Tenés tiempo de entregar hasta el: <strong>{{2.data.expires_at}}</strong> antes de que el compromiso expire.</div>\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">📦 Resumen del Recibo</div>\r\n        <table class=\"data-table\">\r\n          <tr>\r\n            <td class=\"data-label\">Ítem a entregar:</td>\r\n            <td class=\"data-value\">{{2.data.item_name}}</td>\r\n          </tr>\r\n          <tr>\r\n            <td class=\"data-label\">Cantidad comprometida:</td>\r\n            <td class=\"data-value\">{{2.data.quantity}} unidades</td>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">📍 Puntos de Acopio Disponibles</div>\r\n        <p style=\"font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 12px;\">\r\n          Podés realizar la entrega en cualquiera de estos lugares presentando tu código:\r\n        </p>\r\n        <ul class=\"location-list\">\r\n          {{24.text}}\r\n        </ul>\r\n      </div>\r\n\r\n      <p class=\"message\" style=\"font-size: 13px; color: #64748b; text-align: center;\">\r\n        Recuerda dictar o mostrar tu código <strong>{{2.data.commitment_code}}</strong> al entregar las provisiones en la sede para que los coordinadores registren el ingreso.\r\n      </p>\r\n    </div>\r\n\r\n    <div class=\"footer\">\r\n      Este es un comprobante automático de tu compromiso con <strong>Handly</strong>.<br>\r\n      © 2026 Handly. Todos los derechos reservados.\r\n    </div>\r\n  </div>\r\n\r\n</body>\r\n</html>"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 1500,
+                  "y": 600,
+                  "name": "Compromiso de donacion"
                 },
-                {
-                    "flow": [
+                "restore": {
+                  "parameters": {
+                    "__IMTCONN__": {
+                      "label": "Angel's Resend connection"
+                    }
+                  },
+                  "expect": {
+                    "sendEmailAs": {
+                      "mode": "chose",
+                      "label": "HTML",
+                      "nested": [
                         {
-                            "id": 23,
-                            "module": "builtin:BasicFeeder",
-                            "version": 1,
-                            "parameters": {},
-                            "filter": {
-                                "name": "Compromiso de donacion",
-                                "conditions": [
-                                    [
-                                        {
-                                            "a": "{{2.event_type}}",
-                                            "o": "text:equal",
-                                            "b": "DONOR_COMMITMENT"
-                                        }
-                                    ]
-                                ]
-                            },
-                            "mapper": {
-                                "array": "{{2.data.collection_points}}"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 900,
-                                    "y": 600
-                                },
-                                "restore": {},
-                                "expect": [
-                                    {
-                                        "name": "array",
-                                        "type": "array",
-                                        "spec": [],
-                                        "label": "Array",
-                                        "editable": true,
-                                        "mode": "edit"
-                                    }
-                                ]
-                            }
+                          "name": "html",
+                          "type": "text",
+                          "label": "HTML Content",
+                          "multiline": true
                         },
                         {
-                            "id": 24,
-                            "module": "util:TextAggregator",
-                            "version": 1,
-                            "parameters": {
-                                "feeder": 23
-                            },
-                            "filter": null,
-                            "mapper": {
-                                "value": "<li style=\"padding: 10px 0; border-bottom: 1px dashed #cbd5e1; font-size: 14px;\"><strong>{{23.name}}:</strong> {{23.address}}{{if(23.schedule; \"<br><span style='color: #64748b; font-size: 13px;'>Horario: \" + 23.schedule + \"</span>\"; \"\")}}<br><a href=\"https://www.google.com/maps/search/?api=1&query={{23.latitude}},{{23.longitude}}\" target=\"_blank\" style=\"color: #FF6B4A; font-weight: 600; text-decoration: underline; font-size: 13px; display: inline-block; margin-top: 4px;\">📍 Abrir en Google Maps</a></li>"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 1200,
-                                    "y": 600
-                                },
-                                "restore": {},
-                                "parameters": [
-                                    {
-                                        "name": "rowSeparator",
-                                        "label": "Row separator",
-                                        "type": "select",
-                                        "required": false,
-                                        "advanced": true,
-                                        "validate": {
-                                            "enum": [
-                                                "\n",
-                                                "\t",
-                                                "other"
-                                            ]
-                                        }
-                                    }
-                                ],
-                                "expect": [
-                                    {
-                                        "name": "value",
-                                        "type": "text",
-                                        "label": "Text"
-                                    }
-                                ]
-                            }
+                          "help": "Optional plain text version of the message, shown by email clients that cannot display HTML. If left empty, Resend generates it automatically from the HTML content.",
+                          "name": "text",
+                          "type": "text",
+                          "label": "Plain Text Version",
+                          "multiline": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                "parameters": [
+                  {
+                    "name": "__IMTCONN__",
+                    "type": "account:resend",
+                    "label": "Connection",
+                    "required": true
+                  }
+                ],
+                "expect": [
+                  {
+                    "name": "from",
+                    "type": "text",
+                    "label": "From",
+                    "required": true
+                  },
+                  {
+                    "name": "to",
+                    "spec": {
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "To",
+                    "required": true
+                  },
+                  {
+                    "name": "bcc",
+                    "spec": {
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "BCC",
+                    "advanced": true
+                  },
+                  {
+                    "name": "cc",
+                    "spec": {
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "CC",
+                    "advanced": true
+                  },
+                  {
+                    "name": "replyTo",
+                    "spec": {
+                      "type": "email"
+                    },
+                    "type": "array",
+                    "label": "Reply-To",
+                    "advanced": true
+                  },
+                  {
+                    "name": "subject",
+                    "type": "text",
+                    "label": "Subject",
+                    "required": true
+                  },
+                  {
+                    "name": "scheduled_at",
+                    "time": true,
+                    "type": "date",
+                    "label": "Schedule For",
+                    "advanced": true
+                  },
+                  {
+                    "name": "sendEmailAs",
+                    "type": "select",
+                    "label": "Send Email As",
+                    "required": true,
+                    "validate": {
+                      "enum": ["html", "text"]
+                    }
+                  },
+                  {
+                    "name": "html",
+                    "type": "text",
+                    "label": "HTML Content"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Plain Text Version"
+                  },
+                  {
+                    "name": "tags",
+                    "spec": [
+                      {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": false
+                      },
+                      {
+                        "name": "value",
+                        "type": "text",
+                        "label": "Value",
+                        "required": false
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Tags",
+                    "advanced": true
+                  },
+                  {
+                    "name": "attachments",
+                    "spec": [
+                      {
+                        "name": "filename",
+                        "type": "filename",
+                        "label": "File name"
+                      },
+                      {
+                        "name": "path",
+                        "type": "text",
+                        "label": "Path"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Attachments",
+                    "advanced": true
+                  },
+                  {
+                    "name": "headers",
+                    "spec": {
+                      "spec": [
+                        {
+                          "name": "key",
+                          "type": "text",
+                          "label": "Key"
                         },
                         {
-                            "id": 9,
-                            "module": "resend:sendAnEmail",
-                            "version": 1,
-                            "parameters": {
-                                "__IMTCONN__": 10488338
-                            },
-                            "mapper": {
-                                "from": "noreply@handly.angelcorzo.dev",
-                                "to": [
-                                    "{{2.recipient_email}}"
-                                ],
-                                "subject": "¡Gracias por tu donación, {{2.data.donor_name}}! 🤝 Código: {{2.data.commitment_code}} — Handly",
-                                "sendEmailAs": "html",
-                                "html": "<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Compromiso de Donación - Handly</title>\r\n  <style>\r\n    body {\r\n      font-family: {{25.font_family}};\r\n      background-color: {{25.bg_main}};\r\n      margin: 0;\r\n      padding: 0;\r\n      color: #333333;\r\n    }\r\n    .container {\r\n      max-width: 600px;\r\n      margin: 30px auto;\r\n      background-color: #ffffff;\r\n      border-radius: 12px;\r\n      overflow: hidden;\r\n      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);\r\n    }\r\n    .header {\r\n      background: {{25.brand_primary}};\r\n      background: {{25.brand_primary_gradient}};\r\n      color: #ffffff;\r\n      padding: 30px 20px;\r\n      text-align: center;\r\n    }\r\n    .header h1 {\r\n      margin: 0;\r\n      font-size: 24px;\r\n      font-weight: 700;\r\n    }\r\n    .content {\r\n      padding: 30px 25px;\r\n    }\r\n    .greeting {\r\n      font-size: 18px;\r\n      font-weight: 600;\r\n      color: {{25.text_dark}};\r\n      margin-bottom: 12px;\r\n    }\r\n    .message {\r\n      font-size: 15px;\r\n      line-height: 1.6;\r\n      color: #475569;\r\n      margin-top: 0;\r\n    }\r\n    .code-box {\r\n      background-color: #fff7ed;\r\n      border: 2px dashed {{25.brand_primary}};\r\n      border-radius: 10px;\r\n      padding: 20px;\r\n      text-align: center;\r\n      margin: 25px 0;\r\n    }\r\n    .code-title {\r\n      font-size: 13px;\r\n      text-transform: uppercase;\r\n      letter-spacing: 1px;\r\n      color: #c2410c;\r\n      font-weight: 700;\r\n      margin-bottom: 6px;\r\n    }\r\n    .code-value {\r\n      font-size: 32px;\r\n      font-weight: 800;\r\n      color: {{25.brand_primary}};\r\n      letter-spacing: 3px;\r\n      font-family: monospace;\r\n    }\r\n    .code-expiration {\r\n      font-size: 12px;\r\n      color: #9a3412;\r\n      margin-top: 8px;\r\n    }\r\n    .card {\r\n      background-color: #f8fafc;\r\n      border: 1px solid #e2e8f0;\r\n      border-radius: 8px;\r\n      padding: 18px;\r\n      margin-bottom: 20px;\r\n    }\r\n    .card-title {\r\n      font-size: 14px;\r\n      font-weight: 700;\r\n      color: #334155;\r\n      text-transform: uppercase;\r\n      letter-spacing: 0.5px;\r\n      margin-bottom: 12px;\r\n      border-bottom: 1px solid #e2e8f0;\r\n      padding-bottom: 6px;\r\n    }\r\n    .data-table {\r\n      width: 100%;\r\n      border-collapse: collapse;\r\n      font-size: 14px;\r\n    }\r\n    .data-table td {\r\n      padding: 4px 0;\r\n    }\r\n    .data-label {\r\n      color: #64748b;\r\n    }\r\n    .data-value {\r\n      font-weight: 600;\r\n      color: #0f172a;\r\n      text-align: right;\r\n    }\r\n    .location-list {\r\n      list-style-type: none;\r\n      padding-left: 0;\r\n      margin: 0;\r\n    }\r\n    .footer {\r\n      background-color: {{25.bg_main}};\r\n      padding: 20px;\r\n      text-align: center;\r\n      font-size: 12px;\r\n      color: #94a3b8;\r\n    }\r\n  </style>\r\n</head>\r\n<body>\r\n\r\n  <div class=\"container\">\r\n    <div class=\"header\">\r\n      <h1>¡Compromiso Confirmado! 🤝</h1>\r\n    </div>\r\n\r\n    <div class=\"content\">\r\n      <div class=\"greeting\">¡Hola, {{2.data.donor_name}}!</div>\r\n      <p class=\"message\">\r\n        Muchas gracias por sumar tu apoyo a la campaña <strong>\"{{2.data.campaign_name}}\"</strong> organizada por <strong>{{2.data.org_name}}</strong>. Tu aporte marcará una diferencia enorme.\r\n      </p>\r\n\r\n      <div class=\"code-box\">\r\n        <div class=\"code-title\">Tu Código de Confirmación</div>\r\n        <div class=\"code-value\">{{2.data.commitment_code}}</div>\r\n        <div class=\"code-expiration\">⏰ Tenés tiempo de entregar hasta el: <strong>{{2.data.expires_at}}</strong> antes de que el compromiso expire.</div>\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">📦 Resumen del Recibo</div>\r\n        <table class=\"data-table\">\r\n          <tr>\r\n            <td class=\"data-label\">Ítem a entregar:</td>\r\n            <td class=\"data-value\">{{2.data.item_name}}</td>\r\n          </tr>\r\n          <tr>\r\n            <td class=\"data-label\">Cantidad comprometida:</td>\r\n            <td class=\"data-value\">{{2.data.quantity}} unidades</td>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n\r\n      <div class=\"card\">\r\n        <div class=\"card-title\">📍 Puntos de Acopio Disponibles</div>\r\n        <p style=\"font-size: 13px; color: #64748b; margin-top: 0; margin-bottom: 12px;\">\r\n          Podés realizar la entrega en cualquiera de estos lugares presentando tu código:\r\n        </p>\r\n        <ul class=\"location-list\">\r\n          {{24.text}}\r\n        </ul>\r\n      </div>\r\n\r\n      <p class=\"message\" style=\"font-size: 13px; color: #64748b; text-align: center;\">\r\n        Recuerda dictar o mostrar tu código <strong>{{2.data.commitment_code}}</strong> al entregar las provisiones en la sede para que los coordinadores registren el ingreso.\r\n      </p>\r\n    </div>\r\n\r\n    <div class=\"footer\">\r\n      Este es un comprobante automático de tu compromiso con <strong>Handly</strong>.<br>\r\n      © 2026 Handly. Todos los derechos reservados.\r\n    </div>\r\n  </div>\r\n\r\n</body>\r\n</html>"
-                            },
-                            "metadata": {
-                                "designer": {
-                                    "x": 1500,
-                                    "y": 600,
-                                    "name": "Compromiso de donacion"
-                                },
-                                "restore": {
-                                    "parameters": {
-                                        "__IMTCONN__": {
-                                            "label": "Angel's Resend connection"
-                                        }
-                                    },
-                                    "expect": {
-                                        "sendEmailAs": {
-                                            "mode": "chose",
-                                            "label": "HTML",
-                                            "nested": [
-                                                {
-                                                    "name": "html",
-                                                    "type": "text",
-                                                    "label": "HTML Content",
-                                                    "multiline": true
-                                                },
-                                                {
-                                                    "help": "Optional plain text version of the message, shown by email clients that cannot display HTML. If left empty, Resend generates it automatically from the HTML content.",
-                                                    "name": "text",
-                                                    "type": "text",
-                                                    "label": "Plain Text Version",
-                                                    "multiline": true
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "parameters": [
-                                    {
-                                        "name": "__IMTCONN__",
-                                        "type": "account:resend",
-                                        "label": "Connection",
-                                        "required": true
-                                    }
-                                ],
-                                "expect": [
-                                    {
-                                        "name": "from",
-                                        "type": "text",
-                                        "label": "From",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "to",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "To",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "bcc",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "BCC",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "cc",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "CC",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "replyTo",
-                                        "spec": {
-                                            "type": "email"
-                                        },
-                                        "type": "array",
-                                        "label": "Reply-To",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "subject",
-                                        "type": "text",
-                                        "label": "Subject",
-                                        "required": true
-                                    },
-                                    {
-                                        "name": "scheduled_at",
-                                        "time": true,
-                                        "type": "date",
-                                        "label": "Schedule For",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "sendEmailAs",
-                                        "type": "select",
-                                        "label": "Send Email As",
-                                        "required": true,
-                                        "validate": {
-                                            "enum": [
-                                                "html",
-                                                "text"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "name": "html",
-                                        "type": "text",
-                                        "label": "HTML Content"
-                                    },
-                                    {
-                                        "name": "text",
-                                        "type": "text",
-                                        "label": "Plain Text Version"
-                                    },
-                                    {
-                                        "name": "tags",
-                                        "spec": [
-                                            {
-                                                "name": "name",
-                                                "type": "text",
-                                                "label": "Name",
-                                                "required": false
-                                            },
-                                            {
-                                                "name": "value",
-                                                "type": "text",
-                                                "label": "Value",
-                                                "required": false
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Tags",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "attachments",
-                                        "spec": [
-                                            {
-                                                "name": "filename",
-                                                "type": "filename",
-                                                "label": "File name"
-                                            },
-                                            {
-                                                "name": "path",
-                                                "type": "text",
-                                                "label": "Path"
-                                            }
-                                        ],
-                                        "type": "array",
-                                        "label": "Attachments",
-                                        "advanced": true
-                                    },
-                                    {
-                                        "name": "headers",
-                                        "spec": {
-                                            "spec": [
-                                                {
-                                                    "name": "key",
-                                                    "type": "text",
-                                                    "label": "Key"
-                                                },
-                                                {
-                                                    "name": "value",
-                                                    "type": "text",
-                                                    "label": "Value"
-                                                }
-                                            ],
-                                            "type": "collection",
-                                            "label": "Header"
-                                        },
-                                        "type": "array",
-                                        "label": "Custom Headers",
-                                        "labels": {
-                                            "add": "Add header"
-                                        },
-                                        "advanced": true
-                                    }
-                                ]
-                            }
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
                         }
-                    ]
-                }
-            ]
+                      ],
+                      "type": "collection",
+                      "label": "Header"
+                    },
+                    "type": "array",
+                    "label": "Custom Headers",
+                    "labels": {
+                      "add": "Add header"
+                    },
+                    "advanced": true
+                  }
+                ]
+              }
+            }
+          ]
         }
-    ],
-    "metadata": {
-        "instant": true,
-        "version": 1,
-        "scenario": {
-            "roundtrips": 1,
-            "maxErrors": 3,
-            "autoCommit": true,
-            "autoCommitTriggerLast": true,
-            "sequential": false,
-            "slots": null,
-            "confidential": false,
-            "dataloss": false,
-            "dlq": false,
-            "freshVariables": false
-        },
-        "designer": {
-            "orphans": []
-        },
-        "zone": "us2.make.com",
-        "notes": []
+      ]
     }
+  ],
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "slots": null,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us2.make.com",
+    "notes": []
+  }
 }

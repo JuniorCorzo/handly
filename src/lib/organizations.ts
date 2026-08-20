@@ -20,10 +20,14 @@ export async function getUserOrganizations(
   const db = adminClient ?? supabase;
 
   // 1. Consultar membresías existentes
-  const { data: existingMemberships } = await db
+  const { data: existingMemberships, error: memErr } = await db
     .from("org_members")
     .select("org_id, role, organizations(name)")
     .eq("auth_user_id", userId);
+
+  if (memErr) {
+    console.error("[getUserOrganizations] Error querying org_members:", memErr);
+  }
 
   if (existingMemberships && existingMemberships.length > 0) {
     return existingMemberships.map((m) => {
@@ -45,15 +49,22 @@ export async function getUserOrganizations(
     const normalizedEmail = userEmail.trim().toLowerCase();
 
     // 2.1 Buscar si su email coincide con el email de una organización registrada
-    const { data: matchedOrgs } = await db
+    const { data: matchedOrgs, error: orgErr } = await db
       .from("organizations")
       .select("id, name")
       .ilike("email", normalizedEmail);
 
+    if (orgErr) {
+      console.error(
+        "[getUserOrganizations] Error matching organizations:",
+        orgErr
+      );
+    }
+
     if (matchedOrgs && matchedOrgs.length > 0) {
       await Promise.all(
         matchedOrgs.map(async (org) => {
-          await db.from("org_members").upsert(
+          const { error: upsertErr } = await db.from("org_members").upsert(
             {
               auth_user_id: userId,
               org_id: org.id,
@@ -61,6 +72,12 @@ export async function getUserOrganizations(
             },
             { onConflict: "auth_user_id,org_id" }
           );
+          if (upsertErr) {
+            console.error(
+              "[getUserOrganizations] Upsert org_members error:",
+              upsertErr
+            );
+          }
         })
       );
 
@@ -72,11 +89,18 @@ export async function getUserOrganizations(
     }
 
     // 2.2 Buscar si tiene invitaciones pendientes para este correo
-    const { data: pendingInvitations } = await db
+    const { data: pendingInvitations, error: invErr } = await db
       .from("organization_invitations")
       .select("id, org_id, role, organizations(name)")
       .ilike("email", normalizedEmail)
       .eq("status", "pending");
+
+    if (invErr) {
+      console.error(
+        "[getUserOrganizations] Error querying pending invitations:",
+        invErr
+      );
+    }
 
     if (pendingInvitations && pendingInvitations.length > 0) {
       const linked = await Promise.all(

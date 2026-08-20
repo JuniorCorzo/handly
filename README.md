@@ -23,11 +23,11 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Copy `.env.local.example` to `.env.local` and fill in the required values (a missing variable throws at startup):
 
-| Variable          | Description                                                        | Example                        |
-| ----------------- | ------------------------------------------------------------------ | ------------------------------ |
-| `SUPABASE_URL`    | URL of your Supabase project's API                                 | `https://xyz.supabase.co`      |
-| `SUPABASE_ANON_KEY` | Supabase project anon (public) key                               | `eyJhbGciOiJ...`               |
-| `SITE_URL`        | Base URL of the site (used for auth callbacks)                     | `http://localhost:3000`        |
+| Variable | Description | Example |
+| --- | --- | --- |
+| `SUPABASE_URL` | URL of your Supabase project's API | `https://xyz.supabase.co` |
+| `SUPABASE_ANON_KEY` | Supabase project anon (public) key | `eyJhbGciOiJ...` |
+| `SITE_URL` | Base URL of the site (used for auth callbacks) | `http://localhost:3000` |
 
 Find the Supabase values at: <https://supabase.com/dashboard/project/_/settings/api>
 
