@@ -30,6 +30,9 @@ export default async function DashboardPage() {
   const memberships = await getUserOrganizations(user.id, user.email);
   const orgIds = memberships.map((m) => m.org_id);
   const orgName = memberships[0]?.organization_name ?? "Mi Organización";
+  const isAdmin = memberships.some(
+    (m) => m.role?.trim().toLowerCase() === "admin"
+  );
 
   // 2. Obtener ítems de necesidad con su campaña y centros de acopio
   let needItemRows: NeedItemTableRow[] = [];
@@ -153,12 +156,14 @@ export default async function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard/needs/new"
-              className="inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
-            >
-              + Nuevo ítem
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/dashboard/needs/new"
+                className="inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+              >
+                + Nuevo ítem
+              </Link>
+            )}
 
             <form action={signOut}>
               <button
@@ -180,11 +185,19 @@ export default async function DashboardPage() {
             Ítems de Necesidad
           </Link>
           <Link
-            href="/dashboard/members"
+            href="/dashboard/intake"
             className="pb-3 font-medium text-[var(--muted)] hover:text-[var(--ink)]"
           >
-            Miembros del Equipo
+            Recepción de Donaciones
           </Link>
+          {isAdmin && (
+            <Link
+              href="/dashboard/members"
+              className="pb-3 font-medium text-[var(--muted)] hover:text-[var(--ink)]"
+            >
+              Miembros del Equipo
+            </Link>
+          )}
         </nav>
 
         {/* Diagnostic Banner if no org */}
@@ -210,7 +223,7 @@ export default async function DashboardPage() {
             </h2>
           </div>
 
-          <NeedItemsTable data={needItemRows} />
+          <NeedItemsTable data={needItemRows} isAdmin={isAdmin} />
         </section>
       </div>
     </main>

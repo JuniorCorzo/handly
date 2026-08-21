@@ -22,6 +22,10 @@ export default async function NewNeedItemPage() {
   const db = adminClient ?? supabase;
 
   const memberships = await getUserOrganizations(user.id, user.email);
+  const isAdmin = memberships.some((m) => m.role === "admin");
+  if (!isAdmin) {
+    redirect("/dashboard");
+  }
   const orgIds = memberships.map((m) => m.org_id);
 
   let campaigns: { id: string; name: string }[] = [];
