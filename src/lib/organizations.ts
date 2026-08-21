@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient, createClient } from "@/lib/supabase/server";
 
 export interface UserOrganizationMembership {
   org_id: string;
@@ -16,9 +16,11 @@ export async function getUserOrganizations(
   userEmail?: string | null
 ): Promise<UserOrganizationMembership[]> {
   const supabase = await createClient();
+  const adminClient = createAdminClient();
+  const db = adminClient ?? supabase;
 
   // 1. Consultar membresías directas en org_members
-  const { data: directMemberships, error: memErr } = await supabase
+  const { data: directMemberships, error: memErr } = await db
     .from("org_members")
     .select("org_id, role")
     .eq("auth_user_id", userId);
@@ -33,7 +35,7 @@ export async function getUserOrganizations(
 
   if (directMemberships && directMemberships.length > 0) {
     const orgIds = directMemberships.map((m) => m.org_id);
-    const { data: orgs, error: orgErr } = await supabase
+    const { data: orgs, error: orgErr } = await db
       .from("organizations")
       .select("id, name")
       .in("id", orgIds);
@@ -57,7 +59,7 @@ export async function getUserOrganizations(
   if (userEmail) {
     const normalizedEmail = userEmail.trim().toLowerCase();
 
-    const { data: pendingInvitations, error: invErr } = await supabase
+    const { data: pendingInvitations, error: invErr } = await db
       .from("organization_invitations")
       .select("id, org_id, role")
       .ilike("email", normalizedEmail)
@@ -72,7 +74,7 @@ export async function getUserOrganizations(
 
     if (pendingInvitations && pendingInvitations.length > 0) {
       const orgIds = pendingInvitations.map((i) => i.org_id);
-      const { data: invOrgs } = await supabase
+      const { data: invOrgs } = await db
         .from("organizations")
         .select("id, name")
         .in("id", orgIds);
@@ -82,7 +84,7 @@ export async function getUserOrganizations(
       const linked = await Promise.all(
         pendingInvitations.map(async (inv) => {
           await Promise.all([
-            supabase.from("org_members").upsert(
+            db.from("org_members").upsert(
               {
                 auth_user_id: userId,
                 org_id: inv.org_id,
@@ -90,7 +92,7 @@ export async function getUserOrganizations(
               },
               { onConflict: "auth_user_id,org_id" }
             ),
-            supabase
+            db
               .from("organization_invitations")
               .update({ status: "accepted" })
               .eq("id", inv.id),
