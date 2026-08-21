@@ -58,6 +58,10 @@ export default async function MembersPage() {
   const isAdmin = userRole === "admin";
   const orgName = primaryMembership?.organization_name ?? "Mi Organización";
 
+  if (!isAdmin) {
+    redirect("/dashboard");
+  }
+
   let members: OrgMemberRow[] = [];
   let invitations: InvitationRow[] = [];
   const userMap = new Map<string, UserProfileMeta>();
@@ -180,6 +184,12 @@ export default async function MembersPage() {
             className="pb-3 font-medium text-[var(--muted)] hover:text-[var(--ink)]"
           >
             Ítems de Necesidad
+          </Link>
+          <Link
+            href="/dashboard/intake"
+            className="pb-3 font-medium text-[var(--muted)] hover:text-[var(--ink)]"
+          >
+            Recepción de Donaciones
           </Link>
           <Link
             href="/dashboard/members"

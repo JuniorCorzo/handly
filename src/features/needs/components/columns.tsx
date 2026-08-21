@@ -51,8 +51,7 @@ export const STATUS_MAP: Record<
 };
 
 const COLLECTION_POINTS_HEADER = "Centros de Acopio" as const;
-
-export const columns: ColumnDef<NeedItemTableRow>[] = [
+const baseColumns: ColumnDef<NeedItemTableRow>[] = [
   {
     accessorKey: "item_name",
     header: "Ítem",
@@ -149,19 +148,30 @@ export const columns: ColumnDef<NeedItemTableRow>[] = [
       );
     },
   },
-  {
-    id: "actions",
-    header: "Acciones",
-    cell: ({ row }) => {
-      const { id } = row.original;
-      return (
-        <Link
-          href={`/dashboard/needs/${id}/edit`}
-          className="inline-flex items-center rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-xs font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:ring-1 focus:ring-[var(--focus)] focus:outline-none"
-        >
-          Editar
-        </Link>
-      );
-    },
-  },
 ];
+
+export function getColumns(isAdmin = false): ColumnDef<NeedItemTableRow>[] {
+  if (!isAdmin) {
+    return baseColumns;
+  }
+  return [
+    ...baseColumns,
+    {
+      id: "actions",
+      header: "Acciones",
+      cell: ({ row }) => {
+        const { id } = row.original;
+        return (
+          <Link
+            href={`/dashboard/needs/${id}/edit`}
+            className="inline-flex items-center rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-xs font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:ring-1 focus:ring-[var(--focus)] focus:outline-none"
+          >
+            Editar
+          </Link>
+        );
+      },
+    },
+  ];
+}
+
+export const columns: ColumnDef<NeedItemTableRow>[] = getColumns(false);
