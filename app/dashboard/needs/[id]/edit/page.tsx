@@ -47,6 +47,11 @@ export default async function EditNeedItemPage({
     notFound();
   }
 
+  const isAdmin = memberships.some((m) => m.role === "admin");
+  if (!isAdmin) {
+    redirect("/dashboard");
+  }
+
   const orgIds = memberships.map((m) => m.org_id);
 
   const [{ data: campaigns }, { data: collectionPoints }] = await Promise.all([

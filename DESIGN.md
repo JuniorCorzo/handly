@@ -2,17 +2,17 @@
 name: Handly
 description: Donation coordination in emergencies — donor-first pledge flow (guest), calm operational UI.
 colors:
-  background: "#F6FAF8"
+  background: "#F8FAFC"
   surface: "#FFFFFF"
-  ink: "#13201C"
-  muted: "#52635D"
-  border: "#CBD8D2"
-  primary: "#0F5C59"
+  ink: "#0F172A"
+  muted: "#475569"
+  border: "#E2E8F0"
+  primary: "#2563EB"
   focus: "#1D4ED8"
-  critical: "#B42318"
-  urgent: "#A14B00"
-  standard: "#1D5F74"
-  success: "#176B45"
+  critical: "#B91C1C"
+  urgent: "#EA580C"
+  standard: "#334155"
+  success: "#059669"
 typography:
   display:
     fontFamily: "Geist, Geist Fallback, ui-sans-serif, system-ui, sans-serif"
@@ -48,6 +48,7 @@ typography:
     fontWeight: 400
     lineHeight: 1.4
 rounded:
+  xs: "4px"
   sm: "8px"
   md: "12px"
   pill: "999px"
@@ -97,7 +98,7 @@ components:
 
 # Design System: Handly
 
-> **Owner file for Google Stitch / Figma / v0.** Copy-paste ready. Canonical tokens are OKLCH (see Colors); hex in frontmatter is the Stitch-parsable sRGB approximation. Repository is `handly` (renamed from `coderhub` in Phase 1). Canonical light background is `oklch(0.9815 0.005 165)` / `#F6FAF8` (teal-tinted, not warm sand); dark set preserves hue with shifted lightness (see §2 and Appendix). Restrained teal ≤10% of viewport; cream/sand band (OKLCH L 0.84–0.97 C<0.06 hue 40–100) forbidden as body. WCAG AA verified (see Appendix).
+> **Owner file for Google Stitch / Figma / v0.** Copy-paste ready. Canonical tokens are OKLCH (see Colors); hex in frontmatter is the Stitch-parsable sRGB approximation. Repository is `handly` (renamed from `coderhub` in Phase 1). Canonical light background is `oklch(0.984 0.003 247.858)` / `#F8FAFC` (slate institutional); dark set preserves hue with shifted lightness (see §2 and Appendix). Institutional blue ≤10% of any viewport; cream/sand band (OKLCH L 0.84–0.97 C<0.06 hue 40–100) forbidden as body. WCAG AA verified (see Appendix).
 
 ## 1. Overview
 
@@ -105,14 +106,14 @@ components:
 
 Handly is donation coordination in emergencies. The interface must read like a clear, hospital-calm instruction sheet taped to a wall — not a campaign landing page, not a gamer dashboard, not a data cockpit. Primary user: a guest donor on a phone in daylight, possibly stressed, one-handed, scanning what is needed now and how to help today. The system earns trust by being quiet, precise, and never louder than the situation.
 
-Aesthetic philosophy: **Linear / Notion minimal, airy, type-perfect.** Restrained color strategy (tinted neutrals + teal ≤10%), single type family (Geist), generous whitespace, few large cards, no decoration tax. Operational serenity is the voice; restraint is the palette. Motion and elevation are state cues, not theatre. Every urgent signal is redundant (badge + icon + order) so comprehension never depends on color alone.
+Aesthetic philosophy: **Linear / Notion minimal, airy, type-perfect.** Restrained color strategy (slate institutional + blue ≤10%), single type family (Geist), generous whitespace, few large cards, no decoration tax. Operational serenity is the voice; restraint is the palette. Motion and elevation are state cues, not theatre. Every urgent signal is redundant (badge + icon + order) so comprehension never depends on color alone.
 
 What this system explicitly rejects: warm cream/sand AI-default backgrounds, gradient text, glassmorphism, side-stripe borders, hero-metric clichés, identical tiny-card grids, uppercase eyebrows on every section, sketchy SVG illustrations, and any urgency styling that is color-only.
 
 **Key Characteristics:**
 
 - Operativa serena: calm under pressure, direct, hospitable, never panicked
-- Restrained OKLCH palette — teal accent disciplines the page
+- Restrained OKLCH palette — institutional blue disciplines the page
 - Airy catalog — few large need cards, generous whitespace, mobile-first
 - Single-family typography (Geist) with fixed product scale
 - Light-first, dark-proven; WCAG AA everywhere, non-color urgency cues
@@ -120,39 +121,39 @@ What this system explicitly rejects: warm cream/sand AI-default backgrounds, gra
 
 ## 2. Colors
 
-Restrained strategy: tinted neutrals carry the surface; teal carries action. Warm-neutral cream band (OKLCH L 0.84–0.97, C < 0.06, hue 40–100) is forbidden as body.
+Restrained strategy: slate institutional base with institutional blue accent. Warm-neutral cream band (OKLCH L 0.84–0.97, C < 0.06, hue 40–100) is forbidden as body.
 
 ### Primary
 
-- **Institutional Teal** (`oklch(0.431 0.07 191)` / `#0F5C59`): primary actions, links, selection, focus-adjacent. ≤10% of any viewport. Contrast 7.79:1 on white (AA). Use for CTA fill, active tab, selected state only — never as page wash.
+- **Institutional Blue** (`oklch(0.546 0.245 262.881)` / `#2563EB`): primary actions, links, selection, focus-adjacent. ≤10% of any viewport. Trust and credibility. Use for CTA fill, active tab, selected state only — never as page wash.
 
 ### Neutral
 
-- **Paper** (`oklch(0.982 0.005 165)` / `#F6FAF8`): page background. Teal-tinted neutral (chroma 0.005 toward teal), not warm sand. Ink on Paper 15.95:1.
-- **Surface** (`oklch(1 0 0)` / `#FFFFFF`): cards, dialogs, inputs. Elevation via tinted shadow, not border+blur ghost-card.
-- **Ink** (`oklch(0.23 0.02 173)` / `#13201C`): body text. Primary reading color.
-- **Muted** (`oklch(0.484 0.023 172)` / `#52635D`): secondary text, captions. 6.04:1 on Paper (AA for body).
-- **Border** (`oklch(0.871 0.016 167)` / `#CBD8D2`): dividers, field strokes. Teal-tinted, not warm grey.
-- **Focus Blue** (`oklch(0.488 0.217 264)` / `#1D4ED8`): 2px focus ring + 2px offset. Always visible on keyboard nav.
+- **Paper (slate-50)** (`oklch(0.984 0.003 247.858)` / `#F8FAFC`): page background. Slate institutional neutral — high legibility, not warm sand. Ink on Paper ≈15.1:1.
+- **Surface** (`oklch(1 0 0)` / `#FFFFFF`): cards, dialogs, inputs. Elevation via border/whitespace, not border+blur ghost-card.
+- **Ink (slate-900)** (`oklch(0.208 0.042 265.755)` / `#0F172A`): body text. Maximum contrast without pure black.
+- **Muted (slate-600)** (`oklch(0.446 0.043 257.281)` / `#475569`): secondary text, captions. AA on Paper.
+- **Border (slate-200)** (`oklch(0.929 0.013 255.508)` / `#E2E8F0`): dividers, field strokes. Slate-tinted, not teal.
+- **Focus Blue** (`oklch(0.488 0.243 264.376)` / `#1D4ED8`): 2px focus ring + 2px offset. Always visible on keyboard nav.
 
 ### Semantic Urgency Roles (non-color redundancy required)
 
-- **Critical** (`oklch(0.50 0.182 30)` / `#B42318`): most urgent needs. Badge + icon + top sort position. 6.57:1 on white.
-- **Urgent** (`oklch(0.514 0.134 51)` / `#A14B00`): elevated needs. Badge + icon + middle position. 5.96:1 on white.
-- **Standard** (`oklch(0.454 0.073 223)` / `#1D5F74`): routine needs. Badge + icon + lower position. 7.14:1 on white.
-- **Success** (`oklch(0.469 0.099 158)` / `#176B45`): fulfilled/received. 6.51:1 on white.
+- **Critical** (`oklch(0.505 0.213 27.518)` / `#B91C1C`): most urgent needs. Badge + icon + top sort position. Highest chroma — most salient.
+- **Urgent** (`oklch(0.646 0.222 41.116)` / `#EA580C`): elevated needs. Badge + icon + middle position. High-saturation orange alert.
+- **Standard** (`oklch(0.372 0.044 257.287)` / `#334155`): routine needs. Badge + icon + lower position. Low chroma — least salient.
+- **Success** (`oklch(0.596 0.145 163.225)` / `#059669`): fulfilled/received. Emerald.
 
-Each urgency level is identified by three concurrent cues: badge label, icon, and sort order. Color reinforces; it never decides alone.
+Each urgency level is identified by three concurrent cues: badge label, icon, and sort order. Color reinforces; it never decides alone. Chromatic hierarchy: critical > urgent > success > standard.
 
 ### Dark Mode (proven, not afterthought)
 
 Same hues, lightness-shifted to preserve hierarchy and AA:
 
-- Background `oklch(0.18 0.015 191)`, Surface `oklch(0.22 0.015 191)`, Ink `oklch(0.95 0.005 165)`, Muted `oklch(0.70 0.02 172)`, Border `oklch(0.30 0.02 191)`. Accent/semantic hues held at adjusted L. Respect `prefers-color-scheme`; add manual toggle if brand needs it. No pure `#000`/`#FFF`.
+- Background `oklch(0.129 0.042 264.695)` (slate-950), Surface `oklch(0.208 0.042 265.755)` (slate-900), Ink `oklch(0.984 0.003 247.858)` (slate-50), Muted `oklch(0.704 0.04 256.788)` (slate-400), Border `oklch(0.372 0.044 257.287)` (slate-700). Accent/semantic hues held at adjusted L. Respect `prefers-color-scheme`; add manual toggle if brand needs it. No pure `#000`/`#FFF`.
 
 ### Named Rules
 
-**The Restrained Rule.** Teal appears on ≤10% of any screen — actions and selection only. If the page looks teal, it is wrong. **The Non-Color Urgency Rule.** No urgency state may be conveyed by color alone. Badge + icon + order are mandatory. **The No-Cream Rule.** The body background is a teal-tinted neutral. The saturated warm cream/sand band is forbidden.
+**The Restrained Rule.** Institutional blue appears on ≤10% of any screen — actions and selection only. If the page looks blue, it is wrong. **The Non-Color Urgency Rule.** No urgency state may be conveyed by color alone. Badge + icon + order are mandatory. **The No-Cream Rule.** The body background is a slate institutional neutral. The saturated warm cream/sand band is forbidden.
 
 ## 3. Typography
 
@@ -182,8 +183,8 @@ Flat by default; elevation conveys state, not decoration. Tinted shadows (hue fo
 ### Shadow Vocabulary
 
 - **Level 0 — Flat** (`none`): resting cards, page background. Depth via border or whitespace, not shadow.
-- **Level 1 — Lifted** (`0 1px 3px oklch(0.23 0.02 173 / 0.08)`): hovered card, raised control.
-- **Level 2 — Floating** (`0 4px 12px oklch(0.23 0.02 173 / 0.10)`): dialog, popover, toast.
+- **Level 1 — Lifted** (`0 1px 3px oklch(0.208 0.042 265.755 / 0.08)`): hovered card, raised control.
+- **Level 2 — Floating** (`0 4px 12px oklch(0.208 0.042 265.755 / 0.10)`): dialog, popover, toast.
 
 Borders and shadows are alternatives — never `1px solid + blur ≥16px` ghost-card on the same element. Radius scale: controls 8px, cards 12px, tags/pills full. Mixed radii without a documented rule are forbidden.
 
@@ -198,7 +199,7 @@ One icon family, one shape scale, one density system per page. All interactive c
 ### Buttons
 
 - **Shape:** 8px radius, `10px 20px` padding. One shape everywhere.
-- **Primary:** Teal fill (`primary`) on white text. Hover: subtle darken (filter/opacity), not a new hue. Focus: 2px `focus` ring + 2px offset. Active: `translateY(1px)` or `scale(0.98)`. Label max 2–3 words, single line at desktop — wrapping CTA is a failure.
+- **Primary:** Institutional blue fill (`primary`) on white text. Hover: subtle darken (filter/opacity), not a new hue. Focus: 2px `focus` ring + 2px offset. Active: `translateY(1px)` or `scale(0.98)`. Label max 2–3 words, single line at desktop — wrapping CTA is a failure.
 - **Secondary/Ghost:** white/border or transparent with ink text and 1px `border` stroke. Never low-contrast ghost over busy backgrounds without scrim.
 - **States:** Disabled uses `muted` at 50% opacity, no accent. Loading uses skeleton/shimmer matching button shape, not a spinner floating in content. Contrast checked at AA. Duplicate intent CTAs on one page are forbidden (pick one label per intent).
 
@@ -235,7 +236,7 @@ Nested cards, side-stripe `border-left >1px` urgency accents, gradient text, gla
 
 ### Do:
 
-- **Do** use OKLCH tokens and keep teal ≤10% — restraint is the brand.
+- **Do** use OKLCH tokens and keep institutional blue ≤10% — restraint is the brand.
 - **Do** convey urgency with badge + icon + sort order; color is the third cue, never the first.
 - **Do** use Geist only (400/500/600/700) with fixed scale 12/14/16/18/24/32/40, `text-wrap: balance/pretty`, 65–75ch prose.
 - **Do** use 4px spacing, breakpoints 640/768/1024/1280, `auto-fit minmax(280px, 1fr)` grids, 44px targets, 8/12/pill radii.
@@ -253,7 +254,7 @@ Nested cards, side-stripe `border-left >1px` urgency accents, gradient text, gla
 - **Don't** put a tiny uppercase tracked eyebrow above every section or numbered `01/02/03` markers as scaffolding.
 - **Don't** use `32px+` radii on cards/sections/inputs (cards max 12–16px; pill only for tags/buttons).
 - **Don't** invent `SOS-XXXX`, addresses, or urgency levels without server confirmation — "AI proposes, human confirms" is behavior.
-- **Don't** ship color-only urgency, pure `#000`/`#FFF`, Inter as default sans, or mixed accent hues on one page — lock teal and audit every component.
+- **Don't** ship color-only urgency, pure `#000`/`#FFF`, Inter as default sans, or mixed accent hues on one page — lock institutional blue and audit every component.
 
 ---
 
@@ -261,20 +262,20 @@ Nested cards, side-stripe `border-left >1px` urgency accents, gradient text, gla
 
 | Token | OKLCH | sRGB | Role |
 | --- | --- | --- | --- |
-| `background` | `oklch(0.9815 0.005 165)` | `#F6FAF8` | Page — light canonical (matches `design.md`). Dark: `oklch(0.18 0.015 191)` |
-| `surface` | `oklch(1 0 0)` | `#FFFFFF` | Card/dialog/input — Dark: `oklch(0.22 0.015 191)` |
-| `ink` | `oklch(0.23 0.02 173)` | `#13201C` | Text — Dark: `oklch(0.95 0.005 165)` |
-| `muted` | `oklch(0.4835 0.023 172)` | `#52635D` | Secondary text — Dark: `oklch(0.70 0.02 172)` |
-| `border` | `oklch(0.871 0.016 167)` | `#CBD8D2` | Dividers — Dark: `oklch(0.30 0.02 191)` |
-| `primary` | `oklch(0.431 0.07 191)` | `#0F5C59` | Action (Restrained ≤10%) — Dark: `oklch(0.72 0.08 191)` |
-| `focus` | `oklch(0.488 0.217 264)` | `#1D4ED8` | Focus ring 2px+2px offset — Dark: `oklch(0.74 0.16 264)` |
-| `critical` | `oklch(0.50 0.182 30)` | `#B42318` | Critical — Dark: `oklch(0.70 0.14 30)` |
-| `urgent` | `oklch(0.514 0.134 51)` | `#A14B00` | Urgent — Dark: `oklch(0.75 0.11 51)` |
-| `standard` | `oklch(0.454 0.073 223)` | `#1D5F74` | Standard — Dark: `oklch(0.70 0.10 223)` |
-| `success` | `oklch(0.469 0.099 158)` | `#176B45` | Success — Dark: `oklch(0.72 0.11 158)` |
+| `background` | `oklch(0.984 0.003 247.858)` | `#F8FAFC` | Page — light canonical. Dark: `oklch(0.129 0.042 264.695)` (slate-950) |
+| `surface` | `oklch(1 0 0)` | `#FFFFFF` | Card/dialog/input — Dark: `oklch(0.208 0.042 265.755)` (slate-900) |
+| `ink` | `oklch(0.208 0.042 265.755)` | `#0F172A` | Text — Dark: `oklch(0.984 0.003 247.858)` |
+| `muted` | `oklch(0.446 0.043 257.281)` | `#475569` | Secondary text — Dark: `oklch(0.704 0.04 256.788)` |
+| `border` | `oklch(0.929 0.013 255.508)` | `#E2E8F0` | Dividers — Dark: `oklch(0.372 0.044 257.287)` |
+| `primary` | `oklch(0.546 0.245 262.881)` | `#2563EB` | Institutional blue — Dark: `oklch(0.623 0.214 259.815)` |
+| `focus` | `oklch(0.488 0.243 264.376)` | `#1D4ED8` | Focus ring 2px+2px offset — Dark: `oklch(0.623 0.214 259.815)` |
+| `critical` | `oklch(0.505 0.213 27.518)` | `#B91C1C` | Critical — Dark: `oklch(0.704 0.191 22.216)` |
+| `urgent` | `oklch(0.646 0.222 41.116)` | `#EA580C` | Urgent — Dark: `oklch(0.75 0.183 55.934)` |
+| `standard` | `oklch(0.372 0.044 257.287)` | `#334155` | Standard — Dark: `oklch(0.704 0.04 256.788)` |
+| `success` | `oklch(0.596 0.145 163.225)` | `#059669` | Success — Dark: `oklch(0.765 0.177 163.223)` |
 
-Canonical source: `openspec/changes/handly-personality-foundation/design.md` Color table (light+dark). Frontmatter hex is Stitch-parsable approximation; OKLCH in this table is canonical. Rules: **Restrained** (teal ≤10% per viewport), **No-Cream** (body forbids OKLCH L 0.84–0.97 C<0.06 hue 40–100), bans: side-stripe `border-left>1px`, gradient text, glassmorphism, `border+blur≥16px` ghost-card, `32px+` card radius.
+Canonical source: `openspec/changes/handly-personality-foundation/design.md` Color table (light+dark). Frontmatter hex is Stitch-parsable approximation; OKLCH in this table is canonical. Rules: **Restrained** (blue ≤10% per viewport), **No-Cream** (body forbids OKLCH L 0.84–0.97 C<0.06 hue 40–100), bans: side-stripe `border-left>1px`, gradient text, glassmorphism, `border+blur≥16px` ghost-card, `32px+` card radius.
 
-WCAG AA notes: ink 15.95:1 on background, muted 6.04:1 on background, action 7.79:1 on white / 6.70:1 focus on white, critical 6.57:1 / urgent 5.96:1 / standard 7.14:1 / success 6.51:1 on white (body ≥4.5:1, large ≥3:1 satisfied). Dark mode holds same hierarchy at shifted lightness. Placeholder contrast = body contrast (never muted-grey-on-white).
+WCAG AA notes: institutional blue and semantic hues on white meet AA; dark mode holds same hierarchy at shifted lightness. Placeholder contrast = body contrast (never muted-grey-on-white).
 
 **Foundation scope — explicitly excluded:** final logo artwork, `app/page.tsx` UI, DB migrations/RLS/Auth, pledge/TTL/SOS runtime, AI prompts/models, Resend templates, Make blueprint edits/deploys, offline/maps/SMS, analytics, IA prompts. This file is foundation only.

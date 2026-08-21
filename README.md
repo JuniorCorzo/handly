@@ -47,7 +47,7 @@ Hooks corren solos tras `pnpm install` (`prepare` → `lefthook install`).
 
 ## Design
 
-Owner file: `DESIGN.md` (Stitch/Figma-ready). Canonical tokens: OKLCH Restrained teal `#0F5C59` ≤10%. Light-first high-contrast, proven dark mode. See `openspec/changes/handly-personality-foundation/design.md`.
+Owner file: `DESIGN.md` (Stitch/Figma-ready). Canonical tokens: OKLCH institutional `#2563EB` (slate `#F8FAFC` / `#0F172A`). Light-first high-contrast, proven dark mode. See `openspec/changes/handly-personality-foundation/design.md`.
 
 ## Learn More
 
