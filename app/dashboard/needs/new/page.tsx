@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { createNeedItem } from "@/features/needs/actions";
-import { NeedItemForm } from "@/features/needs/components/NeedItemForm";
+import { NewNeedItemTabs } from "@/features/needs/components/NewNeedItemTabs";
+import { getNeedItemFormData } from "@/features/needs/lib/queries";
 import { getUserOrganizations } from "@/lib/organizations";
-import { createAdminClient, createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 // Opt into blocking prerender — page uses cookies() via createClient
 export const instant = false;
@@ -18,48 +18,17 @@ export default async function NewNeedItemPage() {
     redirect("/login");
   }
 
-  const adminClient = createAdminClient();
-  const db = adminClient ?? supabase;
-
   const memberships = await getUserOrganizations(user.id, user.email);
   const isAdmin = memberships.some((m) => m.role === "admin");
   if (!isAdmin) {
     redirect("/dashboard");
   }
   const orgIds = memberships.map((m) => m.org_id);
-
-  let campaigns: { id: string; name: string }[] = [];
-  let collectionPoints: { id: string; location_adress: string }[] = [];
-
-  if (orgIds.length > 0) {
-    const [campRes, cpRes] = await Promise.all([
-      db.from("campaign").select("id, name").in("organization_id", orgIds),
-      db
-        .from("collection_points")
-        .select("id, location_adress")
-        .in("organization_id", orgIds),
-    ]);
-
-    if (campRes.error) {
-      console.error(
-        "[Dashboard Needs] Error fetching campaigns:",
-        campRes.error
-      );
-    }
-    if (cpRes.error) {
-      console.error(
-        "[Dashboard Needs] Error fetching collection points:",
-        cpRes.error
-      );
-    }
-
-    campaigns = campRes.data ?? [];
-    collectionPoints = cpRes.data ?? [];
-  }
+  const { campaigns, collectionPoints } = await getNeedItemFormData(orgIds);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-4 py-12 font-sans text-[var(--ink)] antialiased">
-      <div className="w-full max-w-lg rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] sm:p-10">
+      <div className="w-full max-w-xl rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] sm:p-10">
         <div className="mb-6">
           <Link
             href="/dashboard"
@@ -75,7 +44,8 @@ export default async function NewNeedItemPage() {
               Nuevo ítem de necesidad
             </h1>
             <p className="mt-2 text-sm text-[var(--muted)]">
-              Completá los campos para publicar un requerimiento de asistencia.
+              Elegí entre crear el requerimiento asistido por IA o completarlo
+              manualmente.
             </p>
           </div>
         </div>
@@ -99,10 +69,9 @@ export default async function NewNeedItemPage() {
           </div>
         )}
 
-        <NeedItemForm
+        <NewNeedItemTabs
           campaigns={campaigns}
           collectionPoints={collectionPoints}
-          action={createNeedItem}
         />
       </div>
     </main>
