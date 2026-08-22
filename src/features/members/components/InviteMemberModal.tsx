@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 
+import { Select } from "@/components/ui/Select";
 import { inviteMemberAction } from "@/features/members/actions";
 
 interface InviteMemberModalProps {
@@ -101,19 +102,23 @@ export function InviteMemberModal({ orgId }: InviteMemberModalProps) {
                 >
                   Rol en la organización
                 </label>
-                <select
+                <Select
                   id="invite-role"
                   name="role"
                   defaultValue="operator"
-                  className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
-                >
-                  <option value="operator">
-                    Operador (Carga y gestión operativa de insumos)
-                  </option>
-                  <option value="admin">
-                    Administrador (Control total y gestión del equipo)
-                  </option>
-                </select>
+                  items={[
+                    {
+                      value: "operator",
+                      label: "Operador",
+                      description: "Carga y gestión operativa de insumos",
+                    },
+                    {
+                      value: "admin",
+                      label: "Administrador",
+                      description: "Control total y gestión del equipo",
+                    },
+                  ]}
+                />
                 {state?.fieldErrors?.role && (
                   <p className="text-xs text-[var(--critical)]">
                     {state.fieldErrors.role[0]}
