@@ -1,12 +1,10 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { signOut } from "@/features/auth/actions";
 import { InviteMemberModal } from "@/features/members/components/InviteMemberModal";
 import {
+  RemoveMemberButton,
   ResendInvitationButton,
   RevokeInvitationButton,
-  RemoveMemberButton,
 } from "@/features/members/components/MemberActions";
 import { getUserOrganizations } from "@/lib/organizations";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
@@ -133,276 +131,225 @@ export default async function MembersPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--background)] px-4 py-8 font-sans text-[var(--ink)] antialiased sm:px-8 sm:py-12">
-      <div className="mx-auto flex max-w-5xl flex-col gap-8">
-        {/* Header Bar */}
-        <header className="flex flex-col justify-between gap-4 border-b border-[var(--border)] pb-6 sm:flex-row sm:items-center">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block text-xs font-semibold tracking-wider text-[var(--primary)] uppercase">
-                Handly
-              </span>
-              <span className="text-xs text-[var(--muted)]">•</span>
-              <span className="text-xs font-medium text-[var(--muted)]">
-                {orgName}
-              </span>
-            </div>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight text-[var(--ink)] sm:text-3xl">
+    <div className="flex flex-col gap-6">
+      {/* Encabezado y Acción Principal */}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">
               Miembros y Equipo
             </h1>
-            <p className="mt-1 text-sm text-[var(--muted)]">
-              Gestioná las invitaciones por Magic Link y roles de tu
-              organización.
-            </p>
+            <span className="text-xs text-[var(--muted)]">•</span>
+            <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-2.5 py-0.5 text-xs font-semibold text-[var(--ink)] shadow-2xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />
+              {orgName}
+            </span>
           </div>
+          <p className="text-xs text-[var(--muted)] sm:text-sm">
+            Gestioná las invitaciones por Magic Link y roles de tu organización.
+          </p>
+        </div>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2 text-sm font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
-            >
-              ← Volver al Panel
-            </Link>
+        {isAdmin && orgId && <InviteMemberModal orgId={orgId} />}
+      </div>
 
-            {isAdmin && orgId && <InviteMemberModal orgId={orgId} />}
+      {/* Miembros Activos */}
+      <section className="flex flex-col gap-3">
+        <h2 className="text-base font-bold text-[var(--ink)]">
+          Miembros Activos ({members.length})
+        </h2>
 
-            <form action={signOut}>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2 text-sm font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
-              >
-                Cerrar sesión
-              </button>
-            </form>
-          </div>
-        </header>
-
-        {/* Tab Navigation */}
-        <nav className="flex gap-4 border-b border-[var(--border)] text-sm">
-          <Link
-            href="/dashboard"
-            className="pb-3 font-medium text-[var(--muted)] hover:text-[var(--ink)]"
-          >
-            Ítems de Necesidad
-          </Link>
-          <Link
-            href="/dashboard/intake"
-            className="pb-3 font-medium text-[var(--muted)] hover:text-[var(--ink)]"
-          >
-            Recepción de Donaciones
-          </Link>
-          <Link
-            href="/dashboard/members"
-            className="border-b-2 border-[var(--primary)] pb-3 font-semibold text-[var(--primary)]"
-          >
-            Miembros del Equipo ({members.length})
-          </Link>
-        </nav>
-
-        {/* Miembros Activos */}
-        <section className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[var(--ink)]">
-              Miembros Activos ({members.length})
-            </h2>
-          </div>
-
-          <div className="overflow-hidden rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] shadow-2xs">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-[var(--border)] bg-[var(--background)] text-xs font-semibold text-[var(--muted)] uppercase">
+        <div className="overflow-x-auto rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] shadow-2xs">
+          <table className="w-full text-left text-xs sm:text-sm">
+            <thead className="border-b border-[var(--border)] bg-[var(--background)] text-xs font-semibold text-[var(--muted)] uppercase">
+              <tr>
+                <th scope="col" className="px-4 py-3">
+                  Miembro / Usuario
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Rol
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Fecha de Ingreso
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--border)]">
+              {members.length === 0 ? (
                 <tr>
-                  <th scope="col" className="px-4 py-3">
-                    Miembro / Usuario
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    Rol
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    Fecha de Ingreso
-                  </th>
-                  <th scope="col" className="px-4 py-3 text-right">
-                    Acciones
-                  </th>
+                  <td
+                    colSpan={4}
+                    className="px-4 py-8 text-center text-xs text-[var(--muted)]"
+                  >
+                    No hay miembros registrados en esta organización.
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--border)]">
-                {members.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      className="px-4 py-8 text-center text-sm text-[var(--muted)]"
-                    >
-                      No hay miembros registrados en esta organización.
-                    </td>
-                  </tr>
-                ) : (
-                  members.map((m) => {
-                    const isSelf = m.auth_user_id === user.id;
-                    const profile = userMap.get(m.auth_user_id);
-                    const displayName =
-                      profile?.full_name ||
-                      profile?.email ||
-                      (isSelf
-                        ? (user.email ?? "Tú")
-                        : `Miembro (${m.auth_user_id.slice(0, 8)})`);
-                    const displayEmail =
-                      profile?.email || (isSelf ? user.email : undefined);
-                    const avatarLetter = (displayName[0] || "?").toUpperCase();
+              ) : (
+                members.map((m) => {
+                  const isSelf = m.auth_user_id === user.id;
+                  const profile = userMap.get(m.auth_user_id);
+                  const displayName =
+                    profile?.full_name ||
+                    profile?.email ||
+                    (isSelf
+                      ? (user.email ?? "Tú")
+                      : `Miembro (${m.auth_user_id.slice(0, 8)})`);
+                  const displayEmail =
+                    profile?.email || (isSelf ? user.email : undefined);
+                  const avatarLetter = (displayName[0] || "?").toUpperCase();
 
-                    return (
-                      <tr
-                        key={m.auth_user_id}
-                        className="transition-colors hover:bg-[var(--background)]"
-                      >
-                        <td className="px-4 py-3.5">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--primary)]/10 text-xs font-bold text-[var(--primary)]">
-                              {avatarLetter}
-                            </div>
-                            <div className="flex min-w-0 flex-col">
-                              <span className="truncate text-sm font-semibold text-[var(--ink)]">
-                                {displayName}
-                                {isSelf && (
-                                  <span className="ml-2 inline-flex items-center rounded-full bg-[var(--primary)]/10 px-2 py-0.5 font-sans text-xs font-semibold text-[var(--primary)]">
-                                    Tú
-                                  </span>
-                                )}
-                              </span>
-                              {displayEmail && profile?.full_name && (
-                                <span className="truncate text-xs text-[var(--muted)]">
-                                  {displayEmail}
-                                </span>
-                              )}
-                              {profile?.job_title && (
-                                <span className="truncate text-xs text-[var(--muted)]">
-                                  {profile.job_title}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3.5">
-                          <span
-                            className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
-                              m.role === "admin"
-                                ? "bg-amber-100 text-amber-800"
-                                : "bg-blue-100 text-blue-800"
-                            }`}
-                          >
-                            {m.role === "admin" ? "Administrador" : "Operador"}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3.5 text-xs text-[var(--muted)]">
-                          {m.created_at
-                            ? new Date(m.created_at).toLocaleDateString(
-                                "es-AR",
-                                {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                }
-                              )
-                            : "Activo"}
-                        </td>
-                        <td className="px-4 py-3.5 text-right">
-                          {isAdmin && orgId && (
-                            <RemoveMemberButton
-                              orgId={orgId}
-                              memberAuthId={m.auth_user_id}
-                              isSelf={isSelf}
-                            />
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* Invitaciones Pendientes */}
-        <section className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[var(--ink)]">
-              Invitaciones Pendientes ({invitations.length})
-            </h2>
-          </div>
-
-          <div className="overflow-hidden rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] shadow-2xs">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-[var(--border)] bg-[var(--background)] text-xs font-semibold text-[var(--muted)] uppercase">
-                <tr>
-                  <th scope="col" className="px-4 py-3">
-                    Correo Destinatario
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    Rol Asignado
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    Expiración
-                  </th>
-                  <th scope="col" className="px-4 py-3 text-right">
-                    Acciones
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--border)]">
-                {invitations.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      className="px-4 py-6 text-center text-sm text-[var(--muted)]"
-                    >
-                      No hay invitaciones pendientes. Podés invitar nuevos
-                      colaboradores haciendo clic en "+ Invitar miembro".
-                    </td>
-                  </tr>
-                ) : (
-                  invitations.map((inv) => (
+                  return (
                     <tr
-                      key={inv.id}
+                      key={m.auth_user_id}
                       className="transition-colors hover:bg-[var(--background)]"
                     >
-                      <td className="px-4 py-3.5 font-medium text-[var(--ink)]">
-                        {inv.email}
+                      <td className="px-4 py-3.5">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--primary)]/10 text-xs font-bold text-[var(--primary)]">
+                            {avatarLetter}
+                          </div>
+                          <div className="flex min-w-0 flex-col">
+                            <span className="truncate text-xs font-semibold text-[var(--ink)] sm:text-sm">
+                              {displayName}
+                              {isSelf && (
+                                <span className="ml-2 inline-flex items-center rounded-full bg-[var(--primary)]/10 px-2 py-0.5 font-sans text-xs font-semibold text-[var(--primary)]">
+                                  Tú
+                                </span>
+                              )}
+                            </span>
+                            {displayEmail && profile?.full_name && (
+                              <span className="truncate text-xs text-[var(--muted)]">
+                                {displayEmail}
+                              </span>
+                            )}
+                            {profile?.job_title && (
+                              <span className="truncate text-xs text-[var(--muted)]">
+                                {profile.job_title}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </td>
                       <td className="px-4 py-3.5">
                         <span
-                          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
-                            inv.role === "admin"
-                              ? "bg-amber-100 text-amber-800"
-                              : "bg-blue-100 text-blue-800"
+                          className={`inline-flex items-center rounded-[var(--radius-xs)] border px-2 py-0.5 text-xs font-semibold ${
+                            m.role === "admin"
+                              ? "border-[var(--urgent)]/30 bg-[var(--urgent)]/10 text-[var(--urgent)]"
+                              : "border-[var(--standard)]/30 bg-[var(--standard)]/10 text-[var(--standard)]"
                           }`}
                         >
-                          {inv.role === "admin" ? "Administrador" : "Operador"}
+                          {m.role === "admin" ? "Administrador" : "Operador"}
                         </span>
                       </td>
                       <td className="px-4 py-3.5 text-xs text-[var(--muted)]">
-                        {new Date(inv.expires_at).toLocaleDateString("es-AR", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
+                        {m.created_at
+                          ? new Date(m.created_at).toLocaleDateString("es-AR", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })
+                          : "Activo"}
                       </td>
                       <td className="px-4 py-3.5 text-right">
-                        {isAdmin && (
-                          <div className="flex items-center justify-end gap-3">
-                            <ResendInvitationButton invitationId={inv.id} />
-                            <span className="text-[var(--border)]">•</span>
-                            <RevokeInvitationButton invitationId={inv.id} />
-                          </div>
+                        {isAdmin && orgId && (
+                          <RemoveMemberButton
+                            orgId={orgId}
+                            memberAuthId={m.auth_user_id}
+                            isSelf={isSelf}
+                          />
                         )}
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-    </main>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Invitaciones Pendientes */}
+      <section className="flex flex-col gap-3">
+        <h2 className="text-base font-bold text-[var(--ink)]">
+          Invitaciones Pendientes ({invitations.length})
+        </h2>
+
+        <div className="overflow-x-auto rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] shadow-2xs">
+          <table className="w-full text-left text-xs sm:text-sm">
+            <thead className="border-b border-[var(--border)] bg-[var(--background)] text-xs font-semibold text-[var(--muted)] uppercase">
+              <tr>
+                <th scope="col" className="px-4 py-3">
+                  Correo Destinatario
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Rol Asignado
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Expiración
+                </th>
+                <th scope="col" className="px-4 py-3 text-right">
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[var(--border)]">
+              {invitations.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-4 py-6 text-center text-xs text-[var(--muted)]"
+                  >
+                    No hay invitaciones pendientes. Podés invitar nuevos
+                    colaboradores haciendo clic en &quot;+ Invitar
+                    miembro&quot;.
+                  </td>
+                </tr>
+              ) : (
+                invitations.map((inv) => (
+                  <tr
+                    key={inv.id}
+                    className="transition-colors hover:bg-[var(--background)]"
+                  >
+                    <td className="px-4 py-3.5 font-medium text-[var(--ink)]">
+                      {inv.email}
+                    </td>
+                    <td className="px-4 py-3.5">
+                      <span
+                        className={`inline-flex items-center rounded-[var(--radius-xs)] border px-2 py-0.5 text-xs font-semibold ${
+                          inv.role === "admin"
+                            ? "border-[var(--urgent)]/30 bg-[var(--urgent)]/10 text-[var(--urgent)]"
+                            : "border-[var(--standard)]/30 bg-[var(--standard)]/10 text-[var(--standard)]"
+                        }`}
+                      >
+                        {inv.role === "admin" ? "Administrador" : "Operador"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3.5 text-xs text-[var(--muted)]">
+                      {new Date(inv.expires_at).toLocaleDateString("es-AR", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </td>
+                    <td className="px-4 py-3.5 text-right">
+                      {isAdmin && (
+                        <div className="flex items-center justify-end gap-3">
+                          <ResendInvitationButton invitationId={inv.id} />
+                          <span className="text-[var(--border)]">•</span>
+                          <RevokeInvitationButton invitationId={inv.id} />
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   );
 }

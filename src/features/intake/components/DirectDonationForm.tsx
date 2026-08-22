@@ -1,5 +1,4 @@
-"use client";
-
+import { Select } from "@/components/ui/Select";
 import type { ActiveNeedOption } from "@/src/features/intake/types";
 
 interface DirectDonationFormProps {
@@ -42,10 +41,10 @@ export function DirectDonationForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="flex flex-col gap-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xs"
+      className="flex flex-col gap-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-xs sm:p-6"
     >
       <div>
-        <h3 className="text-lg font-bold text-[var(--ink)]">
+        <h3 className="text-base font-bold text-[var(--ink)] sm:text-lg">
           Registro de Donación en Puerta
         </h3>
         <p className="text-xs text-[var(--muted)]">
@@ -55,7 +54,7 @@ export function DirectDonationForm({
       </div>
 
       {error && (
-        <div className="rounded-[var(--radius-sm)] border border-red-200 bg-red-50 p-3 text-xs font-medium text-red-700">
+        <div className="rounded-[var(--radius-sm)] border border-[var(--critical)]/30 bg-[var(--critical)]/10 p-3 text-xs font-medium text-[var(--critical)]">
           {error}
         </div>
       )}
@@ -68,92 +67,99 @@ export function DirectDonationForm({
         >
           Ítem de Asistencia Recibido *
         </label>
-        <select
+        <Select
           id="need-item-select"
           value={needItemId}
-          onChange={(e) => onNeedItemChange(e.target.value)}
+          onChange={onNeedItemChange}
+          placeholder="-- Seleccioná un ítem de necesidad --"
+          items={activeNeeds.map((need) => ({
+            value: need.id,
+            label: `${need.item_name} (${need.category})`,
+            description: `Campaña: ${need.campaign_name}`,
+          }))}
           required
-          className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
-        >
-          <option value="">-- Seleccioná un ítem de necesidad --</option>
-          {activeNeeds.map((need) => (
-            <option key={need.id} value={need.id}>
-              {need.item_name} ({need.category}) - Meta: {need.target_quantity}{" "}
-              {need.unit} [{need.campaign_name}]
-            </option>
-          ))}
-        </select>
+        />
         {fieldErrors.need_item_id && (
-          <span className="text-xs text-red-600">
+          <p className="text-xs font-medium text-[var(--critical)]">
             {fieldErrors.need_item_id[0]}
-          </span>
+          </p>
         )}
       </div>
 
-      {/* Cantidad */}
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="quantity-input"
-          className="text-xs font-semibold tracking-wider text-[var(--ink)] uppercase"
-        >
-          Cantidad Física Recibida *
-        </label>
-        <div className="flex items-center gap-3">
+      {/* Cantidad y Unidad */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="quantity-input"
+            className="text-xs font-semibold tracking-wider text-[var(--ink)] uppercase"
+          >
+            Cantidad Entregada *
+          </label>
           <input
             id="quantity-input"
             type="number"
-            min="1"
-            step="1"
+            min={1}
+            step={1}
             value={quantity}
             onChange={(e) => onQuantityChange(e.target.value)}
-            placeholder="Ej: 50"
             required
-            className="w-full max-w-xs rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm font-semibold text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+            placeholder="Ej: 50"
+            className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
           />
-          {selectedNeed && (
-            <span className="text-sm font-medium text-[var(--muted)]">
-              {selectedNeed.unit}
-            </span>
+          {fieldErrors.quantity && (
+            <p className="text-xs font-medium text-[var(--critical)]">
+              {fieldErrors.quantity[0]}
+            </p>
           )}
         </div>
-        {fieldErrors.quantity && (
-          <span className="text-xs text-red-600">
-            {fieldErrors.quantity[0]}
-          </span>
-        )}
+
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="unit-display"
+            className="text-xs font-semibold tracking-wider text-[var(--muted)] uppercase"
+          >
+            Unidad de Medida
+          </label>
+          <input
+            id="unit-display"
+            type="text"
+            readOnly
+            value={selectedNeed?.unit ?? "—"}
+            className="w-full cursor-not-allowed rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-sm font-medium text-[var(--muted)]"
+          />
+        </div>
       </div>
 
-      <div className="border-t border-[var(--border)] pt-4">
-        <h4 className="text-xs font-semibold tracking-wider text-[var(--muted)] uppercase">
-          Datos del Donante (Opcionales)
+      {/* Datos del Donante */}
+      <div className="flex flex-col gap-4 border-t border-[var(--border)] pt-4">
+        <h4 className="text-xs font-bold tracking-wider text-[var(--ink)] uppercase">
+          Identificación del Donante (Opcional)
         </h4>
 
-        <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {/* Nombre */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="donor-name-input"
-              className="text-xs font-medium text-[var(--ink)]"
-            >
-              Nombre / Organización
-            </label>
-            <input
-              id="donor-name-input"
-              type="text"
-              value={donorName}
-              onChange={(e) => onDonorNameChange(e.target.value)}
-              placeholder="Donante Anónimo"
-              className="rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
-            />
-          </div>
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="donor-name-input"
+            className="text-xs font-medium text-[var(--muted)]"
+          >
+            Nombre completo o Institución
+          </label>
+          <input
+            id="donor-name-input"
+            type="text"
+            value={donorName}
+            onChange={(e) => onDonorNameChange(e.target.value)}
+            placeholder="Ej: Vecinos Unidos / Juan Pérez"
+            className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--ink)] placeholder:[color:var(--muted)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+          />
+        </div>
 
-          {/* Email */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="donor-email-input"
-              className="text-xs font-medium text-[var(--ink)]"
+              className="text-xs font-medium text-[var(--muted)]"
             >
-              Correo Electrónico
+              Correo Electrónico (para comprobante)
             </label>
             <input
               id="donor-email-input"
@@ -161,15 +167,19 @@ export function DirectDonationForm({
               value={donorEmail}
               onChange={(e) => onDonorEmailChange(e.target.value)}
               placeholder="donante@ejemplo.com"
-              className="rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+              className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--ink)] placeholder:[color:var(--muted)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
             />
+            {fieldErrors.donor_email && (
+              <p className="text-xs font-medium text-[var(--critical)]">
+                {fieldErrors.donor_email[0]}
+              </p>
+            )}
           </div>
 
-          {/* Teléfono */}
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="donor-phone-input"
-              className="text-xs font-medium text-[var(--ink)]"
+              className="text-xs font-medium text-[var(--muted)]"
             >
               Teléfono de Contacto
             </label>
@@ -178,50 +188,48 @@ export function DirectDonationForm({
               type="tel"
               value={donorPhone}
               onChange={(e) => onDonorPhoneChange(e.target.value)}
-              placeholder="+54 9 11 ..."
-              className="rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+              placeholder="+54 9 11 1234-5678"
+              className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--ink)] placeholder:[color:var(--muted)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
             />
           </div>
         </div>
       </div>
 
-      {/* Botón de Envío */}
-      <div className="flex justify-end pt-2">
-        <button
-          type="submit"
-          disabled={isSubmitting || !needItemId || !quantity}
-          className="inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-2.5 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <svg
-                aria-hidden="true"
-                className="h-4 w-4 animate-spin text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-              Registrando e Ingresando...
-            </span>
-          ) : (
-            "✓ Registrar e Ingresar al Inventario"
-          )}
-        </button>
-      </div>
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={isSubmitting || !needItemId || !quantity}
+        className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {isSubmitting ? (
+          <span className="flex items-center gap-2">
+            <svg
+              aria-hidden="true"
+              className="h-4 w-4 animate-spin text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            Registrando Donación...
+          </span>
+        ) : (
+          "✓ Confirmar Ingreso Directo a Inventario"
+        )}
+      </button>
     </form>
   );
 }

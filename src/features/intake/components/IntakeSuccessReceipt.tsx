@@ -12,9 +12,9 @@ export function IntakeSuccessReceipt({
   onNext,
 }: IntakeSuccessReceiptProps) {
   return (
-    <div className="flex flex-col items-center gap-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-md">
+    <div className="flex flex-col items-center gap-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-6 text-center shadow-md sm:p-8">
       {/* Success Icon */}
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-sm">
         <svg
           aria-hidden="true"
           className="h-8 w-8"
@@ -35,10 +35,10 @@ export function IntakeSuccessReceipt({
         <span className="inline-block rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3.5 py-1 font-mono text-xs font-bold text-[var(--primary)]">
           {receipt.short_code}
         </span>
-        <h2 className="mt-2 text-2xl font-extrabold text-[var(--ink)]">
+        <h2 className="mt-2 text-xl font-extrabold text-[var(--ink)] sm:text-2xl">
           ¡Donación Recibida con Éxito!
         </h2>
-        <p className="mt-1 text-sm font-medium text-[var(--muted)]">
+        <p className="mt-1 text-xs font-medium text-[var(--muted)] sm:text-sm">
           El inventario físico y la necesidad remanente se actualizaron en
           tiempo real.
         </p>
@@ -90,7 +90,7 @@ export function IntakeSuccessReceipt({
       <button
         type="button"
         onClick={onNext}
-        className="inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+        className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
       >
         Recepcionar Siguiente Donación
       </button>
