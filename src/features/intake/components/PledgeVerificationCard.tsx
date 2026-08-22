@@ -19,30 +19,30 @@ export function PledgeVerificationCard({
   const isCancelled = pledge.status === "cancelled";
 
   return (
-    <div className="flex flex-col gap-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
+    <div className="flex flex-col gap-6 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm sm:p-6">
       {/* Top Banner / Status */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <span className="font-mono text-xl font-bold tracking-wider text-[var(--primary)]">
             {pledge.short_code}
           </span>
           {isAlreadyReceived && (
-            <span className="inline-flex items-center rounded-full border border-blue-300 bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-900">
+            <span className="inline-flex items-center rounded-full border border-[var(--standard)]/30 bg-[var(--standard)]/10 px-2.5 py-0.5 text-xs font-bold text-[var(--standard)]">
               ✓ Ya Recibido
             </span>
           )}
           {isCancelled && (
-            <span className="inline-flex items-center rounded-full border border-red-300 bg-red-100 px-2.5 py-0.5 text-xs font-bold text-red-900">
+            <span className="inline-flex items-center rounded-full border border-[var(--critical)]/30 bg-[var(--critical)]/10 px-2.5 py-0.5 text-xs font-bold text-[var(--critical)]">
               Cancelado
             </span>
           )}
           {!isAlreadyReceived && !isCancelled && !pledge.is_expired && (
-            <span className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-900">
+            <span className="inline-flex items-center rounded-full border border-[var(--success)]/30 bg-[var(--success)]/10 px-2.5 py-0.5 text-xs font-bold text-[var(--success)]">
               ● Pendiente de Entrega
             </span>
           )}
           {!isAlreadyReceived && !isCancelled && pledge.is_expired && (
-            <span className="inline-flex items-center rounded-full border border-amber-300 bg-amber-100 px-2.5 py-0.5 text-xs font-bold text-amber-900">
+            <span className="inline-flex items-center rounded-full border border-[var(--urgent)]/30 bg-[var(--urgent)]/10 px-2.5 py-0.5 text-xs font-bold text-[var(--urgent)]">
               ⚠️ Expirado
             </span>
           )}
@@ -55,14 +55,14 @@ export function PledgeVerificationCard({
       </div>
 
       {/* Details Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
         {/* Item Data */}
         <div className="flex flex-col gap-3 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] p-4">
           <span className="text-xs font-semibold tracking-wider text-[var(--muted)] uppercase">
             Ítem Comprometido
           </span>
           <div>
-            <h3 className="text-lg font-bold text-[var(--ink)]">
+            <h3 className="text-base font-bold text-[var(--ink)] sm:text-lg">
               {pledge.need_item.item_name}
             </h3>
             <p className="text-xs text-[var(--muted)]">
@@ -71,10 +71,10 @@ export function PledgeVerificationCard({
           </div>
 
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-[var(--primary)]">
+            <span className="text-2xl font-extrabold text-[var(--primary)] sm:text-3xl">
               {pledge.quantity}
             </span>
-            <span className="text-sm font-medium text-[var(--muted)]">
+            <span className="text-xs font-medium text-[var(--muted)] sm:text-sm">
               {pledge.need_item.unit}
             </span>
           </div>
@@ -115,7 +115,7 @@ export function PledgeVerificationCard({
           type="button"
           onClick={onCancel}
           disabled={isConfirming}
-          className="inline-flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:outline-none"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-xs font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:outline-none sm:text-sm"
         >
           Buscar otro código
         </button>
@@ -125,7 +125,7 @@ export function PledgeVerificationCard({
             type="button"
             onClick={onConfirm}
             disabled={isConfirming}
-            className="inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white shadow-xs transition-opacity hover:bg-emerald-500 focus:ring-2 focus:ring-emerald-400 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-2.5 text-xs font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
           >
             {isConfirming ? (
               <span className="flex items-center gap-2">

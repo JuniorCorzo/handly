@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
+import { Select } from "@/components/ui/Select";
 import { URGENCY_LEVELS } from "@/lib/validations/need-item";
 
 import { getNeedItemErrorMessage, URGENCY_LABELS } from "../lib/constants";
@@ -28,10 +29,11 @@ interface NeedItemFormProps {
 }
 
 const inputClass =
-  "mt-1 block w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
-const labelClass = "block text-sm font-medium text-[var(--ink)]";
-const errorClass = "mt-1 text-xs text-red-600";
-const fieldClass = "flex flex-col gap-0.5";
+  "block h-10 w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--ink)] placeholder:[color:var(--muted)] shadow-2xs focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
+const labelClass =
+  "block text-xs font-semibold uppercase tracking-wider text-[var(--ink)]";
+const errorClass = "mt-0.5 text-xs font-medium text-[var(--critical)]";
+const fieldClass = "flex flex-col gap-1.5";
 
 export function NeedItemForm({
   campaigns,
@@ -65,7 +67,7 @@ export function NeedItemForm({
           key={code}
           role="alert"
           aria-live="assertive"
-          className="rounded-[var(--radius-sm)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          className="rounded-[var(--radius-sm)] border border-[var(--critical)]/30 bg-[var(--critical)]/10 px-4 py-3 text-xs font-medium text-[var(--critical)] sm:text-sm"
         >
           {getNeedItemErrorMessage(code)}
         </p>
@@ -121,7 +123,7 @@ export function NeedItemForm({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className={fieldClass}>
           <label htmlFor="target_quantity" className={labelClass}>
             Cantidad objetivo <span aria-hidden="true">*</span>
@@ -168,20 +170,17 @@ export function NeedItemForm({
         <label htmlFor="urgency" className={labelClass}>
           Nivel de urgencia <span aria-hidden="true">*</span>
         </label>
-        <select
+        <Select
           id="urgency"
           name="urgency"
           defaultValue={defaultValues?.urgency}
+          placeholder="Seleccioná urgencia…"
+          items={URGENCY_LEVELS.map((u) => ({
+            value: u,
+            label: URGENCY_LABELS[u],
+          }))}
           required
-          className={inputClass}
-        >
-          <option value="">Seleccioná urgencia…</option>
-          {URGENCY_LEVELS.map((u) => (
-            <option key={u} value={u}>
-              {URGENCY_LABELS[u]}
-            </option>
-          ))}
-        </select>
+        />
         {errors.urgency && (
           <p aria-live="polite" className={errorClass}>
             {getNeedItemErrorMessage(errors.urgency[0])}
@@ -203,14 +202,14 @@ export function NeedItemForm({
         <button
           type="submit"
           disabled={pending || state?.success}
-          className="inline-flex flex-1 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "Guardando…" : submitLabel}
         </button>
 
         <Link
           href="/dashboard"
-          className="inline-flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-medium text-[var(--ink)] shadow-2xs transition-colors hover:bg-[var(--background)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
         >
           Cancelar
         </Link>
@@ -220,7 +219,7 @@ export function NeedItemForm({
         <p
           role="status"
           aria-live="polite"
-          className="rounded-[var(--radius-sm)] border border-green-200 bg-green-50 py-2 text-center text-sm font-medium text-green-700"
+          className="rounded-[var(--radius-sm)] border border-[var(--success)]/30 bg-[var(--success)]/10 py-2.5 text-center text-xs font-semibold text-[var(--success)] sm:text-sm"
         >
           ¡Ítem guardado exitosamente! Redirigiendo al panel...
         </p>

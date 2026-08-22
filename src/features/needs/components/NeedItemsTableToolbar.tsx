@@ -47,7 +47,7 @@ export function NeedItemsTableToolbar({ table }: NeedItemsTableToolbarProps) {
           <button
             type="button"
             onClick={() => table.resetColumnFilters()}
-            className="rounded-[var(--radius-sm)] border border-dashed border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)] transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)]"
+            className="inline-flex h-9 items-center justify-center rounded-[var(--radius-sm)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-3 text-xs font-medium text-[var(--muted)] transition-colors hover:border-[var(--ink)] hover:text-[var(--ink)]"
           >
             Limpiar filtros
           </button>

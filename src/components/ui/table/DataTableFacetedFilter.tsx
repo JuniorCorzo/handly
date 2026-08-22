@@ -2,6 +2,8 @@
 
 import type { Column } from "@tanstack/react-table";
 
+import { Select } from "@/components/ui/Select";
+
 export interface FilterOption {
   label: string;
   value: string;
@@ -21,23 +23,25 @@ export function DataTableFacetedFilter<TData, TValue>({
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const selectedValue = (column?.getFilterValue() as string) ?? "";
 
+  const items = [
+    { value: "", label: `${title}: Todos` },
+    ...options.map((opt) => ({
+      value: opt.value,
+      label: opt.label,
+    })),
+  ];
+
   return (
-    <div className="flex items-center">
-      <select
+    <div className="flex w-44 shrink-0 items-center">
+      <Select
         value={selectedValue}
-        onChange={(e) => {
-          const val = e.target.value;
+        onChange={(val) => {
           column?.setFilterValue(val === "" ? undefined : val);
         }}
-        className="rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1.5 text-xs text-[var(--ink)] shadow-2xs focus:ring-1 focus:ring-[var(--focus)] focus:outline-none"
-      >
-        <option value="">{title}: Todos</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+        placeholder={`${title}: Todos`}
+        items={items}
+        buttonClassName="!h-9 text-xs sm:text-sm !px-3"
+      />
     </div>
   );
 }

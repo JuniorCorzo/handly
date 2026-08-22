@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { NeedItemCard } from "@/components/NeedItemCard";
 import type { PublicNeedItem } from "@/components/NeedItemCard";
+import { Select } from "@/components/ui/Select";
 
 import { useNeedsFilters } from "../hooks/useNeedsFilters";
 
@@ -142,33 +143,45 @@ export function PublicNeedsCatalog({
 
                   {/* Dropdown Categoría */}
                   {availableCategories.length > 0 && (
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="min-h-[36px] rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-1.5 text-xs font-medium text-[var(--ink)] focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
-                    >
-                      <option value="all">Todas las Categorías</option>
-                      {availableCategories.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="w-full sm:w-48">
+                      <Select
+                        value={selectedCategory}
+                        onChange={setSelectedCategory}
+                        placeholder="Todas las Categorías"
+                        items={[
+                          { value: "all", label: "Todas las Categorías" },
+                          ...availableCategories.map((cat) => ({
+                            value: cat,
+                            label: cat,
+                          })),
+                        ]}
+                      />
+                    </div>
                   )}
 
                   {/* Dropdown Cobertura */}
-                  <select
-                    value={selectedCoverage}
-                    onChange={(e) => setSelectedCoverage(e.target.value)}
-                    className="min-h-[36px] rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-1.5 text-xs font-medium text-[var(--ink)] focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] focus:outline-none"
-                  >
-                    <option value="all">Todos los estados</option>
-                    <option value="urgent_uncovered">
-                      Falta cubrir (&lt;50%)
-                    </option>
-                    <option value="in_progress">En progreso (&gt;50%)</option>
-                    <option value="fulfilled">Completados (100%)</option>
-                  </select>
+                  <div className="w-full sm:w-44">
+                    <Select
+                      value={selectedCoverage}
+                      onChange={setSelectedCoverage}
+                      placeholder="Todos los estados"
+                      items={[
+                        { value: "all", label: "Todos los estados" },
+                        {
+                          value: "urgent_uncovered",
+                          label: "Falta cubrir (<50%)",
+                        },
+                        {
+                          value: "in_progress",
+                          label: "En progreso (>50%)",
+                        },
+                        {
+                          value: "fulfilled",
+                          label: "Completados (100%)",
+                        },
+                      ]}
+                    />
+                  </div>
                 </div>
 
                 {hasActiveFilters && (
