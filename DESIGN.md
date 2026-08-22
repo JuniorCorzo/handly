@@ -2,15 +2,30 @@
 name: Handly
 description: Donation coordination in emergencies — donor-first pledge flow (guest), calm operational UI.
 colors:
+  # Nuevos institucionales (light hex; dark en §2 Appendix)
+  bgMain: "#F8FAFC"
+  bgSurface: "#FFFFFF"
+  borderColor: "#E2E8F0"
+  textPrimary: "#0F172A"
+  textSecondary: "#475569"
+  textMuted: "#64748B"
+  primary: "#1E40AF"
+  primaryHover: "#1D4ED8"
+  primaryText: "#FFFFFF"
+  accentSuccess: "#059669"
+  statusCritical: "#DC2626"
+  statusCriticalBg: "#FEF2F2"
+  statusUrgent: "#D97706"
+  statusUrgentBg: "#FFFBEB"
+  # Aliases legacy (preservados sin cambios para compatibilidad)
   background: "#F8FAFC"
   surface: "#FFFFFF"
   ink: "#0F172A"
   muted: "#475569"
   border: "#E2E8F0"
-  primary: "#2563EB"
   focus: "#1D4ED8"
-  critical: "#B91C1C"
-  urgent: "#EA580C"
+  critical: "#DC2626"
+  urgent: "#D97706"
   standard: "#334155"
   success: "#059669"
 typography:
@@ -125,31 +140,30 @@ Restrained strategy: slate institutional base with institutional blue accent. Wa
 
 ### Primary
 
-- **Institutional Blue** (`oklch(0.546 0.245 262.881)` / `#2563EB`): primary actions, links, selection, focus-adjacent. ≤10% of any viewport. Trust and credibility. Use for CTA fill, active tab, selected state only — never as page wash.
+- **Institutional Blue Deep** (`#1E40AF` light / `#2563EB` dark): primary actions, links, selección. ≤10% viewport. Light es Blue 800 profundo, dark es Blue 600 luminoso sobre fondo oscuro. Hover light `#1D4ED8`, dark `#3B82F6`. Texto sobre primary `#FFFFFF`. Trust/corporativo.
 
 ### Neutral
 
-- **Paper (slate-50)** (`oklch(0.984 0.003 247.858)` / `#F8FAFC`): page background. Slate institutional neutral — high legibility, not warm sand. Ink on Paper ≈15.1:1.
-- **Surface** (`oklch(1 0 0)` / `#FFFFFF`): cards, dialogs, inputs. Elevation via border/whitespace, not border+blur ghost-card.
-- **Ink (slate-900)** (`oklch(0.208 0.042 265.755)` / `#0F172A`): body text. Maximum contrast without pure black.
-- **Muted (slate-600)** (`oklch(0.446 0.043 257.281)` / `#475569`): secondary text, captions. AA on Paper.
-- **Border (slate-200)** (`oklch(0.929 0.013 255.508)` / `#E2E8F0`): dividers, field strokes. Slate-tinted, not teal.
-- **Focus Blue** (`oklch(0.488 0.243 264.376)` / `#1D4ED8`): 2px focus ring + 2px offset. Always visible on keyboard nav.
+- **Paper (slate-50)** (`#F8FAFC` ambos temas: light `bg-main` / dark `text-primary`): page background claro. Slate frío, no warm sand.
+- **Surface** (`#FFFFFF` light / `#1E293B` dark `bg-surface`): cards, dialogs, inputs. En dark, superficie elevada `Slate 800`.
+- **Ink (slate-900)** (`#0F172A` light `text-primary` / `#F8FAFC` dark): body text.
+- **Muted (slate-600/400)** (`#475569` light `text-secondary` / `#94A3B8` dark): secondary text.
+- **Muted extra** (`#64748B` ambos `text-muted`): etiquetas pequeñas Slate 500.
+- **Border (slate-200/700)** (`#E2E8F0` light / `#334155` dark `border-color`): dividers 1px.
+- **Focus/Hover Blue** (`#1D4ED8` light `primary-hover/focus` / `#3B82F6` dark): 2px focus ring + 2px offset.
 
 ### Semantic Urgency Roles (non-color redundancy required)
 
-- **Critical** (`oklch(0.505 0.213 27.518)` / `#B91C1C`): most urgent needs. Badge + icon + top sort position. Highest chroma — most salient.
-- **Urgent** (`oklch(0.646 0.222 41.116)` / `#EA580C`): elevated needs. Badge + icon + middle position. High-saturation orange alert.
-- **Standard** (`oklch(0.372 0.044 257.287)` / `#334155`): routine needs. Badge + icon + lower position. Low chroma — least salient.
-- **Success** (`oklch(0.596 0.145 163.225)` / `#059669`): fulfilled/received. Emerald.
+- **Critical** (`#DC2626` light / `#EF4444` dark `status-critical`): badge crítico. Light con fondo pastel `#FEF2F2` (`status-critical-bg`), dark con `#450A0A` — evita parche chillón, pastel + texto oscuro.
+- **Urgent** (`#D97706` light / `#F59E0B` dark `status-urgent`): badge urgente. Fondos `#FFFBEB` light / `#451A03` dark (amber 600/500).
+- **Standard** (`#334155` light / `#94A3B8` dark): preservado sin cambios — routine needs, low chroma.
+- **Success** (`#059669` light `accent-success` / `#10B981` dark): emerald 600/500 para operativo completado.
 
 Each urgency level is identified by three concurrent cues: badge label, icon, and sort order. Color reinforces; it never decides alone. Chromatic hierarchy: critical > urgent > success > standard.
 
-### Dark Mode (proven, not afterthought)
+### Dark Mode (proven, not afterthought) — Institutional Dark
 
-Same hues, lightness-shifted to preserve hierarchy and AA:
-
-- Background `oklch(0.129 0.042 264.695)` (slate-950), Surface `oklch(0.208 0.042 265.755)` (slate-900), Ink `oklch(0.984 0.003 247.858)` (slate-50), Muted `oklch(0.704 0.04 256.788)` (slate-400), Border `oklch(0.372 0.044 257.287)` (slate-700). Accent/semantic hues held at adjusted L. Respect `prefers-color-scheme`; add manual toggle if brand needs it. No pure `#000`/`#FFF`.
+Fondos `bg-main #0F172A` (Slate 900 noche), `bg-surface #1E293B` (Slate 800 elevado), `border-color #334155` (Slate 700), tipografía `text-primary #F8FAFC`, `text-secondary #94A3B8`, `text-muted #64748B`. Accent `primary #2563EB / hover #3B82F6 / text #FFFFFF`, `accent-success #10B981`, `status-critical #EF4444 / bg #450A0A`, `status-urgent #F59E0B / bg #451A03`, `standard #94A3B8` (preservado). Sin sombras en dark — solo diferencia bg-main vs bg-surface. Respect `prefers-color-scheme`. No pure `#000`/`#FFF`.
 
 ### Named Rules
 
@@ -260,19 +274,24 @@ Nested cards, side-stripe `border-left >1px` urgency accents, gradient text, gla
 
 ## Appendix — Tokens for Stitch Variables (exportable)
 
-| Token | OKLCH | sRGB | Role |
-| --- | --- | --- | --- |
-| `background` | `oklch(0.984 0.003 247.858)` | `#F8FAFC` | Page — light canonical. Dark: `oklch(0.129 0.042 264.695)` (slate-950) |
-| `surface` | `oklch(1 0 0)` | `#FFFFFF` | Card/dialog/input — Dark: `oklch(0.208 0.042 265.755)` (slate-900) |
-| `ink` | `oklch(0.208 0.042 265.755)` | `#0F172A` | Text — Dark: `oklch(0.984 0.003 247.858)` |
-| `muted` | `oklch(0.446 0.043 257.281)` | `#475569` | Secondary text — Dark: `oklch(0.704 0.04 256.788)` |
-| `border` | `oklch(0.929 0.013 255.508)` | `#E2E8F0` | Dividers — Dark: `oklch(0.372 0.044 257.287)` |
-| `primary` | `oklch(0.546 0.245 262.881)` | `#2563EB` | Institutional blue — Dark: `oklch(0.623 0.214 259.815)` |
-| `focus` | `oklch(0.488 0.243 264.376)` | `#1D4ED8` | Focus ring 2px+2px offset — Dark: `oklch(0.623 0.214 259.815)` |
-| `critical` | `oklch(0.505 0.213 27.518)` | `#B91C1C` | Critical — Dark: `oklch(0.704 0.191 22.216)` |
-| `urgent` | `oklch(0.646 0.222 41.116)` | `#EA580C` | Urgent — Dark: `oklch(0.75 0.183 55.934)` |
-| `standard` | `oklch(0.372 0.044 257.287)` | `#334155` | Standard — Dark: `oklch(0.704 0.04 256.788)` |
-| `success` | `oklch(0.596 0.145 163.225)` | `#059669` | Success — Dark: `oklch(0.765 0.177 163.223)` |
+| Token | sRGB Light | sRGB Dark | CSS var | Role |
+| --- | --- | --- | --- | --- |
+| `bg-main` / `background` | `#F8FAFC` | `#0F172A` | `var(--bg-main)` / `var(--background)` | Page — Slate 50 / Slate 900 noche |
+| `bg-surface` / `surface` | `#FFFFFF` | `#1E293B` | `var(--bg-surface)` | Card/dialog/input — White / Slate 800 elevado |
+| `text-primary` / `ink` | `#0F172A` | `#F8FAFC` | `var(--text-primary)` | Text principal |
+| `text-secondary` / `muted` | `#475569` | `#94A3B8` | `var(--text-secondary)` | Secondary text |
+| `text-muted` | `#64748B` | `#64748B` | `var(--text-muted)` | Etiquetas pequeñas Slate 500 |
+| `border-color` / `border` | `#E2E8F0` | `#334155` | `var(--border-color)` | Dividers 1px |
+| `primary` | `#1E40AF` | `#2563EB` | `var(--primary)` | Institutional blue deep (light) / luminoso dark |
+| `primary-hover` / `focus` | `#1D4ED8` | `#3B82F6` | `var(--primary-hover)` | Hover + focus ring 2px+2px offset |
+| `primary-text` | `#FFFFFF` | `#FFFFFF` | `var(--primary-text)` | Texto sobre primary |
+| `accent-success` / `success` | `#059669` | `#10B981` | `var(--accent-success)` | Emerald 600 / 500 |
+| `status-critical` / `critical` | `#DC2626` | `#EF4444` | `var(--status-critical)` | Critical badge text — Red 600/500 |
+| `status-critical-bg` | `#FEF2F2` | `#450A0A` | `var(--status-critical-bg)` | Fondo pastel critical (pulido, no parche chillón) |
+| `status-urgent` / `urgent` | `#D97706` | `#F59E0B` | `var(--status-urgent)` | Urgent badge — Amber 600/500 |
+| `status-urgent-bg` | `#FFFBEB` | `#451A03` | `var(--status-urgent-bg)` | Fondo pastel urgent |
+| `standard` | `#334155` | `#94A3B8` | `var(--standard)` | Standard — **preservado sin cambios** |
+| `shadow-card` | `0 1px 3px rgba(0,0,0,.05)` | `none` | `var(--shadow-card)` | Sombra sutil light, sin sombra dark |
 
 Canonical source: `openspec/changes/handly-personality-foundation/design.md` Color table (light+dark). Frontmatter hex is Stitch-parsable approximation; OKLCH in this table is canonical. Rules: **Restrained** (blue ≤10% per viewport), **No-Cream** (body forbids OKLCH L 0.84–0.97 C<0.06 hue 40–100), bans: side-stripe `border-left>1px`, gradient text, glassmorphism, `border+blur≥16px` ghost-card, `32px+` card radius.
 

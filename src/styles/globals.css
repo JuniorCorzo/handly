@@ -1,52 +1,100 @@
 @import "tailwindcss";
 
-/* Handly — Fondo Claro Institucional (Opción A). Alta legibilidad, jerarquía critical > urgent > success > standard. */
+/* Handly — Institutional Light/Dark (Slated Slate + Institutional Blue). Alias strategy A: new names + legacy aliases. */
 
 :root {
-  --background: oklch(0.984 0.003 247.858);
-  --surface: oklch(1 0 0);
-  --ink: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.446 0.043 257.281);
-  --border: oklch(0.929 0.013 255.508);
-  --primary: oklch(0.546 0.245 262.881);
-  --focus: oklch(0.488 0.243 264.376);
-  --critical: oklch(0.505 0.213 27.518);
-  --urgent: oklch(0.646 0.222 41.116);
-  --standard: oklch(0.372 0.044 257.287);
-  --success: oklch(0.596 0.145 163.225);
+  /* Nuevos tokens institucionales — Tema Claro */
+  --bg-main: #f8fafc;
+  --bg-surface: #ffffff;
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --primary: #1e40af;
+  --primary-hover: #1d4ed8;
+  --primary-text: #ffffff;
+  --accent-success: #059669;
+  --status-critical: #dc2626;
+  --status-critical-bg: #fef2f2;
+  --status-urgent: #d97706;
+  --status-urgent-bg: #fffbeb;
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+
+  /* Aliases legacy — compat sin churn (standard preservado sin cambios) */
+  --background: var(--bg-main);
+  --surface: var(--bg-surface);
+  --ink: var(--text-primary);
+  --muted: var(--text-secondary);
+  --border: var(--border-color);
+  --focus: var(--primary-hover);
+  --critical: var(--status-critical);
+  --urgent: var(--status-urgent);
+  --standard: #334155;
+  --success: var(--accent-success);
   --foreground: var(--ink);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: oklch(0.129 0.042 264.695);
-    --surface: oklch(0.208 0.042 265.755);
-    --ink: oklch(0.984 0.003 247.858);
-    --muted: oklch(0.704 0.04 256.788);
-    --border: oklch(0.372 0.044 257.287);
-    --primary: oklch(0.623 0.214 259.815);
-    --focus: oklch(0.623 0.214 259.815);
-    --critical: oklch(0.704 0.191 22.216);
-    --urgent: oklch(0.75 0.183 55.934);
-    --standard: oklch(0.704 0.04 256.788);
-    --success: oklch(0.765 0.177 163.223);
+    --bg-main: #0f172a;
+    --bg-surface: #1e293b;
+    --border-color: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --primary: #2563eb;
+    --primary-hover: #3b82f6;
+    --primary-text: #ffffff;
+    --accent-success: #10b981;
+    --status-critical: #ef4444;
+    --status-critical-bg: #450a0a;
+    --status-urgent: #f59e0b;
+    --status-urgent-bg: #451a03;
+    --shadow-card: none;
+
+    /* Aliases legacy dark */
+    --background: var(--bg-main);
+    --surface: var(--bg-surface);
+    --ink: var(--text-primary);
+    --muted: var(--text-secondary);
+    --border: var(--border-color);
+    --focus: var(--primary-hover);
+    --critical: var(--status-critical);
+    --urgent: var(--status-urgent);
+    --standard: #94a3b8;
+    --success: var(--accent-success);
     --foreground: var(--ink);
   }
 }
 
 @theme inline {
-  --color-background: oklch(0.984 0.003 247.858);
-  --color-surface: oklch(1 0 0);
-  --color-ink: oklch(0.208 0.042 265.755);
-  --color-muted: oklch(0.446 0.043 257.281);
-  --color-border: oklch(0.929 0.013 255.508);
-  --color-primary: oklch(0.546 0.245 262.881);
-  --color-focus: oklch(0.488 0.243 264.376);
-  --color-critical: oklch(0.505 0.213 27.518);
-  --color-urgent: oklch(0.646 0.222 41.116);
-  --color-standard: oklch(0.372 0.044 257.287);
-  --color-success: oklch(0.596 0.145 163.225);
-  --color-foreground: oklch(0.208 0.042 265.755);
+  /* Nuevos (mapeo directo hex -> color) */
+  --color-bg-main: #f8fafc;
+  --color-bg-surface: #ffffff;
+  --color-border-color: #e2e8f0;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-primary: #1e40af;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-text: #ffffff;
+  --color-accent-success: #059669;
+  --color-status-critical: #dc2626;
+  --color-status-critical-bg: #fef2f2;
+  --color-status-urgent: #d97706;
+  --color-status-urgent-bg: #fffbeb;
+  /* Legacy aliases para Tailwind bg-[var(--background)] etc. */
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-border: #e2e8f0;
+  --color-focus: #1d4ed8;
+  --color-critical: #dc2626;
+  --color-urgent: #d97706;
+  --color-standard: #334155;
+  --color-success: #059669;
+  --color-foreground: #0f172a;
   --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
   --radius-xs: 4px;
@@ -74,6 +122,16 @@ body {
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* Cards institucionales: sombra sutil en claro, solo borde en oscuro */
+:where(.card-need, [data-card="need"]) {
+  box-shadow: var(--shadow-card);
+}
+@media (prefers-color-scheme: dark) {
+  :where(.card-need, [data-card="need"]) {
+    box-shadow: none;
+  }
 }
 
 /* Motion: transform/opacity only, ease-out-quart; reduced motion crossfade/instant */
