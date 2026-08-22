@@ -1,87 +1,29 @@
 "use client";
 
-import { useState } from "react";
-
 import { NeedItemCard } from "@/components/NeedItemCard";
 import type { PublicNeedItem } from "@/components/NeedItemCard";
+
+import { useNeedsFilters } from "../hooks/useNeedsFilters";
 
 interface PublicNeedsCatalogProps {
   items: PublicNeedItem[];
 }
 
 export function PublicNeedsCatalog({ items }: PublicNeedsCatalogProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUrgency, setSelectedUrgency] = useState<string>("all");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedCoverage, setSelectedCoverage] = useState<string>("all");
-
-  // Extraer categorías únicas disponibles
-  const categorySet = new Set<string>();
-  for (const item of items) {
-    if (item.category) {
-      categorySet.add(item.category);
-    }
-  }
-  const availableCategories = [...categorySet].toSorted();
-
-  // Filtrar ítems en tiempo real
-  const filteredItems = items.filter((item) => {
-    // 1. Filtro de búsqueda por texto
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      const matchName = item.item_name.toLowerCase().includes(query);
-      const matchCat = item.category.toLowerCase().includes(query);
-      const matchOrg = (item.org_name || "").toLowerCase().includes(query);
-      const matchCamp = (item.campaign_name || "")
-        .toLowerCase()
-        .includes(query);
-      if (!matchName && !matchCat && !matchOrg && !matchCamp) {
-        return false;
-      }
-    }
-
-    // 2. Filtro de urgencia
-    if (selectedUrgency !== "all" && item.urgency !== selectedUrgency) {
-      return false;
-    }
-
-    // 3. Filtro de categoría
-    if (selectedCategory !== "all" && item.category !== selectedCategory) {
-      return false;
-    }
-
-    // 4. Filtro de cobertura
-    if (
-      selectedCoverage === "urgent_uncovered" &&
-      item.progress_percentage >= 50
-    ) {
-      return false;
-    }
-    if (
-      selectedCoverage === "in_progress" &&
-      (item.progress_percentage < 50 || item.progress_percentage >= 100)
-    ) {
-      return false;
-    }
-    if (selectedCoverage === "fulfilled" && !item.is_fulfilled) {
-      return false;
-    }
-
-    return true;
-  });
-
-  const hasActiveFilters =
-    searchQuery.trim() !== "" ||
-    selectedUrgency !== "all" ||
-    selectedCategory !== "all" ||
-    selectedCoverage !== "all";
-
-  const handleResetFilters = () => {
-    setSearchQuery("");
-    setSelectedUrgency("all");
-    setSelectedCategory("all");
-    setSelectedCoverage("all");
-  };
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedUrgency,
+    setSelectedUrgency,
+    selectedCategory,
+    setSelectedCategory,
+    selectedCoverage,
+    setSelectedCoverage,
+    availableCategories,
+    filteredItems,
+    hasActiveFilters,
+    resetFilters,
+  } = useNeedsFilters({ items });
 
   return (
     <section id="catalogo" className="py-12 sm:py-16">
@@ -214,7 +156,7 @@ export function PublicNeedsCatalog({ items }: PublicNeedsCatalogProps) {
               {hasActiveFilters && (
                 <button
                   type="button"
-                  onClick={handleResetFilters}
+                  onClick={resetFilters}
                   className="text-xs font-medium text-[var(--primary)] hover:underline"
                 >
                   Limpiar filtros
@@ -238,7 +180,7 @@ export function PublicNeedsCatalog({ items }: PublicNeedsCatalogProps) {
             {hasActiveFilters && (
               <button
                 type="button"
-                onClick={handleResetFilters}
+                onClick={resetFilters}
                 className="mt-4 rounded-[var(--radius-sm)] bg-[var(--primary)] px-4 py-2 text-xs font-semibold text-white"
               >
                 Ver todos los requerimientos

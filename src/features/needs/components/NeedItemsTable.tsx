@@ -13,9 +13,9 @@ import { useState } from "react";
 import { DataTable } from "@/components/ui/table/DataTable";
 import { DataTablePagination } from "@/components/ui/table/DataTablePagination";
 
+import type { NeedItemTableRow } from "../types";
 import { getColumns } from "./columns";
 import { NeedItemsTableToolbar } from "./NeedItemsTableToolbar";
-import type { NeedItemTableRow } from "./types";
 
 interface NeedItemsTableProps {
   data: NeedItemTableRow[];

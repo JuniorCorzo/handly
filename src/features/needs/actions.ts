@@ -4,17 +4,12 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { createAdminClient, createClient } from "@/lib/supabase/server";
-import { NeedItemSchema, NeedItemErrorCode } from "@/lib/validations/need-item";
-import type { NeedItemInput } from "@/lib/validations/need-item";
+import { NeedItemErrorCode, NeedItemSchema } from "@/lib/validations/need-item";
 import { getUserOrganizations } from "@/src/lib/organizations";
 
-// ── Return type ─────────────────────────────────────────────────────
-export type NeedItemActionState =
-  | { success: true; needItemId: string }
-  | {
-      success: false;
-      errors: Partial<Record<keyof NeedItemInput | "_root", string[]>>;
-    };
+import type { NeedItemActionState } from "./types";
+
+export type { NeedItemActionState };
 
 // ── Auth guard ───────────────────────────────────────────────────────
 async function requireUser(supabase: Awaited<ReturnType<typeof createClient>>) {
