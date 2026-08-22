@@ -25,7 +25,7 @@ export function PublicHeader() {
   const isNeeds = pathname === "/needs";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur-md transition-colors">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)] shadow-2xs transition-colors">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
         {/* ── Brand Logo ────────────────────────────────────────── */}
         <div className="flex items-center gap-3">

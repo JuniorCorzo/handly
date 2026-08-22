@@ -47,7 +47,7 @@ export default async function Home() {
               donantes solidarios. Cada aporte se reserva de forma transparente
               y con trazabilidad inmediata.
             </p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
                 href="/needs"
                 className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--surface)] shadow-xs transition-colors hover:bg-[var(--primary)]/90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
@@ -64,7 +64,7 @@ export default async function Home() {
           </div>
 
           {/* ── Tarjetas de Métricas en Vivo ─────────────────────── */}
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-4 lg:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:mt-16 sm:gap-4 lg:grid-cols-4">
             <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-3.5 shadow-2xs sm:p-4">
               <span className="text-xs font-medium text-[var(--muted)]">
                 Insumos Requeridos
