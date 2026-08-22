@@ -2,6 +2,8 @@
 
 import type { Table as TanStackTable } from "@tanstack/react-table";
 
+import { Select } from "@/components/ui/Select";
+
 interface DataTablePaginationProps<TData> {
   table: TanStackTable<TData>;
   pageSizeOptions?: number[];
@@ -41,17 +43,17 @@ export function DataTablePagination<TData>({
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
           <span>Filas por página:</span>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => table.setPageSize(Number(e.target.value))}
-            className="rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] px-2 py-1 text-xs text-[var(--ink)] focus:ring-1 focus:ring-[var(--focus)] focus:outline-none"
-          >
-            {pageSizeOptions.map((size) => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
+          <div className="w-20">
+            <Select
+              value={String(table.getState().pagination.pageSize)}
+              onChange={(val) => table.setPageSize(Number(val))}
+              buttonClassName="min-h-[32px] px-2 py-1 text-xs"
+              items={pageSizeOptions.map((size) => ({
+                value: String(size),
+                label: String(size),
+              }))}
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-1">

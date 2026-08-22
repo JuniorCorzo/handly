@@ -1,5 +1,4 @@
-"use client";
-
+import { Select } from "@/components/ui/Select";
 import type { ActiveNeedOption } from "@/src/features/intake/types";
 
 interface DirectDonationFormProps {
@@ -68,20 +67,18 @@ export function DirectDonationForm({
         >
           Ítem de Asistencia Recibido *
         </label>
-        <select
+        <Select
           id="need-item-select"
           value={needItemId}
-          onChange={(e) => onNeedItemChange(e.target.value)}
+          onChange={onNeedItemChange}
+          placeholder="-- Seleccioná un ítem de necesidad --"
+          items={activeNeeds.map((need) => ({
+            value: need.id,
+            label: `${need.item_name} (${need.category})`,
+            description: `Campaña: ${need.campaign_name}`,
+          }))}
           required
-          className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-sm text-[var(--ink)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
-        >
-          <option value="">-- Seleccioná un ítem de necesidad --</option>
-          {activeNeeds.map((need) => (
-            <option key={need.id} value={need.id}>
-              {need.item_name} ({need.category}) — Campaña: {need.campaign_name}
-            </option>
-          ))}
-        </select>
+        />
         {fieldErrors.need_item_id && (
           <p className="text-xs font-medium text-[var(--critical)]">
             {fieldErrors.need_item_id[0]}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 
+import { Select } from "@/components/ui/Select";
 import { URGENCY_LEVELS } from "@/lib/validations/need-item";
 
 import { getNeedItemErrorMessage, URGENCY_LABELS } from "../lib/constants";
@@ -169,20 +170,17 @@ export function NeedItemForm({
         <label htmlFor="urgency" className={labelClass}>
           Nivel de urgencia <span aria-hidden="true">*</span>
         </label>
-        <select
+        <Select
           id="urgency"
           name="urgency"
           defaultValue={defaultValues?.urgency}
+          placeholder="Seleccioná urgencia…"
+          items={URGENCY_LEVELS.map((u) => ({
+            value: u,
+            label: URGENCY_LABELS[u],
+          }))}
           required
-          className={inputClass}
-        >
-          <option value="">Seleccioná urgencia…</option>
-          {URGENCY_LEVELS.map((u) => (
-            <option key={u} value={u}>
-              {URGENCY_LABELS[u]}
-            </option>
-          ))}
-        </select>
+        />
         {errors.urgency && (
           <p aria-live="polite" className={errorClass}>
             {getNeedItemErrorMessage(errors.urgency[0])}

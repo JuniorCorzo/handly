@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 
+import { Select } from "@/components/ui/Select";
 import { createCampaign } from "@/features/campaigns/actions";
 
 import type { CampaignOption } from "../../types";
@@ -12,8 +13,6 @@ interface CampaignFieldProps {
   error?: string;
 }
 
-const inputClass =
-  "mt-1 block w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--ink)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
 const labelClass = "block text-sm font-medium text-[var(--ink)]";
 const fieldClass = "flex flex-col gap-0.5";
 
@@ -103,25 +102,25 @@ export function CampaignField({
           )}
         </div>
       ) : (
-        <select
+        <Select
           id="campaign_id"
           name="campaign_id"
           value={selectedCampaign}
-          onChange={(e) => setSelectedCampaign(e.target.value)}
+          onChange={setSelectedCampaign}
+          placeholder="Seleccioná una campaña…"
+          items={campaignList.map((c) => ({
+            value: c.id,
+            label: c.name,
+          }))}
           required
-          className={inputClass}
-        >
-          <option value="">Seleccioná una campaña…</option>
-          {campaignList.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+        />
       )}
 
       {error && (
-        <p aria-live="polite" className="mt-1 text-xs text-red-600">
+        <p
+          aria-live="polite"
+          className="mt-1 text-xs font-medium text-[var(--critical)]"
+        >
           {error}
         </p>
       )}
