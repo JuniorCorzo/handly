@@ -2,28 +2,32 @@
 name: Handly
 description: Donation coordination in emergencies — donor-first pledge flow (guest), calm operational UI.
 colors:
-  # Nuevos institucionales (light hex; dark en §2 Appendix)
-  bgMain: "#F8FAFC"
+  # Institutional Slate Light #F4F6F8 / Midnight Dark #0B1120 (light hex; dark en Appendix)
+  bgMain: "#F4F6F8"
   bgSurface: "#FFFFFF"
   borderColor: "#E2E8F0"
   textPrimary: "#0F172A"
   textSecondary: "#475569"
   textMuted: "#64748B"
-  primary: "#1E40AF"
-  primaryHover: "#1D4ED8"
+  primary: "#1E3A8A"
+  primaryHover: "#1E40AF"
   primaryText: "#FFFFFF"
   accentSuccess: "#059669"
+  criticalText: "#DC2626"
+  criticalBg: "#FEF2F2"
+  urgentText: "#D97706"
+  urgentBg: "#FFFBEB"
   statusCritical: "#DC2626"
   statusCriticalBg: "#FEF2F2"
   statusUrgent: "#D97706"
   statusUrgentBg: "#FFFBEB"
   # Aliases legacy (preservados sin cambios para compatibilidad)
-  background: "#F8FAFC"
+  background: "#F4F6F8"
   surface: "#FFFFFF"
   ink: "#0F172A"
   muted: "#475569"
   border: "#E2E8F0"
-  focus: "#1D4ED8"
+  focus: "#1E40AF"
   critical: "#DC2626"
   urgent: "#D97706"
   standard: "#334155"
@@ -113,7 +117,7 @@ components:
 
 # Design System: Handly
 
-> **Owner file for Google Stitch / Figma / v0.** Copy-paste ready. Canonical tokens are OKLCH (see Colors); hex in frontmatter is the Stitch-parsable sRGB approximation. Repository is `handly` (renamed from `coderhub` in Phase 1). Canonical light background is `oklch(0.984 0.003 247.858)` / `#F8FAFC` (slate institutional); dark set preserves hue with shifted lightness (see §2 and Appendix). Institutional blue ≤10% of any viewport; cream/sand band (OKLCH L 0.84–0.97 C<0.06 hue 40–100) forbidden as body. WCAG AA verified (see Appendix).
+> **Owner file for Google Stitch / Figma / v0.** Copy-paste ready. Canonical tokens son hex sRGB (ver Colors); OKLCH es derivable. Canonical light background `#F4F6F8` (Slate Light gris azulado anti-deslumbramiento); dark `#0B1120` Midnight Slate. Institutional blue ≤10% viewport; cream/sand band (OKLCH L 0.84–0.97 C<0.06 hue 40–100) forbidden as body. WCAG AA verified (see Appendix).
 
 ## 1. Overview
 
@@ -140,30 +144,30 @@ Restrained strategy: slate institutional base with institutional blue accent. Wa
 
 ### Primary
 
-- **Institutional Blue Deep** (`#1E40AF` light / `#2563EB` dark): primary actions, links, selección. ≤10% viewport. Light es Blue 800 profundo, dark es Blue 600 luminoso sobre fondo oscuro. Hover light `#1D4ED8`, dark `#3B82F6`. Texto sobre primary `#FFFFFF`. Trust/corporativo.
+- **Institutional Blue Deep** (`#1E3A8A` light / `#2563EB` dark): primary actions, links, selección. ≤10% viewport. Light es Blue 900 oficial, hover `#1E40AF`; dark vibrante `#2563EB` hover `#3B82F6`. Texto sobre primary `#FFFFFF`.
 
 ### Neutral
 
-- **Paper (slate-50)** (`#F8FAFC` ambos temas: light `bg-main` / dark `text-primary`): page background claro. Slate frío, no warm sand.
-- **Surface** (`#FFFFFF` light / `#1E293B` dark `bg-surface`): cards, dialogs, inputs. En dark, superficie elevada `Slate 800`.
-- **Ink (slate-900)** (`#0F172A` light `text-primary` / `#F8FAFC` dark): body text.
+- **Paper** (`#F4F6F8` light `bg-main` / `#0B1120` dark): gris azulado suave anti-deslumbramiento (no blanco puro), noche profunda en dark.
+- **Surface** (`#FFFFFF` light / `#151E32` dark `bg-surface`): cards blanco puro vs elevación azulada midnight.
+- **Ink** (`#0F172A` light `text-primary` / `#F8FAFC` dark): body text Slate 900 / 50.
 - **Muted (slate-600/400)** (`#475569` light `text-secondary` / `#94A3B8` dark): secondary text.
 - **Muted extra** (`#64748B` ambos `text-muted`): etiquetas pequeñas Slate 500.
-- **Border (slate-200/700)** (`#E2E8F0` light / `#334155` dark `border-color`): dividers 1px.
-- **Focus/Hover Blue** (`#1D4ED8` light `primary-hover/focus` / `#3B82F6` dark): 2px focus ring + 2px offset.
+- **Border (slate-200/700)** (`#E2E8F0` light / `#23314D` dark `border-color`): dividers — dark Midnight `23314D` (más azulado que previo `334155`).
+- **Focus/Hover Blue** (`#1E40AF` light `primary-hover/focus` / `#3B82F6` dark): 2px focus ring + 2px offset.
 
 ### Semantic Urgency Roles (non-color redundancy required)
 
-- **Critical** (`#DC2626` light / `#EF4444` dark `status-critical`): badge crítico. Light con fondo pastel `#FEF2F2` (`status-critical-bg`), dark con `#450A0A` — evita parche chillón, pastel + texto oscuro.
-- **Urgent** (`#D97706` light / `#F59E0B` dark `status-urgent`): badge urgente. Fondos `#FFFBEB` light / `#451A03` dark (amber 600/500).
+- **Critical** (`#DC2626` light `critical-text` / `#EF4444` dark): badge crítico. Fondos pastel `#FEF2F2` light / `#381111` dark (`critical-bg` / `status-critical-bg` aliases) — oscuro Midnight más profundo que previo `450A0A`.
+- **Urgent** (`#D97706` light `urgent-text` / `#F59E0B` dark): badge urgente. Fondos `#FFFBEB` light / `#332008` dark (`urgent-bg` / `status-urgent-bg`).
 - **Standard** (`#334155` light / `#94A3B8` dark): preservado sin cambios — routine needs, low chroma.
 - **Success** (`#059669` light `accent-success` / `#10B981` dark): emerald 600/500 para operativo completado.
 
 Each urgency level is identified by three concurrent cues: badge label, icon, and sort order. Color reinforces; it never decides alone. Chromatic hierarchy: critical > urgent > success > standard.
 
-### Dark Mode (proven, not afterthought) — Institutional Dark
+### Dark Mode (proven, not afterthought) — Midnight Slate Dark
 
-Fondos `bg-main #0F172A` (Slate 900 noche), `bg-surface #1E293B` (Slate 800 elevado), `border-color #334155` (Slate 700), tipografía `text-primary #F8FAFC`, `text-secondary #94A3B8`, `text-muted #64748B`. Accent `primary #2563EB / hover #3B82F6 / text #FFFFFF`, `accent-success #10B981`, `status-critical #EF4444 / bg #450A0A`, `status-urgent #F59E0B / bg #451A03`, `standard #94A3B8` (preservado). Sin sombras en dark — solo diferencia bg-main vs bg-surface. Respect `prefers-color-scheme`. No pure `#000`/`#FFF`.
+Fondos `bg-main #0B1120` (Midnight noche muy profundo), `bg-surface #151E32` (elevación azulada), `border-color #23314D` (gris azulado oscuro), tipografía `text-primary #F8FAFC`, `text-secondary #94A3B8`, `text-muted #64748B`. Accent `primary #2563EB / hover #3B82F6 / text #FFFFFF`, `accent-success #10B981`, `critical-text #EF4444 / bg #381111`, `urgent-text #F59E0B / bg #332008` (aliases `status-*`), `standard #94A3B8` (preservado). Sin sombras en dark — solo diferencia bg-main vs bg-surface. Respect `prefers-color-scheme`. No pure `#000`/`#FFF`.
 
 ### Named Rules
 
@@ -276,20 +280,20 @@ Nested cards, side-stripe `border-left >1px` urgency accents, gradient text, gla
 
 | Token | sRGB Light | sRGB Dark | CSS var | Role |
 | --- | --- | --- | --- | --- |
-| `bg-main` / `background` | `#F8FAFC` | `#0F172A` | `var(--bg-main)` / `var(--background)` | Page — Slate 50 / Slate 900 noche |
-| `bg-surface` / `surface` | `#FFFFFF` | `#1E293B` | `var(--bg-surface)` | Card/dialog/input — White / Slate 800 elevado |
+| `bg-main` / `background` | `#F4F6F8` | `#0B1120` | `var(--bg-main)` | Page — Gris azulado suave #F4F6F8 / Midnight #0B1120 |
+| `bg-surface` / `surface` | `#FFFFFF` | `#151E32` | `var(--bg-surface)` | Card/dialog/input — White / Elevación azulada #151E32 |
 | `text-primary` / `ink` | `#0F172A` | `#F8FAFC` | `var(--text-primary)` | Text principal |
 | `text-secondary` / `muted` | `#475569` | `#94A3B8` | `var(--text-secondary)` | Secondary text |
 | `text-muted` | `#64748B` | `#64748B` | `var(--text-muted)` | Etiquetas pequeñas Slate 500 |
-| `border-color` / `border` | `#E2E8F0` | `#334155` | `var(--border-color)` | Dividers 1px |
-| `primary` | `#1E40AF` | `#2563EB` | `var(--primary)` | Institutional blue deep (light) / luminoso dark |
-| `primary-hover` / `focus` | `#1D4ED8` | `#3B82F6` | `var(--primary-hover)` | Hover + focus ring 2px+2px offset |
+| `border-color` / `border` | `#E2E8F0` | `#23314D` | `var(--border-color)` | Dividers 1px — Midnight #23314D |
+| `primary` | `#1E3A8A` | `#2563EB` | `var(--primary)` | Institutional deep #1E3A8A (Blue 900 oficial) / Vibrante #2563EB dark |
+| `primary-hover` / `focus` | `#1E40AF` | `#3B82F6` | `var(--primary-hover)` | Hover + focus ring 2px+2px offset |
 | `primary-text` | `#FFFFFF` | `#FFFFFF` | `var(--primary-text)` | Texto sobre primary |
 | `accent-success` / `success` | `#059669` | `#10B981` | `var(--accent-success)` | Emerald 600 / 500 |
-| `status-critical` / `critical` | `#DC2626` | `#EF4444` | `var(--status-critical)` | Critical badge text — Red 600/500 |
-| `status-critical-bg` | `#FEF2F2` | `#450A0A` | `var(--status-critical-bg)` | Fondo pastel critical (pulido, no parche chillón) |
-| `status-urgent` / `urgent` | `#D97706` | `#F59E0B` | `var(--status-urgent)` | Urgent badge — Amber 600/500 |
-| `status-urgent-bg` | `#FFFBEB` | `#451A03` | `var(--status-urgent-bg)` | Fondo pastel urgent |
+| `critical-text` / `status-critical` / `critical` | `#DC2626` | `#EF4444` | `var(--critical-text)` | Critical badge text — aliases 3 nombres |
+| `critical-bg` / `status-critical-bg` | `#FEF2F2` | `#381111` | `var(--critical-bg)` | Fondo pastel critical — Midnight #381111 |
+| `urgent-text` / `status-urgent` / `urgent` | `#D97706` | `#F59E0B` | `var(--urgent-text)` | Urgent badge — Amber 600/500 |
+| `urgent-bg` / `status-urgent-bg` | `#FFFBEB` | `#332008` | `var(--urgent-bg)` | Fondo pastel urgent — Midnight #332008 |
 | `standard` | `#334155` | `#94A3B8` | `var(--standard)` | Standard — **preservado sin cambios** |
 | `shadow-card` | `0 1px 3px rgba(0,0,0,.05)` | `none` | `var(--shadow-card)` | Sombra sutil light, sin sombra dark |
 

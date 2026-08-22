@@ -1,34 +1,39 @@
 @import "tailwindcss";
 
-/* Handly — Institutional Light/Dark (Slated Slate + Institutional Blue). Alias strategy A: new names + legacy aliases. */
+/* Handly — Institutional Slate Light (#F4F6F8) / Midnight Slate Dark (#0B1120). Alias A: nuevos + legacy. */
 
 :root {
-  /* Nuevos tokens institucionales — Tema Claro */
-  --bg-main: #f8fafc;
+  /* Tema Claro — Institutional Slate Light */
+  --bg-main: #f4f6f8;
   --bg-surface: #ffffff;
   --border-color: #e2e8f0;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #64748b;
-  --primary: #1e40af;
-  --primary-hover: #1d4ed8;
+  --primary: #1e3a8a;
+  --primary-hover: #1e40af;
   --primary-text: #ffffff;
   --accent-success: #059669;
-  --status-critical: #dc2626;
-  --status-critical-bg: #fef2f2;
-  --status-urgent: #d97706;
-  --status-urgent-bg: #fffbeb;
+  --critical-text: #dc2626;
+  --critical-bg: #fef2f2;
+  --urgent-text: #d97706;
+  --urgent-bg: #fffbeb;
+  /* Aliases alternos (compatibilidad con nombres previos status-*) */
+  --status-critical: var(--critical-text);
+  --status-critical-bg: var(--critical-bg);
+  --status-urgent: var(--urgent-text);
+  --status-urgent-bg: var(--urgent-bg);
   --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 
-  /* Aliases legacy — compat sin churn (standard preservado sin cambios) */
+  /* Aliases legacy — sin churn (standard preservado) */
   --background: var(--bg-main);
   --surface: var(--bg-surface);
   --ink: var(--text-primary);
   --muted: var(--text-secondary);
   --border: var(--border-color);
   --focus: var(--primary-hover);
-  --critical: var(--status-critical);
-  --urgent: var(--status-urgent);
+  --critical: var(--critical-text);
+  --urgent: var(--urgent-text);
   --standard: #334155;
   --success: var(--accent-success);
   --foreground: var(--ink);
@@ -36,9 +41,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-main: #0f172a;
-    --bg-surface: #1e293b;
-    --border-color: #334155;
+    --bg-main: #0b1120;
+    --bg-surface: #151e32;
+    --border-color: #23314d;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
@@ -46,10 +51,14 @@
     --primary-hover: #3b82f6;
     --primary-text: #ffffff;
     --accent-success: #10b981;
-    --status-critical: #ef4444;
-    --status-critical-bg: #450a0a;
-    --status-urgent: #f59e0b;
-    --status-urgent-bg: #451a03;
+    --critical-text: #ef4444;
+    --critical-bg: #381111;
+    --urgent-text: #f59e0b;
+    --urgent-bg: #332008;
+    --status-critical: var(--critical-text);
+    --status-critical-bg: var(--critical-bg);
+    --status-urgent: var(--urgent-text);
+    --status-urgent-bg: var(--urgent-bg);
     --shadow-card: none;
 
     /* Aliases legacy dark */
@@ -59,8 +68,8 @@
     --muted: var(--text-secondary);
     --border: var(--border-color);
     --focus: var(--primary-hover);
-    --critical: var(--status-critical);
-    --urgent: var(--status-urgent);
+    --critical: var(--critical-text);
+    --urgent: var(--urgent-text);
     --standard: #94a3b8;
     --success: var(--accent-success);
     --foreground: var(--ink);
@@ -68,28 +77,32 @@
 }
 
 @theme inline {
-  /* Nuevos (mapeo directo hex -> color) */
-  --color-bg-main: #f8fafc;
+  /* Nuevos + alternos */
+  --color-bg-main: #f4f6f8;
   --color-bg-surface: #ffffff;
   --color-border-color: #e2e8f0;
   --color-text-primary: #0f172a;
   --color-text-secondary: #475569;
   --color-text-muted: #64748b;
-  --color-primary: #1e40af;
-  --color-primary-hover: #1d4ed8;
+  --color-primary: #1e3a8a;
+  --color-primary-hover: #1e40af;
   --color-primary-text: #ffffff;
   --color-accent-success: #059669;
+  --color-critical-text: #dc2626;
+  --color-critical-bg: #fef2f2;
+  --color-urgent-text: #d97706;
+  --color-urgent-bg: #fffbeb;
   --color-status-critical: #dc2626;
   --color-status-critical-bg: #fef2f2;
   --color-status-urgent: #d97706;
   --color-status-urgent-bg: #fffbeb;
   /* Legacy aliases para Tailwind bg-[var(--background)] etc. */
-  --color-background: #f8fafc;
+  --color-background: #f4f6f8;
   --color-surface: #ffffff;
   --color-ink: #0f172a;
   --color-muted: #475569;
   --color-border: #e2e8f0;
-  --color-focus: #1d4ed8;
+  --color-focus: #1e40af;
   --color-critical: #dc2626;
   --color-urgent: #d97706;
   --color-standard: #334155;
