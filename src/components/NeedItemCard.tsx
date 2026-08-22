@@ -43,31 +43,31 @@ const URGENCY_CONFIG: Record<
   critical_4h: {
     label: "Crítico (4h)",
     badge:
-      "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800",
-    dot: "bg-rose-500 animate-pulse",
+      "bg-[var(--critical)]/10 text-[var(--critical)] border-[var(--critical)]/30",
+    dot: "bg-[var(--critical)] animate-pulse",
   },
   urgent_12h: {
     label: "Urgente (12h)",
     badge:
-      "bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
-    dot: "bg-amber-500",
+      "bg-[var(--urgent)]/10 text-[var(--urgent)] border-[var(--urgent)]/30",
+    dot: "bg-[var(--urgent)]",
   },
   standard_24h: {
     label: "Estándar (24h)",
     badge:
-      "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
-    dot: "bg-blue-500",
+      "bg-[var(--standard)]/10 text-[var(--standard)] border-[var(--standard)]/30",
+    dot: "bg-[var(--standard)]",
   },
 };
 
 function getProgressColor(progress: number): string {
   if (progress >= 100) {
-    return "bg-emerald-500";
+    return "bg-[var(--success)]";
   }
   if (progress >= 50) {
     return "bg-[var(--primary)]";
   }
-  return "bg-amber-500";
+  return "bg-[var(--urgent)]";
 }
 
 export function NeedItemCard({
@@ -78,8 +78,8 @@ export function NeedItemCard({
 
   const urgency = URGENCY_CONFIG[item.urgency] ?? {
     label: item.urgency,
-    badge: "bg-gray-100 text-gray-700 border-gray-200",
-    dot: "bg-gray-400",
+    badge: "bg-[var(--background)] text-[var(--muted)] border-[var(--border)]",
+    dot: "bg-[var(--muted)]",
   };
 
   const progressColor = getProgressColor(item.progress_percentage);
@@ -87,20 +87,20 @@ export function NeedItemCard({
   return (
     <>
       <div
-        className={`flex flex-col justify-between rounded-[var(--radius-md)] border bg-[var(--surface)] p-6 shadow-xs transition-shadow hover:shadow-md ${
+        className={`flex flex-col justify-between rounded-[var(--radius-md)] border bg-[var(--surface)] p-5 shadow-2xs transition-all hover:shadow-xs sm:p-6 ${
           item.is_fulfilled
-            ? "border-emerald-200/80 bg-emerald-50/10"
+            ? "border-[var(--success)]/30 bg-[var(--success)]/5"
             : "border-[var(--border)]"
         }`}
       >
         <div>
           {/* Header de la Tarjeta */}
           <div className="mb-3 flex items-start justify-between gap-2">
-            <span className="inline-flex items-center rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--background)] px-2.5 py-1 text-[11px] font-semibold tracking-wider text-[var(--muted)] uppercase">
+            <span className="inline-flex items-center rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--background)] px-2.5 py-1 text-xs font-semibold tracking-wider text-[var(--muted)] uppercase">
               {item.category}
             </span>
             <span
-              className={`inline-flex items-center gap-1.5 rounded-[var(--radius-xs)] border px-2 py-0.5 text-[11px] font-semibold ${urgency.badge}`}
+              className={`inline-flex items-center gap-1.5 rounded-[var(--radius-xs)] border px-2 py-0.5 text-xs font-semibold ${urgency.badge}`}
             >
               <span className={`h-1.5 w-1.5 rounded-full ${urgency.dot}`} />
               {urgency.label}
@@ -108,7 +108,7 @@ export function NeedItemCard({
           </div>
 
           {/* Título y Organización */}
-          <h3 className="text-lg leading-snug font-bold text-[var(--ink)]">
+          <h3 className="text-base leading-snug font-bold text-[var(--ink)] sm:text-lg">
             {item.item_name}
           </h3>
 
@@ -126,10 +126,10 @@ export function NeedItemCard({
           )}
 
           {/* ── Bloque de Progreso y Compromiso ──────────────── */}
-          <div className="mt-5 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] p-4">
+          <div className="mt-4 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] p-3.5 sm:mt-5 sm:p-4">
             <div className="mb-1.5 flex items-center justify-between text-xs">
               <span className="font-semibold text-[var(--ink)]">
-                Comprometido por la gente:
+                Comprometido:
               </span>
               <span className="font-mono font-bold text-[var(--ink)]">
                 {item.progress_percentage}%
@@ -145,16 +145,16 @@ export function NeedItemCard({
               aria-valuemax={100}
             >
               <div
-                className={`h-full transition-colors duration-500 ${progressColor}`}
+                className={`h-full transition-all duration-500 ${progressColor}`}
                 style={{ width: `${item.progress_percentage}%` }}
               />
             </div>
 
             {/* Números exactos */}
-            <div className="mt-3 flex items-baseline justify-between text-xs">
+            <div className="mt-3 flex flex-wrap items-baseline justify-between gap-1 text-xs">
               <div>
                 <span className="text-[var(--muted)]">Donado: </span>
-                <strong className="font-mono text-sm text-[var(--ink)]">
+                <strong className="font-mono text-xs text-[var(--ink)] sm:text-sm">
                   {item.committed_quantity}
                 </strong>
                 <span className="text-[var(--muted)]">
@@ -164,11 +164,11 @@ export function NeedItemCard({
               </div>
               <div>
                 {item.is_fulfilled ? (
-                  <span className="font-semibold text-emerald-600">
+                  <span className="font-semibold text-[var(--success)]">
                     ¡Meta cubierta! 🎉
                   </span>
                 ) : (
-                  <span className="font-medium text-amber-700">
+                  <span className="font-medium text-[var(--urgent)]">
                     Faltan {item.remaining_quantity} {item.unit}
                   </span>
                 )}
@@ -178,12 +178,12 @@ export function NeedItemCard({
 
           {/* Puntos de Acopio */}
           {item.collection_points.length > 0 && (
-            <div className="mt-4 text-xs text-[var(--muted)]">
+            <div className="mt-3 text-xs text-[var(--muted)] sm:mt-4">
               <p className="mb-1 flex items-center gap-1 font-medium text-[var(--ink)]">
                 <span>📍</span> Centros de recepción (
                 {item.collection_points.length}):
               </p>
-              <ul className="flex flex-col gap-1 border-l-2 border-[var(--border)] pl-4">
+              <ul className="flex flex-col gap-1 border-l-2 border-[var(--border)] pl-3 sm:pl-4">
                 {item.collection_points.slice(0, 2).map((cp) => (
                   <li
                     key={cp.id}
@@ -210,16 +210,16 @@ export function NeedItemCard({
         </div>
 
         {/* Botón de Acción / Footer */}
-        <div className="mt-6 border-t border-[var(--border)] pt-4">
+        <div className="mt-5 border-t border-[var(--border)] pt-4 sm:mt-6">
           {item.is_fulfilled ? (
-            <div className="flex items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-emerald-300 bg-emerald-100/80 py-2.5 text-xs font-bold text-emerald-800">
+            <div className="flex items-center justify-center gap-2 rounded-[var(--radius-sm)] border border-[var(--success)]/40 bg-[var(--success)]/10 py-2.5 text-xs font-bold text-[var(--success)]">
               ✓ Insumo 100% Cubierto
             </div>
           ) : (
             <button
               type="button"
               onClick={() => setActiveItem(item)}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--primary)] py-2.5 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+              className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[var(--radius-sm)] bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-2xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
             >
               <span>🤝</span> Donar / Comprometer
             </button>
@@ -228,7 +228,6 @@ export function NeedItemCard({
       </div>
 
       {/* Modal de Donación */}
-      {/* Sugerir el cupo restante */}
       <PledgeModal
         item={
           activeItem
