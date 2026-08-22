@@ -5,23 +5,12 @@ import type { Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "@/components/ui/table/DataTableFacetedFilter";
 import { DataTableSearchFilter } from "@/components/ui/table/DataTableSearchFilter";
 
-import type { NeedItemTableRow } from "./types";
+import { STATUS_OPTIONS, URGENCY_OPTIONS } from "../lib/constants";
+import type { NeedItemTableRow } from "../types";
 
 interface NeedItemsTableToolbarProps {
   table: Table<NeedItemTableRow>;
 }
-
-const URGENCY_OPTIONS = [
-  { label: "Crítico (4h)", value: "critical_4h" },
-  { label: "Urgente (12h)", value: "urgent_12h" },
-  { label: "Estándar (24h)", value: "standard_24h" },
-];
-
-const STATUS_OPTIONS = [
-  { label: "Activo", value: "active" },
-  { label: "Completado", value: "fulfilled" },
-  { label: "Cancelado", value: "cancelled" },
-];
 
 export function NeedItemsTableToolbar({ table }: NeedItemsTableToolbarProps) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -38,7 +27,9 @@ export function NeedItemsTableToolbar({ table }: NeedItemsTableToolbarProps) {
           <DataTableFacetedFilter
             column={table.getColumn("urgency")}
             title="Urgencia"
-            options={URGENCY_OPTIONS}
+            options={
+              URGENCY_OPTIONS as unknown as { label: string; value: string }[]
+            }
           />
         )}
 
@@ -46,7 +37,9 @@ export function NeedItemsTableToolbar({ table }: NeedItemsTableToolbarProps) {
           <DataTableFacetedFilter
             column={table.getColumn("status")}
             title="Estado"
-            options={STATUS_OPTIONS}
+            options={
+              STATUS_OPTIONS as unknown as { label: string; value: string }[]
+            }
           />
         )}
 

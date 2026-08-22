@@ -1,10 +1,14 @@
 import Link from "next/link";
-import { redirect, notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { updateNeedItem } from "@/features/needs/actions";
 import { NeedItemForm } from "@/features/needs/components/NeedItemForm";
+import {
+  getNeedItemById,
+  getNeedItemFormData,
+} from "@/features/needs/lib/queries";
 import { getUserOrganizations } from "@/lib/organizations";
-import { createAdminClient, createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 // Opt into blocking prerender — page uses cookies() via createClient
 export const instant = false;
@@ -24,26 +28,12 @@ export default async function EditNeedItemPage({
     redirect("/login");
   }
 
-  const adminClient = createAdminClient();
-  const db = adminClient ?? supabase;
-
-  const [{ data: needItem }, memberships] = await Promise.all([
-    db
-      .from("need_items")
-      .select(
-        `
-        *,
-        need_items_collection_points (
-          collection_point_id
-        )
-      `
-      )
-      .eq("id", id)
-      .single(),
+  const [itemResult, memberships] = await Promise.all([
+    getNeedItemById(id),
     getUserOrganizations(user.id, user.email),
   ]);
 
-  if (!needItem) {
+  if (!itemResult) {
     notFound();
   }
 
@@ -53,19 +43,8 @@ export default async function EditNeedItemPage({
   }
 
   const orgIds = memberships.map((m) => m.org_id);
-
-  const [{ data: campaigns }, { data: collectionPoints }] = await Promise.all([
-    db.from("campaign").select("id, name").in("organization_id", orgIds),
-    db
-      .from("collection_points")
-      .select("id, location_adress")
-      .in("organization_id", orgIds),
-  ]);
-
-  const selectedPointIds =
-    needItem.need_items_collection_points?.map(
-      (p: { collection_point_id: string }) => p.collection_point_id
-    ) ?? [];
+  const { campaigns, collectionPoints } = await getNeedItemFormData(orgIds);
+  const { needItem, selectedPointIds } = itemResult;
 
   const boundAction = updateNeedItem.bind(null, id);
 
@@ -92,8 +71,8 @@ export default async function EditNeedItemPage({
           </div>
         </div>
         <NeedItemForm
-          campaigns={campaigns ?? []}
-          collectionPoints={collectionPoints ?? []}
+          campaigns={campaigns}
+          collectionPoints={collectionPoints}
           action={boundAction}
           defaultValues={{
             campaign_id: needItem.campaign_id,
