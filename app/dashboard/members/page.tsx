@@ -54,6 +54,7 @@ export default async function MembersPage() {
   const orgId = primaryMembership?.org_id;
   const userRole = primaryMembership?.role;
   const isAdmin = userRole === "admin";
+  const orgName = primaryMembership?.organization_name ?? "Mi Organización";
 
   if (!isAdmin) {
     redirect("/dashboard");
@@ -134,9 +135,16 @@ export default async function MembersPage() {
       {/* Encabezado y Acción Principal */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex flex-col gap-1">
-          <h1 className="text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">
-            Miembros y Equipo
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">
+              Miembros y Equipo
+            </h1>
+            <span className="text-xs text-[var(--muted)]">•</span>
+            <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-2.5 py-0.5 text-xs font-semibold text-[var(--ink)] shadow-2xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />
+              {orgName}
+            </span>
+          </div>
           <p className="text-xs text-[var(--muted)] sm:text-sm">
             Gestioná las invitaciones por Magic Link y roles de tu organización.
           </p>

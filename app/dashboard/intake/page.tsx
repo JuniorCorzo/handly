@@ -37,6 +37,8 @@ export default async function IntakePage() {
   // 1. Obtener organizaciones del usuario
   const memberships = await getUserOrganizations(user.id, user.email);
   const orgIds = memberships.map((m) => m.org_id);
+  const [primaryMembership] = memberships;
+  const orgName = primaryMembership?.organization_name ?? "Mi Organización";
 
   // 2. Obtener ítems de necesidad activos de la organización para el selector de donación directa
   const activeNeedOptions: ActiveNeedOption[] = [];
@@ -85,11 +87,18 @@ export default async function IntakePage() {
   }
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">
-          Recepción en Centro de Acopio
-        </h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">
+            Recepción en Centro de Acopio
+          </h1>
+          <span className="text-xs text-[var(--muted)]">•</span>
+          <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border border-[var(--border)] bg-[var(--surface)] px-2.5 py-0.5 text-xs font-semibold text-[var(--ink)] shadow-2xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />
+            {orgName}
+          </span>
+        </div>
         <p className="text-xs text-[var(--muted)] sm:text-sm">
           Verificá códigos SOS o registrá donaciones físicas entregadas en
           puerta.
