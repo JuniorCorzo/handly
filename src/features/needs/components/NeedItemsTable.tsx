@@ -13,22 +13,24 @@ import { useState } from "react";
 import { DataTable } from "@/components/ui/table/DataTable";
 import { DataTablePagination } from "@/components/ui/table/DataTablePagination";
 
-import { columns } from "./columns";
+import type { NeedItemTableRow } from "../types";
+import { getColumns } from "./columns";
 import { NeedItemsTableToolbar } from "./NeedItemsTableToolbar";
-import type { NeedItemTableRow } from "./types";
 
 interface NeedItemsTableProps {
   data: NeedItemTableRow[];
+  isAdmin?: boolean;
 }
 
-export function NeedItemsTable({ data }: NeedItemsTableProps) {
+export function NeedItemsTable({ data, isAdmin = false }: NeedItemsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const tableColumns = getColumns(Boolean(isAdmin));
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
-    columns,
+    columns: tableColumns,
     state: {
       sorting,
       columnFilters,

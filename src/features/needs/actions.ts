@@ -4,16 +4,10 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { createAdminClient, createClient } from "@/lib/supabase/server";
-import { NeedItemSchema, NeedItemErrorCode } from "@/lib/validations/need-item";
-import type { NeedItemInput } from "@/lib/validations/need-item";
+import { NeedItemErrorCode, NeedItemSchema } from "@/lib/validations/need-item";
+import { getUserOrganizations } from "@/src/lib/organizations";
 
-// ── Return type ─────────────────────────────────────────────────────
-export type NeedItemActionState =
-  | { success: true; needItemId: string }
-  | {
-      success: false;
-      errors: Partial<Record<keyof NeedItemInput | "_root", string[]>>;
-    };
+import type { NeedItemActionState } from "./types";
 
 // ── Auth guard ───────────────────────────────────────────────────────
 async function requireUser(supabase: Awaited<ReturnType<typeof createClient>>) {
@@ -26,13 +20,42 @@ async function requireUser(supabase: Awaited<ReturnType<typeof createClient>>) {
   return user;
 }
 
+// ── Admin role guard ────────────────────────────────────────────────
+async function requireAdminUser(
+  supabase: Awaited<ReturnType<typeof createClient>>
+) {
+  const user = await requireUser(supabase);
+  const memberships = await getUserOrganizations(user.id, user.email);
+  const isAdmin = memberships.some((m) => m.role === "admin");
+  if (!isAdmin) {
+    throw new Error("FORBIDDEN_ADMIN_ONLY");
+  }
+  return { user, memberships };
+}
+
 // ── CREATE ──────────────────────────────────────────────────────────
 export async function createNeedItem(
   _prev: NeedItemActionState | null,
   formData: FormData
 ): Promise<NeedItemActionState> {
   const supabase = await createClient();
-  await requireUser(supabase);
+
+  try {
+    await requireAdminUser(supabase);
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : "";
+    if (errorMsg === "FORBIDDEN_ADMIN_ONLY") {
+      return {
+        success: false,
+        errors: {
+          _root: [
+            "Solo los administradores pueden crear nuevos ítems de necesidad.",
+          ],
+        },
+      };
+    }
+    throw error;
+  }
 
   const adminClient = createAdminClient();
   const db = adminClient ?? supabase;
@@ -109,7 +132,23 @@ export async function updateNeedItem(
   formData: FormData
 ): Promise<NeedItemActionState> {
   const supabase = await createClient();
-  await requireUser(supabase);
+
+  try {
+    await requireAdminUser(supabase);
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : "";
+    if (errorMsg === "FORBIDDEN_ADMIN_ONLY") {
+      return {
+        success: false,
+        errors: {
+          _root: [
+            "Solo los administradores pueden modificar ítems de necesidad.",
+          ],
+        },
+      };
+    }
+    throw error;
+  }
 
   const adminClient = createAdminClient();
   const db = adminClient ?? supabase;

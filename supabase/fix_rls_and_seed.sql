@@ -172,3 +172,42 @@ CREATE POLICY "allow_manage_invitations" ON public.organization_invitations
     org_id IN (SELECT public.get_auth_user_org_ids())
     OR email = (SELECT auth.jwt() ->> 'email')
   );
+
+-- Tabla: pledges
+ALTER TABLE public.pledges ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "allow_public_read_pledges" ON public.pledges;
+DROP POLICY IF EXISTS "allow_members_read_pledges" ON public.pledges;
+CREATE POLICY "allow_public_read_pledges" ON public.pledges
+  FOR SELECT TO anon, authenticated
+  USING (true);
+
+DROP POLICY IF EXISTS "allow_org_members_update_pledges" ON public.pledges;
+CREATE POLICY "allow_org_members_update_pledges" ON public.pledges
+  FOR UPDATE TO authenticated
+  USING (
+    need_item_id IN (
+      SELECT ni.id FROM public.need_items ni
+      JOIN public.campaign c ON c.id = ni.campaign_id
+      WHERE c.organization_id IN (SELECT public.get_auth_user_org_ids())
+    )
+  )
+  WITH CHECK (
+    need_item_id IN (
+      SELECT ni.id FROM public.need_items ni
+      JOIN public.campaign c ON c.id = ni.campaign_id
+      WHERE c.organization_id IN (SELECT public.get_auth_user_org_ids())
+    )
+  );
+
+DROP POLICY IF EXISTS "allow_org_members_insert_pledges" ON public.pledges;
+CREATE POLICY "allow_org_members_insert_pledges" ON public.pledges
+  FOR INSERT TO authenticated
+  WITH CHECK (
+    need_item_id IN (
+      SELECT ni.id FROM public.need_items ni
+      JOIN public.campaign c ON c.id = ni.campaign_id
+      WHERE c.organization_id IN (SELECT public.get_auth_user_org_ids())
+    )
+  );
+
