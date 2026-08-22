@@ -285,7 +285,7 @@ export function NeedItemAIAssistant({
       <div className="flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-600" />
+            <span className="flex h-2 w-2 rounded-full bg-[var(--success)]" />
             <span className="text-xs font-semibold text-[var(--ink)]">
               Asistente de Insumos (NVIDIA Nemotron)
             </span>
@@ -574,10 +574,10 @@ export function NeedItemAIAssistant({
       {error && (
         <div
           role="alert"
-          className="flex items-start gap-2 rounded-[var(--radius-sm)] border border-red-300 bg-red-50 p-3 text-xs text-red-900"
+          className="flex items-start gap-2 rounded-[var(--radius-sm)] border border-[var(--critical)]/30 bg-[var(--critical)]/10 p-3 text-xs text-[var(--ink)]"
         >
           <svg
-            className="mt-0.5 h-4 w-4 shrink-0 text-red-700"
+            className="mt-0.5 h-4 w-4 shrink-0 text-[var(--critical)]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -591,8 +591,8 @@ export function NeedItemAIAssistant({
             <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
           <div className="flex flex-col gap-0.5">
-            <p className="font-bold text-red-950">Atención:</p>
-            <p>
+            <p className="font-bold text-[var(--ink)]">Atención:</p>
+            <p className="text-[var(--muted)]">
               {error.message ||
                 "No se pudo conectar con el asistente. Intentá de nuevo."}
             </p>
@@ -600,12 +600,12 @@ export function NeedItemAIAssistant({
         </div>
       )}
 
-      {/* High-Contrast Success Ticket (Dispatch Receipt) */}
+      {/* High-Contrast Success Ticket (Dispatch Receipt) using CSS tokens */}
       {createdItems.length > 0 && (
-        <div className="flex flex-col gap-3.5 rounded-[var(--radius-sm)] border border-emerald-600 bg-emerald-50/90 p-4.5 text-emerald-950 shadow-xs">
-          <div className="flex items-center justify-between border-b border-emerald-300 pb-3">
+        <div className="flex flex-col gap-3.5 rounded-[var(--radius-sm)] border border-[var(--success)]/40 bg-[var(--success)]/10 p-4.5 text-[var(--ink)] shadow-xs">
+          <div className="flex items-center justify-between border-b border-[var(--success)]/30 pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-white">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--success)] text-white">
                 <svg
                   className="h-4 w-4"
                   viewBox="0 0 24 24"
@@ -620,19 +620,19 @@ export function NeedItemAIAssistant({
                 </svg>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-emerald-950">
+                <h4 className="text-sm font-bold text-[var(--ink)]">
                   {createdItems.length === 1
                     ? "Insumo registrado en el catálogo"
                     : `${createdItems.length} insumos registrados en el catálogo`}
                 </h4>
-                <p className="text-xs font-medium text-emerald-900">
+                <p className="text-xs font-medium text-[var(--muted)]">
                   {latestAssistantText ||
                     "Los ítems ya están disponibles en el panel operativo."}
                 </p>
               </div>
             </div>
 
-            <span className="rounded-full border border-emerald-500 bg-emerald-100 px-2.5 py-0.5 font-mono text-xs font-bold text-emerald-950">
+            <span className="rounded-full border border-[var(--success)]/40 bg-[var(--surface)] px-2.5 py-0.5 font-mono text-xs font-bold text-[var(--ink)]">
               {createdItems.length}{" "}
               {createdItems.length === 1 ? "ítem" : "ítems"}
             </span>
@@ -645,43 +645,44 @@ export function NeedItemAIAssistant({
                 item.urgency as UrgencyLevel
               ] ?? {
                 label: item.urgency,
-                className: "bg-gray-100 text-gray-900 border-gray-300",
+                className:
+                  "bg-[var(--background)] text-[var(--ink)] border-[var(--border)]",
               };
 
               return (
                 <div
                   key={item.id}
-                  className="grid grid-cols-2 gap-2 rounded-[var(--radius-xs)] border border-emerald-300 bg-white p-3 shadow-2xs sm:grid-cols-4"
+                  className="grid grid-cols-2 gap-2 rounded-[var(--radius-xs)] border border-[var(--border)] bg-[var(--surface)] p-3 shadow-2xs sm:grid-cols-4"
                 >
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                    <span className="text-xs font-bold tracking-wider text-[var(--muted)] uppercase">
                       Insumo
                     </span>
-                    <p className="text-xs font-bold text-gray-950">
+                    <p className="text-xs font-bold text-[var(--ink)]">
                       {item.item_name}
                     </p>
                   </div>
 
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                    <span className="text-xs font-bold tracking-wider text-[var(--muted)] uppercase">
                       Categoría
                     </span>
-                    <p className="text-xs font-semibold text-gray-900">
+                    <p className="text-xs font-semibold text-[var(--ink)]">
                       {item.category}
                     </p>
                   </div>
 
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                    <span className="text-xs font-bold tracking-wider text-[var(--muted)] uppercase">
                       Cantidad
                     </span>
-                    <p className="font-mono text-xs font-bold text-gray-950">
+                    <p className="font-mono text-xs font-bold text-[var(--ink)]">
                       {item.target_quantity} {item.unit}
                     </p>
                   </div>
 
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                    <span className="text-xs font-bold tracking-wider text-[var(--muted)] uppercase">
                       Urgencia
                     </span>
                     <div>
@@ -698,11 +699,11 @@ export function NeedItemAIAssistant({
           </div>
 
           {/* Actions footer */}
-          <div className="flex items-center justify-between border-t border-emerald-300 pt-3">
+          <div className="flex items-center justify-between border-t border-[var(--success)]/30 pt-3">
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="text-xs font-semibold text-emerald-950 underline underline-offset-2 hover:text-emerald-800 focus:outline-none"
+              className="text-xs font-semibold text-[var(--ink)] underline underline-offset-2 hover:text-[var(--muted)] focus:outline-none"
             >
               ← Ir al panel de necesidades
             </button>
@@ -716,7 +717,7 @@ export function NeedItemAIAssistant({
                 }
                 router.refresh();
               }}
-              className="inline-flex items-center gap-1.5 rounded-[var(--radius-xs)] bg-emerald-800 px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs transition-colors hover:bg-emerald-900 focus:outline-none"
+              className="inline-flex items-center gap-1.5 rounded-[var(--radius-xs)] bg-[var(--primary)] px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs transition-colors hover:opacity-90 focus:outline-none"
             >
               <span>Cargar más insumos</span>
               <svg

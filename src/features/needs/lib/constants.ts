@@ -1,6 +1,6 @@
 import { NeedItemErrorCode } from "@/lib/validations/need-item";
 
-import type { UrgencyLevel, NeedStatus } from "../types";
+import type { NeedStatus, UrgencyLevel } from "../types";
 
 const LABEL_CRITICAL = "Crítico (4h)";
 const LABEL_URGENT = "Urgente (12h)";
@@ -31,15 +31,18 @@ export const URGENCY_MAP: Record<
 > = {
   critical_4h: {
     label: LABEL_CRITICAL,
-    className: "bg-red-50 text-red-700 border-red-200",
+    className:
+      "bg-[var(--critical)]/10 text-[var(--critical)] border-[var(--critical)]/30",
   },
   urgent_12h: {
     label: LABEL_URGENT,
-    className: "bg-amber-50 text-amber-800 border-amber-200",
+    className:
+      "bg-[var(--urgent)]/10 text-[var(--urgent)] border-[var(--urgent)]/30",
   },
   standard_24h: {
     label: LABEL_STANDARD,
-    className: "bg-blue-50 text-blue-700 border-blue-200",
+    className:
+      "bg-[var(--standard)]/10 text-[var(--standard)] border-[var(--standard)]/30",
   },
 };
 
@@ -49,15 +52,18 @@ export const STATUS_MAP: Record<
 > = {
   active: {
     label: LABEL_ACTIVE,
-    className: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    className:
+      "bg-[var(--success)]/10 text-[var(--success)] border-[var(--success)]/30",
   },
   fulfilled: {
     label: "Completado",
-    className: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    className:
+      "bg-[var(--primary)]/10 text-[var(--primary)] border-[var(--primary)]/30",
   },
   cancelled: {
     label: "Cancelado",
-    className: "bg-gray-100 text-gray-700 border-gray-200",
+    className:
+      "bg-[var(--background)] text-[var(--muted)] border-[var(--border)]",
   },
 };
 
