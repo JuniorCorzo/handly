@@ -7,9 +7,7 @@ import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { NeedItemErrorCode, NeedItemSchema } from "@/lib/validations/need-item";
 import { getUserOrganizations } from "@/src/lib/organizations";
 
-import type { NeedItemActionState } from "./types";
-
-export type { NeedItemActionState };
+export type { NeedItemActionState } from "./types";
 
 // ── Auth guard ───────────────────────────────────────────────────────
 async function requireUser(supabase: Awaited<ReturnType<typeof createClient>>) {

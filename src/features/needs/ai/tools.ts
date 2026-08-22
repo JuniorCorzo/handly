@@ -53,7 +53,7 @@ export function createNeedItemAITools(options?: {
           ),
         })
       ),
-      execute: async ({ question, contextKey, options: optList }) => {
+      execute: ({ question, contextKey, options: optList }) => {
         const clarification: ClarificationRequest = {
           question,
           contextKey,
@@ -81,7 +81,7 @@ export function createNeedItemAITools(options?: {
         z.object({
           campaign_id: z
             .string()
-            .uuid("El campaign_id debe ser un UUID válido"),
+            .describe("El campaign_id debe ser un UUID válido"),
           items: z
             .array(
               z.object({
@@ -108,7 +108,7 @@ export function createNeedItemAITools(options?: {
                   .array(
                     z
                       .string()
-                      .uuid("Cada centro de acopio debe ser un UUID válido")
+                      .describe("Cada centro de acopio debe ser un UUID válido")
                   )
                   .min(1, "Debes asignar al menos un centro de acopio"),
               })
@@ -150,59 +150,75 @@ export function createNeedItemAITools(options?: {
         const adminClient = createAdminClient();
         const db = adminClient ?? supabase;
 
+        // 1. Batch insert need_items
+        const rowsToInsert = items.map((item) => ({
+          campaign_id,
+          category: item.category.trim(),
+          item_name: item.item_name.trim(),
+          target_quantity: item.target_quantity,
+          unit: item.unit.trim(),
+          urgency: item.urgency,
+          status: "active",
+        }));
+
+        const { data: insertedItems, error: insertErr } = await db
+          .from("need_items")
+          .insert(rowsToInsert)
+          .select(
+            "id, category, item_name, target_quantity, unit, urgency, campaign_id"
+          );
+
+        if (insertErr || !insertedItems) {
+          return {
+            success: false,
+            error: `Error al crear los ítems: ${insertErr?.message || "Error desconocido"}`,
+          };
+        }
+
+        // 2. Build pivot rows associating inserted items with collection points
+        const pivotRows: {
+          need_item_id: string;
+          collection_point_id: string;
+        }[] = [];
         const createdResults: CreatedItemDetails[] = [];
 
-        for (const item of items) {
-          // 1. Insert need_item
-          const { data: ni, error: niErr } = await db
-            .from("need_items")
-            .insert({
-              campaign_id,
-              category: item.category.trim(),
-              item_name: item.item_name.trim(),
-              target_quantity: item.target_quantity,
-              unit: item.unit.trim(),
-              urgency: item.urgency,
-              status: "active",
-            })
-            .select("id")
-            .single();
+        for (let i = 0; i < insertedItems.length; i += 1) {
+          const inserted = insertedItems[i];
+          const original = items[i];
+          if (inserted && original) {
+            for (const cpId of original.collection_point_ids) {
+              pivotRows.push({
+                need_item_id: inserted.id,
+                collection_point_id: cpId,
+              });
+            }
 
-          if (niErr || !ni) {
-            return {
-              success: false,
-              error: `Error al crear el ítem "${item.item_name}": ${niErr?.message || "Error desconocido"}`,
-            };
+            createdResults.push({
+              id: inserted.id,
+              campaign_id: inserted.campaign_id,
+              category: inserted.category,
+              item_name: inserted.item_name,
+              target_quantity: inserted.target_quantity,
+              unit: inserted.unit,
+              urgency: inserted.urgency as UrgencyLevel,
+              collection_point_ids: original.collection_point_ids,
+            });
           }
+        }
 
-          // 2. Insert pivot relations
-          const pivotRows = item.collection_point_ids.map((cpId: string) => ({
-            need_item_id: ni.id,
-            collection_point_id: cpId,
-          }));
-
+        if (pivotRows.length > 0) {
           const { error: pivotErr } = await db
             .from("need_items_collection_points")
             .insert(pivotRows);
 
           if (pivotErr) {
-            await db.from("need_items").delete().eq("id", ni.id);
+            const insertedIds = insertedItems.map((it) => it.id);
+            await db.from("need_items").delete().in("id", insertedIds);
             return {
               success: false,
-              error: `Error al asociar centros de acopio para "${item.item_name}": ${pivotErr.message}`,
+              error: `Error al asociar centros de acopio: ${pivotErr.message}`,
             };
           }
-
-          createdResults.push({
-            id: ni.id,
-            campaign_id,
-            category: item.category.trim(),
-            item_name: item.item_name.trim(),
-            target_quantity: item.target_quantity,
-            unit: item.unit.trim(),
-            urgency: item.urgency,
-            collection_point_ids: item.collection_point_ids,
-          });
         }
 
         if (options?.onItemsCreated) {

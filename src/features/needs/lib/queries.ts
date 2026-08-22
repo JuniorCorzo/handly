@@ -358,5 +358,5 @@ export async function getDistinctCategories(): Promise<string[]> {
     }
   }
 
-  return [...categorySet].sort();
+  return [...categorySet].toSorted();
 }

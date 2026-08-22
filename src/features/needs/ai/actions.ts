@@ -86,15 +86,16 @@ export async function createNeedItemWithAI(
       };
     }
 
+    let defaultMessage = "Operación procesada.";
+    if (createdItems.length > 0) {
+      defaultMessage = `Se registraron exitosamente ${createdItems.length} ítem(s) de necesidad.`;
+    } else if (requestedClarification) {
+      defaultMessage = requestedClarification.question;
+    }
+
     return {
       success: createdItems.length > 0,
-      message:
-        response.text ||
-        (createdItems.length > 0
-          ? `Se registraron exitosamente ${createdItems.length} ítem(s) de necesidad.`
-          : (requestedClarification
-            ? requestedClarification.question
-            : "Operación procesada.")),
+      message: response.text || defaultMessage,
       createdItems,
       clarification: requestedClarification,
       toolsExecuted: executedTools,

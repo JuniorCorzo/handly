@@ -2,8 +2,9 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import type { UIMessage } from "ai";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { ClarificationOption, CreatedItemDetails } from "../../ai/types";
 import { URGENCY_MAP } from "../../lib/constants";
@@ -25,6 +26,153 @@ const EXAMPLE_PROMPTS = [
   "50 cajas de paracetamol 500mg para asistencia médica inmediata.",
 ];
 
+function extractCreatedItems(messages: UIMessage[]): CreatedItemDetails[] {
+  const items: CreatedItemDetails[] = [];
+  for (const msg of messages) {
+    if (msg.role !== "assistant") {
+      continue;
+    }
+
+    if (Array.isArray(msg.parts)) {
+      for (const part of msg.parts as unknown as Record<string, unknown>[]) {
+        if (
+          part.type === "tool-result" &&
+          part.toolName === "create_need_items"
+        ) {
+          const res = (part.result as { items?: CreatedItemDetails[] }) || {};
+          if (Array.isArray(res.items)) {
+            items.push(...res.items);
+          }
+        }
+        if (
+          part.type === "tool-invocation" &&
+          (
+            part.toolInvocation as {
+              toolName?: string;
+              state?: string;
+              result?: { items?: CreatedItemDetails[] };
+            }
+          )?.toolName === "create_need_items"
+        ) {
+          const ti = part.toolInvocation as {
+            state?: string;
+            result?: { items?: CreatedItemDetails[] };
+          };
+          const resultItems = ti.result?.items;
+          if (ti.state === "result" && Array.isArray(resultItems)) {
+            items.push(...resultItems);
+          }
+        }
+      }
+    }
+
+    const { toolInvocations } = msg as unknown as {
+      toolInvocations?: {
+        toolName?: string;
+        state?: string;
+        result?: { items?: CreatedItemDetails[] };
+      }[];
+    };
+    if (Array.isArray(toolInvocations)) {
+      for (const ti of toolInvocations) {
+        const resultItems = ti.result?.items;
+        if (
+          ti.toolName === "create_need_items" &&
+          ti.state === "result" &&
+          Array.isArray(resultItems)
+        ) {
+          items.push(...resultItems);
+        }
+      }
+    }
+  }
+  return items;
+}
+
+function extractPendingClarification(messages: UIMessage[]): {
+  question: string;
+  options: ClarificationOption[];
+  contextKey: string;
+} | null {
+  const reversedMessages = [...messages].toReversed();
+  const lastAssistant = reversedMessages.find((m) => m.role === "assistant");
+  if (!lastAssistant) {
+    return null;
+  }
+
+  if (Array.isArray(lastAssistant.parts)) {
+    for (const part of lastAssistant.parts as unknown as Record<
+      string,
+      unknown
+    >[]) {
+      if (
+        part.type === "tool-call" &&
+        part.toolName === "request_clarification" &&
+        part.args
+      ) {
+        return part.args as {
+          question: string;
+          options: ClarificationOption[];
+          contextKey: string;
+        };
+      }
+      if (
+        part.type === "tool-invocation" &&
+        (part.toolInvocation as { toolName?: string; args?: unknown })
+          ?.toolName === "request_clarification"
+      ) {
+        const ti = part.toolInvocation as {
+          args?: {
+            question: string;
+            options: ClarificationOption[];
+            contextKey: string;
+          };
+        };
+        if (ti.args) {
+          return ti.args;
+        }
+      }
+    }
+  }
+
+  const { toolInvocations } = lastAssistant as unknown as {
+    toolInvocations?: {
+      toolName?: string;
+      args?: {
+        question: string;
+        options: ClarificationOption[];
+        contextKey: string;
+      };
+    }[];
+  };
+  if (Array.isArray(toolInvocations)) {
+    for (const ti of toolInvocations) {
+      if (ti.toolName === "request_clarification" && ti.args) {
+        return ti.args;
+      }
+    }
+  }
+
+  return null;
+}
+
+function extractLatestAssistantText(messages: UIMessage[]): string | null {
+  const reversedMessages = [...messages].toReversed();
+  const lastAssistant = reversedMessages.find((m) => m.role === "assistant");
+  if (!lastAssistant || !Array.isArray(lastAssistant.parts)) {
+    return null;
+  }
+
+  const textParts: string[] = [];
+  for (const p of lastAssistant.parts as unknown as Record<string, unknown>[]) {
+    if (p.type === "text" && typeof p.text === "string") {
+      textParts.push(p.text);
+    }
+  }
+
+  return textParts.join(" ") || null;
+}
+
 export function NeedItemAIAssistant({
   campaigns,
   collectionPoints,
@@ -38,7 +186,7 @@ export function NeedItemAIAssistant({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const transport = useMemo(
+  const [transport] = useState(
     () =>
       new DefaultChatTransport({
         api: "/api/needs/chat",
@@ -46,8 +194,7 @@ export function NeedItemAIAssistant({
           campaigns,
           collectionPoints,
         },
-      }),
-    [campaigns, collectionPoints]
+      })
   );
 
   const { messages, sendMessage, status, error, setMessages } = useChat({
@@ -61,154 +208,20 @@ export function NeedItemAIAssistant({
     if (messages.length > 0) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, status]);
-
-  // Extract all created items from conversation tool results (supporting all AI SDK representation formats)
-  const createdItems = useMemo<CreatedItemDetails[]>(() => {
-    const items: CreatedItemDetails[] = [];
-    for (const msg of messages) {
-      if (msg.role === "assistant") {
-        if (Array.isArray(msg.parts)) {
-          for (const part of msg.parts as unknown as Record<
-            string,
-            unknown
-          >[]) {
-            if (
-              part.type === "tool-result" &&
-              part.toolName === "create_need_items"
-            ) {
-              const res =
-                (part.result as { items?: CreatedItemDetails[] }) || {};
-              if (Array.isArray(res.items)) {
-                items.push(...res.items);
-              }
-            }
-            if (
-              part.type === "tool-invocation" &&
-              (
-                part.toolInvocation as {
-                  toolName?: string;
-                  state?: string;
-                  result?: { items?: CreatedItemDetails[] };
-                }
-              )?.toolName === "create_need_items"
-            ) {
-              const ti = part.toolInvocation as {
-                state?: string;
-                result?: { items?: CreatedItemDetails[] };
-              };
-              if (ti.state === "result" && Array.isArray(ti.result?.items)) {
-                items.push(...ti.result.items);
-              }
-            }
-          }
-        }
-        if (
-          Array.isArray(
-            (msg as unknown as { toolInvocations?: unknown[] }).toolInvocations
-          )
-        ) {
-          for (const ti of (
-            msg as unknown as {
-              toolInvocations: {
-                toolName?: string;
-                state?: string;
-                result?: { items?: CreatedItemDetails[] };
-              }[];
-            }
-          ).toolInvocations) {
-            if (
-              ti.toolName === "create_need_items" &&
-              ti.state === "result" &&
-              Array.isArray(ti.result?.items)
-            ) {
-              items.push(...ti.result.items);
-            }
-          }
-        }
-      }
-    }
-    return items;
   }, [messages]);
 
-  // Extract pending clarification request only if the model explicitly invoked request_clarification
-  const pendingClarification = useMemo<{
-    question: string;
-    options: ClarificationOption[];
-    contextKey: string;
-  } | null>(() => {
-    if (createdItems.length > 0) {return null;}
-
-    const lastAssistantMessage = [...messages]
-      .reverse()
-      .find((m) => m.role === "assistant");
-    if (!lastAssistantMessage) {return null;}
-
-    if (Array.isArray(lastAssistantMessage.parts)) {
-      for (const part of lastAssistantMessage.parts as unknown as Record<
-        string,
-        unknown
-      >[]) {
-        if (
-          part.type === "tool-call" &&
-          part.toolName === "request_clarification" &&
-          part.args
-        ) {
-          return part.args as {
-            question: string;
-            options: ClarificationOption[];
-            contextKey: string;
-          };
-        }
-        if (
-          part.type === "tool-invocation" &&
-          (part.toolInvocation as { toolName?: string; args?: unknown })
-            ?.toolName === "request_clarification"
-        ) {
-          const ti = part.toolInvocation as {
-            args?: {
-              question: string;
-              options: ClarificationOption[];
-              contextKey: string;
-            };
-          };
-          if (ti.args) {
-            return ti.args;
-          }
-        }
-      }
-    }
-
-    if (
-      Array.isArray(
-        (lastAssistantMessage as unknown as { toolInvocations?: unknown[] })
-          .toolInvocations
-      )
-    ) {
-      for (const ti of (
-        lastAssistantMessage as unknown as {
-          toolInvocations: {
-            toolName?: string;
-            args?: {
-              question: string;
-              options: ClarificationOption[];
-              contextKey: string;
-            };
-          }[];
-        }
-      ).toolInvocations) {
-        if (ti.toolName === "request_clarification" && ti.args) {
-          return ti.args;
-        }
-      }
-    }
-
-    return null;
-  }, [messages, createdItems.length]);
+  const createdItems = extractCreatedItems(messages);
+  const pendingClarification =
+    createdItems.length === 0 ? extractPendingClarification(messages) : null;
+  const latestAssistantText = extractLatestAssistantText(messages);
 
   const handleSubmit = (e?: React.FormEvent) => {
-    if (e) {e.preventDefault();}
-    if (!inputPrompt.trim() || isLoading) {return;}
+    if (e) {
+      e.preventDefault();
+    }
+    if (!inputPrompt.trim() || isLoading) {
+      return;
+    }
 
     const textToSend = inputPrompt.trim();
     setInputPrompt("");
@@ -227,11 +240,15 @@ export function NeedItemAIAssistant({
   };
 
   const handleConfirmClarification = () => {
-    if (isLoading) {return;}
+    if (isLoading) {
+      return;
+    }
 
     let responseText = "";
     if (isOtherSelected) {
-      if (!otherText.trim()) {return;}
+      if (!otherText.trim()) {
+        return;
+      }
       responseText = otherText.trim();
     } else if (selectedOptionId) {
       const selectedOption = pendingClarification?.options.find(
@@ -240,7 +257,9 @@ export function NeedItemAIAssistant({
       responseText = selectedOption ? selectedOption.label : selectedOptionId;
     }
 
-    if (!responseText) {return;}
+    if (!responseText) {
+      return;
+    }
 
     setSelectedOptionId(null);
     setIsOtherSelected(false);
@@ -259,21 +278,6 @@ export function NeedItemAIAssistant({
       textareaRef.current.focus();
     }
   };
-
-  const latestAssistantText = useMemo(() => {
-    const lastAssistant = [...messages]
-      .reverse()
-      .find((m) => m.role === "assistant");
-    if (!lastAssistant || !Array.isArray(lastAssistant.parts)) {return null;}
-
-    const textParts = (
-      lastAssistant.parts as unknown as Record<string, unknown>[]
-    )
-      .filter((p) => p.type === "text" && typeof p.text === "string")
-      .map((p) => p.text as string);
-
-    return textParts.join(" ") || null;
-  }, [messages]);
 
   return (
     <div className="flex flex-col gap-5 pt-1">
@@ -326,22 +330,26 @@ export function NeedItemAIAssistant({
       {/* Message Stream */}
       {messages.length > 0 && createdItems.length === 0 && (
         <div className="flex max-h-80 flex-col gap-3 overflow-y-auto rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] p-4 text-xs">
-          {messages.map((m, idx) => {
+          {messages.map((m) => {
             const isUser = m.role === "user";
-            const textContent = Array.isArray(m.parts)
-              ? (m.parts as unknown as Record<string, unknown>[])
-                  .filter(
-                    (p) => p.type === "text" && typeof p.text === "string"
-                  )
-                  .map((p) => p.text as string)
-                  .join(" ")
-              : "";
+            let textContent = "";
+            if (Array.isArray(m.parts)) {
+              const partsText: string[] = [];
+              for (const p of m.parts as unknown as Record<string, unknown>[]) {
+                if (p.type === "text" && typeof p.text === "string") {
+                  partsText.push(p.text);
+                }
+              }
+              textContent = partsText.join(" ");
+            }
 
-            if (!textContent) {return null;}
+            if (!textContent) {
+              return null;
+            }
 
             return (
               <div
-                key={m.id || idx}
+                key={m.id}
                 className={`flex flex-col gap-1 ${isUser ? "items-end pl-8" : "items-start pr-8"}`}
               >
                 <span className="text-xs font-semibold tracking-wider text-[var(--muted)] uppercase">
@@ -416,6 +424,7 @@ export function NeedItemAIAssistant({
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="3"
+                        aria-hidden="true"
                       >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
@@ -455,6 +464,7 @@ export function NeedItemAIAssistant({
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="3"
+                    aria-hidden="true"
                   >
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
@@ -518,7 +528,7 @@ export function NeedItemAIAssistant({
               <button
                 type="submit"
                 disabled={isLoading || !inputPrompt.trim()}
-                className="inline-flex items-center gap-1.5 rounded-[var(--radius-xs)] bg-[var(--primary)] px-3 py-1.5 text-xs font-semibold text-white shadow-2xs transition-all hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex items-center gap-1.5 rounded-[var(--radius-xs)] bg-[var(--primary)] px-3 py-1.5 text-xs font-semibold text-white shadow-2xs transition-opacity hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <span>{isLoading ? "Enviando…" : "Enviar"}</span>
                 <svg
@@ -544,9 +554,9 @@ export function NeedItemAIAssistant({
               <span className="text-xs font-semibold text-[var(--muted)]">
                 Sugerencias:
               </span>
-              {EXAMPLE_PROMPTS.map((ex, idx) => (
+              {EXAMPLE_PROMPTS.map((ex) => (
                 <button
-                  key={idx}
+                  key={ex}
                   type="button"
                   disabled={isLoading}
                   onClick={() => setInputPrompt(ex)}
@@ -701,7 +711,9 @@ export function NeedItemAIAssistant({
               type="button"
               onClick={() => {
                 handleReset();
-                if (onSuccess) {onSuccess(createdItems);}
+                if (onSuccess) {
+                  onSuccess(createdItems);
+                }
                 router.refresh();
               }}
               className="inline-flex items-center gap-1.5 rounded-[var(--radius-xs)] bg-emerald-800 px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs transition-colors hover:bg-emerald-900 focus:outline-none"
@@ -713,6 +725,7 @@ export function NeedItemAIAssistant({
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2.5"
+                aria-hidden="true"
               >
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />

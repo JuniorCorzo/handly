@@ -6,7 +6,7 @@ import Link from "next/link";
 import { STATUS_MAP, URGENCY_MAP } from "../lib/constants";
 import type { NeedItemTableRow, NeedStatus, UrgencyLevel } from "../types";
 
-export { STATUS_MAP, URGENCY_MAP };
+export { STATUS_MAP, URGENCY_MAP } from "../lib/constants";
 
 const GRAY_FALLBACK = "bg-gray-100 text-gray-700 border-gray-200" as const;
 const COLLECTION_POINTS_HEADER = "Centros de Acopio" as const;
