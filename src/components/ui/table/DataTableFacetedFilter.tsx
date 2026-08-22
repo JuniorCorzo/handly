@@ -32,7 +32,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   ];
 
   return (
-    <div className="flex min-w-[150px] items-center">
+    <div className="flex w-44 shrink-0 items-center">
       <Select
         value={selectedValue}
         onChange={(val) => {
@@ -40,7 +40,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         }}
         placeholder={`${title}: Todos`}
         items={items}
-        buttonClassName="min-h-[36px] text-xs py-1.5 px-3"
+        buttonClassName="!h-9 text-xs sm:text-sm !px-3"
       />
     </div>
   );

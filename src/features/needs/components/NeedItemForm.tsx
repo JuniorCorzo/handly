@@ -29,11 +29,11 @@ interface NeedItemFormProps {
 }
 
 const inputClass =
-  "mt-1 block w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--ink)] placeholder:[color:var(--muted)] focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
+  "block h-10 w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--ink)] placeholder:[color:var(--muted)] shadow-2xs focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)]";
 const labelClass =
   "block text-xs font-semibold uppercase tracking-wider text-[var(--ink)]";
-const errorClass = "mt-1 text-xs font-medium text-[var(--critical)]";
-const fieldClass = "flex flex-col gap-0.5";
+const errorClass = "mt-0.5 text-xs font-medium text-[var(--critical)]";
+const fieldClass = "flex flex-col gap-1.5";
 
 export function NeedItemForm({
   campaigns,

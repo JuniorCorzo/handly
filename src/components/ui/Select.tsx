@@ -35,7 +35,7 @@ function getItemClassName(
   isHighlighted = false
 ): string {
   const base =
-    "flex cursor-pointer items-center justify-between rounded-[var(--radius-xs)] px-3 py-2 text-xs sm:text-sm transition-colors";
+    "flex cursor-pointer items-center justify-between rounded-[var(--radius-xs)] px-3 py-2 text-sm transition-colors";
 
   if (disabled) {
     return `${base} cursor-not-allowed opacity-40 text-[var(--muted)]`;
@@ -122,13 +122,13 @@ export function Select({
           id: selectId,
           disabled,
           "aria-label": ariaLabel || placeholder,
-          className: `flex min-h-[40px] w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2 text-left text-xs sm:text-sm text-[var(--ink)] shadow-2xs transition-colors focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)] disabled:cursor-not-allowed disabled:opacity-50 ${buttonClassName}`,
+          className: `flex min-h-[38px] w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-left text-sm leading-tight text-[var(--ink)] shadow-2xs transition-colors focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)] disabled:cursor-not-allowed disabled:opacity-50 ${buttonClassName}`,
         })}
       >
         <span
-          className={`truncate ${
+          className={`truncate text-sm ${
             selectedItem
-              ? "font-medium text-[var(--ink)]"
+              ? "font-normal text-[var(--ink)]"
               : "text-[var(--muted)]"
           }`}
         >
@@ -156,7 +156,7 @@ export function Select({
       {/* Floating Menu Listbox */}
       <ul
         {...getMenuProps({
-          className: `absolute left-0 top-full z-50 mt-1 max-h-60 w-full overflow-auto rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] p-1 text-xs sm:text-sm shadow-lg [scrollbar-width:thin] focus:outline-none ${
+          className: `absolute left-0 top-full z-50 mt-1 max-h-60 w-full overflow-auto rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] p-1 text-sm shadow-lg [scrollbar-width:thin] focus:outline-none ${
             isOpen ? "block" : "hidden"
           }`,
         })}

@@ -108,6 +108,7 @@ export function CampaignField({
           value={selectedCampaign}
           onChange={setSelectedCampaign}
           placeholder="Seleccioná una campaña…"
+          className="mt-1"
           items={campaignList.map((c) => ({
             value: c.id,
             label: c.name,
