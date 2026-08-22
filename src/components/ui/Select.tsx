@@ -35,7 +35,7 @@ function getItemClassName(
   isHighlighted = false
 ): string {
   const base =
-    "flex cursor-pointer items-center justify-between rounded-[var(--radius-xs)] px-3 py-2 text-sm transition-colors";
+    "flex cursor-pointer items-center justify-between rounded-[var(--radius-xs)] px-3.5 py-2 text-sm transition-colors";
 
   if (disabled) {
     return `${base} cursor-not-allowed opacity-40 text-[var(--muted)]`;
@@ -122,7 +122,7 @@ export function Select({
           id: selectId,
           disabled,
           "aria-label": ariaLabel || placeholder,
-          className: `flex min-h-[38px] w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-left text-sm leading-tight text-[var(--ink)] shadow-2xs transition-colors focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)] disabled:cursor-not-allowed disabled:opacity-50 ${buttonClassName}`,
+          className: `flex h-10 w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-3.5 text-left text-sm text-[var(--ink)] shadow-2xs transition-colors focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--focus)] disabled:cursor-not-allowed disabled:opacity-50 ${buttonClassName}`,
         })}
       >
         <span
