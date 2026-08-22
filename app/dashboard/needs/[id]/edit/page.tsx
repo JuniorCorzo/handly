@@ -10,7 +10,6 @@ import {
 import { getUserOrganizations } from "@/lib/organizations";
 import { createClient } from "@/lib/supabase/server";
 
-// Opt into blocking prerender — page uses cookies() via createClient
 export const instant = false;
 
 export default async function EditNeedItemPage({
@@ -18,7 +17,6 @@ export default async function EditNeedItemPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // async params — required in Next.js 16
   const { id } = await params;
   const supabase = await createClient();
   const {
@@ -49,43 +47,37 @@ export default async function EditNeedItemPage({
   const boundAction = updateNeedItem.bind(null, id);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-4 py-12 font-sans text-[var(--ink)] antialiased">
-      <div className="w-full max-w-lg rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_1px_3px_oklch(0.23_0.02_173/0.08)] sm:p-10">
-        <div className="mb-6">
-          <Link
-            href="/dashboard"
-            className="mb-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
-          >
-            ← Volver al panel de necesidades
-          </Link>
-          <div>
-            <span className="inline-block text-xs font-semibold tracking-wider text-[var(--primary)] uppercase">
-              Handly
-            </span>
-            <h1 className="mt-1 text-2xl font-bold tracking-tight text-[var(--ink)]">
-              Editar ítem de necesidad
-            </h1>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Actualizá los datos del requerimiento de asistencia.
-            </p>
-          </div>
-        </div>
-        <NeedItemForm
-          campaigns={campaigns}
-          collectionPoints={collectionPoints}
-          action={boundAction}
-          defaultValues={{
-            campaign_id: needItem.campaign_id,
-            category: needItem.category,
-            item_name: needItem.item_name,
-            target_quantity: needItem.target_quantity,
-            unit: needItem.unit,
-            urgency: needItem.urgency,
-            collection_point_ids: selectedPointIds,
-          }}
-          submitLabel="Guardar cambios"
-        />
+    <div className="mx-auto w-full max-w-xl rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xs sm:p-8">
+      <div className="mb-6">
+        <Link
+          href="/dashboard"
+          className="mb-3 inline-flex items-center gap-1 text-xs font-semibold text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
+        >
+          ← Volver al panel de necesidades
+        </Link>
+        <h1 className="text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">
+          Editar ítem de necesidad
+        </h1>
+        <p className="mt-1 text-xs text-[var(--muted)] sm:text-sm">
+          Actualizá los datos del requerimiento de asistencia.
+        </p>
       </div>
-    </main>
+
+      <NeedItemForm
+        campaigns={campaigns}
+        collectionPoints={collectionPoints}
+        action={boundAction}
+        defaultValues={{
+          campaign_id: needItem.campaign_id,
+          category: needItem.category,
+          item_name: needItem.item_name,
+          target_quantity: needItem.target_quantity,
+          unit: needItem.unit,
+          urgency: needItem.urgency,
+          collection_point_ids: selectedPointIds,
+        }}
+        submitLabel="Guardar cambios"
+      />
+    </div>
   );
 }

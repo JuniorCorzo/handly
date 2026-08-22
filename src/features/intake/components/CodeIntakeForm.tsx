@@ -18,22 +18,22 @@ export function CodeIntakeForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xs"
+      className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-xs sm:p-6"
     >
       <div className="flex flex-col gap-2">
         <label
           htmlFor="short-code-input"
-          className="text-sm font-semibold text-[var(--ink)]"
+          className="text-sm font-bold text-[var(--ink)]"
         >
           Código Corto del Donante
         </label>
         <p className="text-xs text-[var(--muted)]">
           Ingresá el código alfanumérico proporcionado por el donante (ej:{" "}
-          <span className="font-mono font-medium text-[var(--primary)]">
+          <span className="font-mono font-bold text-[var(--primary)]">
             SOS-87B2
           </span>{" "}
           o simplemente{" "}
-          <span className="font-mono font-medium text-[var(--primary)]">
+          <span className="font-mono font-bold text-[var(--primary)]">
             87B2
           </span>
           ).
@@ -50,14 +50,14 @@ export function CodeIntakeForm({
               maxLength={8}
               autoFocus
               autoComplete="off"
-              className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-4 py-3 font-mono text-lg font-bold tracking-wider text-[var(--ink)] uppercase placeholder:text-[var(--muted)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+              className="w-full rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--background)] px-4 py-3 font-mono text-lg font-bold tracking-wider text-[var(--ink)] uppercase placeholder:[color:var(--muted)] focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading || !code.trim()}
-            className="inline-flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-white shadow-xs transition-opacity hover:opacity-90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <span className="flex items-center gap-2">
@@ -91,7 +91,7 @@ export function CodeIntakeForm({
         </div>
 
         {error && (
-          <div className="mt-3 rounded-[var(--radius-sm)] border border-red-200 bg-red-50 p-3 text-xs font-medium text-red-700">
+          <div className="mt-3 rounded-[var(--radius-sm)] border border-[var(--critical)]/30 bg-[var(--critical)]/10 p-3 text-xs font-medium text-[var(--critical)]">
             {error}
           </div>
         )}
