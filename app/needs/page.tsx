@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
+import { PublicHeader } from "@/components/PublicHeader";
 import { PublicNeedsCatalog } from "@/src/features/needs/components/PublicNeedsCatalog";
 import { getPublicNeedItems } from "@/src/features/needs/lib/queries";
 
@@ -25,37 +25,8 @@ export default async function NeedsLandingPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--background)] font-sans text-[var(--ink)] antialiased">
-      {/* ── Header ─────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)]/90 backdrop-blur-xs">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-3 sm:gap-6">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-bold tracking-tight text-[var(--ink)]">
-                Handly
-              </span>
-            </Link>
-            <span className="hidden h-4 w-px bg-[var(--border)] sm:inline-block" />
-            <span className="hidden text-xs font-semibold text-[var(--muted)] sm:inline-block">
-              Catálogo de Insumos
-            </span>
-          </div>
-
-          <nav className="flex items-center gap-3 sm:gap-4">
-            <Link
-              href="/"
-              className="text-xs font-medium text-[var(--muted)] transition-colors hover:text-[var(--ink)] sm:text-sm"
-            >
-              ← Inicio
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex min-h-[38px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-3.5 py-2 text-xs font-semibold text-[var(--surface)] shadow-xs transition-colors hover:bg-[var(--primary)]/90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none sm:px-4 sm:text-sm"
-            >
-              Acceso Organizaciones
-            </Link>
-          </nav>
-        </div>
-      </header>
+      {/* ── Responsive Header ───────────────────────────────────── */}
+      <PublicHeader />
 
       {/* ── Hero & Quick Insight Banner ─────────────────────────── */}
       <main className="flex-1">
