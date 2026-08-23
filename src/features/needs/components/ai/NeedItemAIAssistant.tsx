@@ -13,6 +13,8 @@ import type {
   CollectionPointOption,
   UrgencyLevel,
 } from "../../types";
+import { getCreationToast } from "./creation-toast";
+import type { CreationToast } from "./creation-toast";
 
 interface NeedItemAIAssistantProps {
   campaigns: CampaignOption[];
@@ -25,6 +27,19 @@ const EXAMPLE_PROMPTS = [
   "150 cajas de leche larga vida y 80 kits de higiene para todas las sedes.",
   "50 cajas de paracetamol 500mg para asistencia médica inmediata.",
 ];
+
+// Transient toast: auto-dismiss window and mount animation (transform/opacity,
+// ease-out-quart). Reduced-motion fallback is handled globally in globals.css.
+const CREATION_TOAST_AUTO_DISMISS_MS = 6000;
+const CREATION_TOAST_STYLE = `
+.handly-creation-toast-enter {
+  animation: creation-toast-in 200ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+@keyframes creation-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+`;
 
 function extractCreatedItems(messages: UIMessage[]): CreatedItemDetails[] {
   const items: CreatedItemDetails[] = [];
@@ -215,6 +230,40 @@ export function NeedItemAIAssistant({
     createdItems.length === 0 ? extractPendingClarification(messages) : null;
   const latestAssistantText = extractLatestAssistantText(messages);
 
+  const [creationToast, setCreationToast] = useState<CreationToast | null>(
+    null
+  );
+  const previousCreatedCountRef = useRef(0);
+
+  // Fire the toast only on the 0 -> N transition of created items; later
+  // renders with the same result are no-ops. Resetting the conversation
+  // brings the count back to 0 so a new batch can announce itself again.
+  useEffect(() => {
+    const nextToast = getCreationToast(
+      previousCreatedCountRef.current,
+      createdItems.length
+    );
+    previousCreatedCountRef.current = createdItems.length;
+    if (nextToast) {
+      setCreationToast(nextToast);
+    }
+  }, [createdItems.length]);
+
+  // Auto-dismiss the transient toast.
+  useEffect(() => {
+    if (!creationToast) {
+      return;
+    }
+    const timeoutId = window.setTimeout(() => {
+      setCreationToast(null);
+    }, CREATION_TOAST_AUTO_DISMISS_MS);
+    return () => window.clearTimeout(timeoutId);
+  }, [creationToast]);
+
+  const handleDismissCreationToast = () => {
+    setCreationToast(null);
+  };
+
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();
@@ -270,6 +319,7 @@ export function NeedItemAIAssistant({
 
   const handleReset = () => {
     setMessages([]);
+    setCreationToast(null);
     setInputPrompt("");
     setSelectedOptionId(null);
     setIsOtherSelected(false);
@@ -735,6 +785,51 @@ export function NeedItemAIAssistant({
           </div>
         </div>
       )}
+
+      {/* Transient creation toast — persistent polite live region, floats
+          above content without replacing the inline success ticket. */}
+      <div role="status" aria-live="polite">
+        {creationToast && (
+          <div className="handly-creation-toast-enter fixed inset-x-4 bottom-4 z-50 flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4 text-xs text-[var(--ink)] shadow-[0_4px_12px_oklch(0.23_0.02_173/0.10)] sm:inset-x-auto sm:right-4 sm:w-full sm:max-w-sm">
+            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--success)] text-white">
+              <svg
+                className="h-3 w-3"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+            <p className="flex-1 font-medium">{creationToast.message}</p>
+            <button
+              type="button"
+              onClick={handleDismissCreationToast}
+              aria-label="Cerrar notificación"
+              className="-m-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-[var(--muted)] transition-colors hover:bg-[var(--background)] hover:text-[var(--ink)] focus:outline-none"
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+            <style>{CREATION_TOAST_STYLE}</style>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
