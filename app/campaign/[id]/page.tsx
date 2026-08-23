@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { NeedItemCard } from "@/components/NeedItemCard";
+import { PublicHeader } from "@/components/PublicHeader";
 import { CampaignHeader } from "@/features/campaign/components/CampaignHeader";
 import { getPublicCampaign } from "@/features/campaign/lib/queries";
 
@@ -57,24 +58,31 @@ export default async function CampaignPage({
   }
 
   return (
-    <main className="min-h-screen bg-[var(--background)] px-4 py-10 font-sans text-[var(--ink)] antialiased sm:px-6 sm:py-12">
-      <div className="mx-auto max-w-5xl">
-        <CampaignHeader campaign={campaign} />
+    <div className="flex min-h-screen flex-col bg-[var(--background)] font-sans text-[var(--ink)] antialiased">
+      <PublicHeader />
+      <main className="flex-1 px-4 py-10 sm:px-6 sm:py-12">
+        <div className="mx-auto max-w-5xl">
+          <CampaignHeader campaign={campaign} />
 
-        {campaign.needs.length === 0 ? (
-          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
-            <p className="text-sm text-[var(--muted)]">
-              No hay necesidades activas en esta campaña.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {campaign.needs.map((need) => (
-              <NeedItemCard key={need.id} item={need} showCampaignTag={false} />
-            ))}
-          </div>
-        )}
-      </div>
-    </main>
+          {campaign.needs.length === 0 ? (
+            <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-8 text-center">
+              <p className="text-sm text-[var(--muted)]">
+                No hay necesidades activas en esta campaña.
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {campaign.needs.map((need) => (
+                <NeedItemCard
+                  key={need.id}
+                  item={need}
+                  showCampaignTag={false}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }

@@ -7,7 +7,6 @@ export interface PublicCampaign {
     id: string;
     name: string;
     zoneCode: string;
-    email: string | null;
     phone: string | null;
   } | null;
   needs: PublicNeedItem[];

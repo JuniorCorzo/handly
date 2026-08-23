@@ -50,14 +50,12 @@ interface PublicCampaignQueryRow {
         id: string;
         name: string;
         zone_code: string | null;
-        email: string | null;
         phone: string | null;
       }
     | {
         id: string;
         name: string;
         zone_code: string | null;
-        email: string | null;
         phone: string | null;
       }[]
     | null;
@@ -70,11 +68,6 @@ const UUID_RE =
  * Carga la campaña pública con sus necesidades activas y puntos de acopio.
  * Envuelta en `cache()` de React para deduplicar entre generateMetadata y el
  * render de la página.
- *
- * Por decisión del producto, la dirección exacta del punto de acopio es pública
- * (el donante invitado la necesita para elegir el punto más cercano), al igual
- * que los medios de contacto de la organización (email, teléfono). Se mantienen
- * privados los datos operativos internos (lat/lng; no hay mapa en el MVP).
  */
 export const getPublicCampaign = cache(
   async (campaignId: string): Promise<PublicCampaign | null> => {
@@ -84,7 +77,7 @@ export const getPublicCampaign = cache(
 
     const supabase = await createClient();
 
-    // ── 1. Campaña + organización (incluye medios de contacto) ──────────────
+    // ── 1. Campaña + organización ──────────────────────────────────────
     const { data: campaignRow } = await supabase
       .from("campaign")
       .select(
@@ -96,7 +89,6 @@ export const getPublicCampaign = cache(
           id,
           name,
           zone_code,
-          email,
           phone
         )
         `
@@ -120,7 +112,6 @@ export const getPublicCampaign = cache(
           id: string;
           name: string;
           zone_code: string | null;
-          email: string | null;
           phone: string | null;
         } | null);
 
@@ -237,7 +228,6 @@ export const getPublicCampaign = cache(
             id: orgRow.id,
             name: orgRow.name,
             zoneCode: orgRow.zone_code ?? "",
-            email: orgRow.email ?? null,
             phone: orgRow.phone ?? null,
           }
         : null,

@@ -10,9 +10,7 @@ export const CampaignHeader: FC<CampaignHeaderProps> = ({ campaign }) => {
   const org = campaign.organization;
   const orgName = org?.name ?? "Organización";
   const zone = org?.zoneCode;
-  const contact = org
-    ? [org.email, org.phone].filter(Boolean).join(" · ")
-    : null;
+  const contact = org?.phone;
 
   return (
     <header className="mb-8 text-center sm:text-left">
