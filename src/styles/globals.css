@@ -1,55 +1,116 @@
 @import "tailwindcss";
 
-/* Handly — Restrained OKLCH tokens. Teal accent ≤10% of any viewport. */
-/* Light is canonical. Dark preserves hue and contrast hierarchy (WCAG AA). */
+/* Handly — Institutional Slate Light (#F4F6F8) / Midnight Slate Dark (#0B1120). Alias A: nuevos + legacy. */
 
 :root {
-  --background: oklch(0.9815 0.005 165);
-  --surface: oklch(1 0 0);
-  --ink: oklch(0.23 0.02 173);
-  --muted: oklch(0.4835 0.023 172);
-  --border: oklch(0.871 0.016 167);
-  --primary: oklch(0.431 0.07 191);
-  --focus: oklch(0.488 0.217 264);
-  --critical: oklch(0.5 0.182 30);
-  --urgent: oklch(0.514 0.134 51);
-  --standard: oklch(0.454 0.073 223);
-  --success: oklch(0.469 0.099 158);
+  /* Tema Claro — Institutional Slate Light */
+  --bg-main: #f4f6f8;
+  --bg-surface: #ffffff;
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --primary: #1e3a8a;
+  --primary-hover: #1e40af;
+  --primary-text: #ffffff;
+  --accent-success: #059669;
+  --critical-text: #dc2626;
+  --critical-bg: #fef2f2;
+  --urgent-text: #d97706;
+  --urgent-bg: #fffbeb;
+  /* Aliases alternos (compatibilidad con nombres previos status-*) */
+  --status-critical: var(--critical-text);
+  --status-critical-bg: var(--critical-bg);
+  --status-urgent: var(--urgent-text);
+  --status-urgent-bg: var(--urgent-bg);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+
+  /* Aliases legacy — sin churn (standard preservado) */
+  --background: var(--bg-main);
+  --surface: var(--bg-surface);
+  --ink: var(--text-primary);
+  --muted: var(--text-secondary);
+  --border: var(--border-color);
+  --focus: var(--primary-hover);
+  --critical: var(--critical-text);
+  --urgent: var(--urgent-text);
+  --standard: #334155;
+  --success: var(--accent-success);
   --foreground: var(--ink);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: oklch(0.18 0.015 191);
-    --surface: oklch(0.22 0.015 191);
-    --ink: oklch(0.95 0.005 165);
-    --muted: oklch(0.7 0.02 172);
-    --border: oklch(0.3 0.02 191);
-    --primary: oklch(0.72 0.08 191);
-    --focus: oklch(0.74 0.16 264);
-    --critical: oklch(0.7 0.14 30);
-    --urgent: oklch(0.75 0.11 51);
-    --standard: oklch(0.7 0.1 223);
-    --success: oklch(0.72 0.11 158);
+    --bg-main: #0b1120;
+    --bg-surface: #151e32;
+    --border-color: #23314d;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --primary: #2563eb;
+    --primary-hover: #3b82f6;
+    --primary-text: #ffffff;
+    --accent-success: #10b981;
+    --critical-text: #ef4444;
+    --critical-bg: #381111;
+    --urgent-text: #f59e0b;
+    --urgent-bg: #332008;
+    --status-critical: var(--critical-text);
+    --status-critical-bg: var(--critical-bg);
+    --status-urgent: var(--urgent-text);
+    --status-urgent-bg: var(--urgent-bg);
+    --shadow-card: none;
+
+    /* Aliases legacy dark */
+    --background: var(--bg-main);
+    --surface: var(--bg-surface);
+    --ink: var(--text-primary);
+    --muted: var(--text-secondary);
+    --border: var(--border-color);
+    --focus: var(--primary-hover);
+    --critical: var(--critical-text);
+    --urgent: var(--urgent-text);
+    --standard: #94a3b8;
+    --success: var(--accent-success);
     --foreground: var(--ink);
   }
 }
 
 @theme inline {
-  --color-background: oklch(0.9815 0.005 165);
-  --color-surface: oklch(1 0 0);
-  --color-ink: oklch(0.23 0.02 173);
-  --color-muted: oklch(0.4835 0.023 172);
-  --color-border: oklch(0.871 0.016 167);
-  --color-primary: oklch(0.431 0.07 191);
-  --color-focus: oklch(0.488 0.217 264);
-  --color-critical: oklch(0.5 0.182 30);
-  --color-urgent: oklch(0.514 0.134 51);
-  --color-standard: oklch(0.454 0.073 223);
-  --color-success: oklch(0.469 0.099 158);
-  --color-foreground: oklch(0.23 0.02 173);
+  /* Nuevos + alternos */
+  --color-bg-main: #f4f6f8;
+  --color-bg-surface: #ffffff;
+  --color-border-color: #e2e8f0;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-primary: #1e3a8a;
+  --color-primary-hover: #1e40af;
+  --color-primary-text: #ffffff;
+  --color-accent-success: #059669;
+  --color-critical-text: #dc2626;
+  --color-critical-bg: #fef2f2;
+  --color-urgent-text: #d97706;
+  --color-urgent-bg: #fffbeb;
+  --color-status-critical: #dc2626;
+  --color-status-critical-bg: #fef2f2;
+  --color-status-urgent: #d97706;
+  --color-status-urgent-bg: #fffbeb;
+  /* Legacy aliases para Tailwind bg-[var(--background)] etc. */
+  --color-background: #f4f6f8;
+  --color-surface: #ffffff;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-border: #e2e8f0;
+  --color-focus: #1e40af;
+  --color-critical: #dc2626;
+  --color-urgent: #d97706;
+  --color-standard: #334155;
+  --color-success: #059669;
+  --color-foreground: #0f172a;
   --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-pill: 999px;
@@ -74,6 +135,16 @@ body {
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
+}
+
+/* Cards institucionales: sombra sutil en claro, solo borde en oscuro */
+:where(.card-need, [data-card="need"]) {
+  box-shadow: var(--shadow-card);
+}
+@media (prefers-color-scheme: dark) {
+  :where(.card-need, [data-card="need"]) {
+    box-shadow: none;
+  }
 }
 
 /* Motion: transform/opacity only, ease-out-quart; reduced motion crossfade/instant */
