@@ -126,14 +126,34 @@ export async function inviteMemberAction(
         });
 
       if (adminInviteErr) {
-        // Si el usuario ya existe en auth.users, despachamos con signInWithOtp
-        const { error: otpError } = await supabase.auth.signInWithOtp({
-          email: normalizedEmail,
-          options: {
-            emailRedirectTo: redirectUrl,
-          },
-        });
-        mailError = otpError;
+        // Si el usuario ya existe en auth.users (por invitación previa no confirmada),
+        // buscamos si aún no confirmó su email para regenerar la invitación oficial:
+        const { data: usersData } = await adminClient.auth.admin.listUsers();
+        const existingAuthUser = usersData?.users.find(
+          (u) => u.email?.toLowerCase() === normalizedEmail
+        );
+
+        if (existingAuthUser && !existingAuthUser.email_confirmed_at) {
+          await adminClient.auth.admin.deleteUser(existingAuthUser.id);
+          const { error: retryErr } =
+            await adminClient.auth.admin.inviteUserByEmail(normalizedEmail, {
+              redirectTo: redirectUrl,
+              data: {
+                org_id,
+                role,
+              },
+            });
+          mailError = retryErr;
+        } else {
+          // Si el usuario ya está activo/confirmado, enviamos OTP de acceso
+          const { error: otpError } = await supabase.auth.signInWithOtp({
+            email: normalizedEmail,
+            options: {
+              emailRedirectTo: redirectUrl,
+            },
+          });
+          mailError = otpError;
+        }
       }
     } else {
       // Fallback a OTP Magic Link si no está configurada la admin key
@@ -242,15 +262,35 @@ export async function resendInvitationAction(
         });
 
       // Si el usuario ya fue creado en auth.users en la primera invitación,
-      // inviteUserByEmail falla con "already registered". Despachamos via signInWithOtp.
+      // buscamos si aún no confirmó su correo para re-crearlo y forzar el template de invitación oficial:
       if (adminInviteErr) {
-        const { error: otpError } = await supabase.auth.signInWithOtp({
-          email: invite.email,
-          options: {
-            emailRedirectTo: redirectUrl,
-          },
-        });
-        mailError = otpError;
+        const normalizedInviteEmail = invite.email.trim().toLowerCase();
+        const { data: usersData } = await adminClient.auth.admin.listUsers();
+        const existingAuthUser = usersData?.users.find(
+          (u) => u.email?.toLowerCase() === normalizedInviteEmail
+        );
+
+        if (existingAuthUser && !existingAuthUser.email_confirmed_at) {
+          await adminClient.auth.admin.deleteUser(existingAuthUser.id);
+          const { error: retryErr } =
+            await adminClient.auth.admin.inviteUserByEmail(invite.email, {
+              redirectTo: redirectUrl,
+              data: {
+                org_id: invite.org_id,
+                role: invite.role,
+              },
+            });
+          mailError = retryErr;
+        } else {
+          // Si el usuario ya está activo/confirmado, enviamos OTP de acceso
+          const { error: otpError } = await supabase.auth.signInWithOtp({
+            email: invite.email,
+            options: {
+              emailRedirectTo: redirectUrl,
+            },
+          });
+          mailError = otpError;
+        }
       }
     } else {
       const { error: otpError } = await supabase.auth.signInWithOtp({

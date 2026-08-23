@@ -29,3 +29,23 @@ enabled = true
 port = 54321
 file_size_limit = "50MiB"
 import_path = "./seed.sql"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = [
+  "http://localhost:3000/**",
+  "http://localhost:3000/auth/callback",
+  "http://127.0.0.1:3000/**",
+  "http://127.0.0.1:3000/auth/callback",
+  "https://handly.angelcorzo.dev/auth/callback",
+  "https://handly.angelcorzo.dev/**",
+]
+
+[auth.email.template.magic_link]
+subject = "Tu enlace de acceso a Handly"
+content_path = "./supabase/templates/magic_link.html"
+
+[auth.email.template.invite]
+subject = "Te invitaron a colaborar en Handly"
+content_path = "./supabase/templates/invite.html"
