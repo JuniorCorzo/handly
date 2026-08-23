@@ -50,7 +50,7 @@ export default async function Home() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
                 href="/needs"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--surface)] shadow-xs transition-colors hover:bg-[var(--primary)]/90 focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-sm)] bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--primary-text)] shadow-xs transition-colors hover:bg-[var(--primary-hover)] focus:ring-2 focus:ring-[var(--focus)] focus:outline-none"
               >
                 Explorar Catálogo de Insumos ({totalRequerimientos})
               </Link>
