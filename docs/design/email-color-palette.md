@@ -7,7 +7,7 @@ This document contains the exact hexadecimal color palette used across Handly em
 ## 1. Brand & CTA Actions
 
 | Token Name | Hex Code | Description / Usage |
-| :--- | :--- | :--- |
+| :-- | :-- | :-- |
 | `--email-btn-primary` | `#2563eb` | Primary button background color (Blue 600) |
 | `--email-btn-hover` | `#1d4ed8` | Interactive hover state (Blue 700) |
 | `--email-btn-text` | `#ffffff` | High contrast button text |
@@ -20,7 +20,7 @@ This document contains the exact hexadecimal color palette used across Handly em
 ## 2. Light Mode (Canonical)
 
 | Token Name | Hex Code | Description / Usage |
-| :--- | :--- | :--- |
+| :-- | :-- | :-- |
 | `--email-bg-body` | `#f8fafc` | Full email viewport background (Slate 50) |
 | `--email-bg-card` | `#ffffff` | 560px centered container card background |
 | `--email-border` | `#e2e8f0` | Card borders and horizontal dividers (Slate 200) |
@@ -34,7 +34,7 @@ This document contains the exact hexadecimal color palette used across Handly em
 ## 3. Semantic & Security Statuses
 
 | Token Name | Hex Code | Description / Usage |
-| :--- | :--- | :--- |
+| :-- | :-- | :-- |
 | `--email-success-text` | `#047857` | Verified checkmark & security badge text (Emerald 700) |
 | `--email-success-bg` | `#f0fdf4` | Verified status background (Emerald 50) |
 | `--email-success-border` | `#bbf7d0` | Verified status border (Emerald 200) |
@@ -47,7 +47,7 @@ This document contains the exact hexadecimal color palette used across Handly em
 ## 4. Dark Mode (`@media (prefers-color-scheme: dark)`)
 
 | Token Name | Hex Code | Description / Usage |
-| :--- | :--- | :--- |
+| :-- | :-- | :-- |
 | `--email-bg-dark` | `#0b0f19` | Dark viewport background |
 | `--email-card-dark` | `#111827` | Dark card container background (Gray 900) |
 | `--email-border-dark` | `#1f2937` | Dark card borders (Gray 800) |
