@@ -62,13 +62,13 @@ DESIGN.md       Tokens y sistema visual canónicos (owner file)
 
 La generación de necesidades con IA vive en `src/features/needs/ai/`:
 
-| Archivo | Responsabilidad |
-| --- | --- |
-| `prompts.ts` | Definición de prompts |
-| `provider.ts` | Proveedor NVIDIA NIM vía Vercel AI SDK |
-| `tools.ts` | Herramientas disponibles para el modelo |
-| `actions.ts` | Acciones ejecutables |
-| `types.ts` | Tipos TypeScript del módulo |
+| Archivo       | Responsabilidad                         |
+| ------------- | --------------------------------------- |
+| `prompts.ts`  | Definición de prompts                   |
+| `provider.ts` | Proveedor NVIDIA NIM vía Vercel AI SDK  |
+| `tools.ts`    | Herramientas disponibles para el modelo |
+| `actions.ts`  | Acciones ejecutables                    |
+| `types.ts`    | Tipos TypeScript del módulo             |
 
 Las variables opcionales de integración (`NVIDIA_API_KEY`, modelo y base URL) están documentadas con comentarios en `.env.example`.
 
