@@ -19,7 +19,7 @@
     "@ai-sdk/react": "^4.0.74",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.3",
-    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-table": "^9.2.3",
     "@vercel/analytics": "^2.0.1",
     "ai": "^7.0.71",
     "downshift": "^9.4.0",
